@@ -1,0 +1,237 @@
+\documentclass[10pt]{article}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{epsfig}
+\usepackage{times}
+
+\usepackage[OT2,T1]{fontenc}
+\DeclareSymbolFont{cyrletters}{OT2}{wncyr}{m}{n}
+\DeclareMathSymbol{\Sha}{\mathalpha}{cyrletters}{"58}
+
+\textwidth=6in
+\textheight=8.8in
+\baselineskip 18pt
+\hoffset=-1.7cm
+\voffset=-.1in
+
+\begin{document}
+
+
+\setlength{\parskip}{2.0ex plus 0.5ex minus 0.5ex}
+\setlength{\parindent}{0cm} 
+
+\section*{IMCOM: IMage COMbination \\ Documentation for Version 0.2 (\emph{alpha})}
+\subsubsection*{\emph{Barnaby Rowe (2011)}}
+
+\section{Introduction}
+This is some (very) light documentation describing how to use this early, prototype version (v0.2) of the IMCOM image combination software described in Rowe, Hirata \& Rhodes (2011, in prep.).  For theoretical details and discussion of the precise implementation we follow, please see that paper: the purpose of this documentation is to make it easier for you to get IMCOM running.
+
+\section{Compiling IMCOM v0.2}
+IMCOM is written in Fortran 95, and is well-tested using GNU Fortran (\texttt{gfortran}) which is available as part of the GNU Compiler Collection (GCC) at \newline
+\texttt{http://gcc.gnu.org/} \newline
+Version 4.3 or later of GCC allows the use of OpenMP-based multi-threading to speed up many of the IMCOM calculations on multi-cored systems.  The OpenMP directives can be ignored for earlier versions of GCC by omitting the OpenMP compiler flag \texttt{-fopenmp} in the \texttt{Makefile}.  This \texttt{Makefile} for the IMCOM package can be found in the directory \texttt{./src/} (all paths given as navigated from the directory containing this document).
+
+The IMCOM package has certain additional library dependencies, all of which are open source and available free of charge.  These are:
+
+\begin{itemize}
+\item The BLAS (Basic Linear Algebra Subprograms) and LAPACK (Linear Algebra Pack) libraries, available and documented at 
+\newline
+\texttt{http://www.netlib.org/blas/} ~ and ~ \newline
+ \texttt{http://www.netlib.org/lapack/}.  
+\newline
+Both libraries depend for speed on the implementation of the BLAS.  Quoting from the LAPACK site: \emph{Highly efficient machine-specific implementations of the BLAS are available for many modern high-performance computers. For details of known vendor- or ISV-provided BLAS, consult the BLAS FAQ. Alternatively, the user can download ATLAS to automatically generate an optimized BLAS library for the architecture. A Fortran 77 reference implementation of the BLAS is available from netlib; however, its use is discouraged as it will not perform as well as a specifically tuned implementation.}
+
+\item The CFITSIO/FITSIO library (Version 3.25 is tested as compatible with IMCOM) of C and Fortran subroutines for reading and writing data files in FITS (Flexible Image Transport System) data format, available to download free from NASA at \newline \texttt{http://heasarc.gsfc.nasa.gov/fitsio/fitsio.html}.
+
+\item The FFTW library of C subroutines with Fortran wrappers for computing the discrete Fourier transform (DFT) in one or more dimensions (Version 3.2.2 is tested as compatible with IMCOM), available and documented at \newline
+\texttt{http://www.fftw.org/}
+\end{itemize}
+
+These libraries should be installed on your system and the paths to these libraries and their include files should be changed in the \texttt{Makefile} to match their respective locations in your system.  
+
+Once this is done, typing \texttt{make} from the terminal in this \texttt{./src/} directory should compile the code.  This will not take long as IMCOM is not a large piece of software.
+
+\section{Running IMCOM v0.2 from the command line}
+The IMCOM package is called using the minimum-possible set of command line arguments as follows:
+\newline
+\newline
+\indent \texttt{./imcom <config\_file> <U/S> <U/S\_max> <U/S\_tol>}
+\newline
+\newline
+where
+\begin{itemize}
+\item \texttt{<config\_file>} gives the path and filename of the important IMCOM config file, described in detail in Section \ref{sect:config} below.
+
+\item \texttt{<U/S>} is either one of the single character strings \texttt{U} or \texttt{S} -- other values should produce an error message.  This command line input switches IMCOM behaviour between solving $\kappa_{\alpha}$ while requiring $U_{\alpha}^{\textrm{max}} - \Delta U_{\alpha}^{\textrm{max}} \le U_{\alpha} < U_{\alpha}^{\textrm{max}}$ (for input \texttt{U}) or requiring $ \Sigma_{\alpha \alpha}^{\textrm{max}} - \Delta \Sigma_{\alpha \alpha}^{\textrm{max}} \le \Sigma_{\alpha \alpha} < \Sigma_{\alpha \alpha}^{\textrm{max}}$ (for input \texttt{S}; see Rowe et al.\ 2011, in prep., for details of what these relations mean).
+
+\item \texttt{<U/S\_max>} should be a double precision floating point number, typically given in exponential format (e.g.\ \texttt{1.d-8}), which specifies the numerical value of either $U_{\alpha}^{\textrm{max}}$ or $\Sigma_{\alpha \alpha}^{\textrm{max}}$ as specified by \texttt{<U/S>}.
+
+\item \texttt{<U/S\_tol>} should be another double precision floating point number, typically given in exponential format (e.g.\ \texttt{1.d-12}), which specifies the numerical value of either $\Delta U_{\alpha}^{\textrm{max}}$ or $\Delta \Sigma_{\alpha \alpha}^{\textrm{max}}$ as specified by \texttt{<U/S>}.
+\end{itemize}
+
+We now give a simple example of this usage. The user has a set of images which are described in the file \texttt{config\_example}, along with an output PSF and sampling locations.  This user wishes to attempt to maintain $9.99 \times 10^{-4} \le \Sigma_{\alpha \alpha} < 1 \times 10^{-3}$ in their final output image, and therefore calls IMCOM using the command:
+\newline
+\newline
+\texttt{./imcom config\_example S 1.d-3 1.d-6}
+\newline
+\newline
+This is an exercise you yourself can try using the images and \texttt{config\_example} configuration file available in the directory \texttt{./example/}.
+
+\subsection{Optional parameters}
+If you call IMCOM with too few (or far too many) command line arguments, something like the following message should be printed:
+\newline \newline
+\texttt{IMCOM: IMage COMbination v0.2 (B. Rowe \& C. Hirata 2010-2011) \\
+IMCOM: [usage] \\
+ ./imcom <config\_file> <U/S> <U/S\_max> <U/S\_tol> [...<forceT> <forceSys> \\ <saturation>] \\
+ \newline
+  <config\_file> [string] : Global config file containing image locations etc. \\
+  <U/S> [string] : U/u or S/s to specify minimization of U or S in output image \\
+  <U/S\_max> [dbl]         : Required maximum U or S \\
+  <U/S\_tol> [dbl]         : Absolute tolerance on U or S for interval bisection \\
+ ...<forceT> [int]           : 1 = force build T matrix , 0 = not                 \\
+   ...<forceSys> [int]      : 1 = force build system matrices A, B etc., 0 = not  \\
+   ...<saturation> [dbl] : Image saturation or bad pixel value                 }
+\newline \newline
+These latter three optional input parameters, which must come in that order, fulfill the following purposes:
+\begin{itemize}
+\item \texttt{<forceT>} should be set to integer value \texttt{1} to force IMCOM to recalculate the $T_{\alpha i}$ matrix rather than read it from the filename specified in the configuration files (see Section \ref{sect:config} below).  This is important as the default behaviour is to read in $T_{\alpha i }$ if it exists, but if other parameters (e.g.\ $U_{\alpha}^{\textrm{max}}$) have changed since the previous call then the output image will be created using this old $T_{\alpha i}$ matrix unless specifed otherwise using \texttt{<forceT>} = 1.
+\item \texttt{<forceSys>} is similar to \texttt{<forceT>} and should be set to integer value \texttt{1} to force IMCOM to recalculate the $A_{\alpha ij}$, $B_{\alpha i}$ etc. system matrices (including the eigendecomposition and projection matrices) rather than read them in from the filenames specified in the configuration files (see Section \ref{sect:config} below). 
+\item \texttt{<saturation>} is means of specifying saturated, cosmic ray-corrupted or otherwise bad pixels in the input images.  Input pixels for which $I_i \ge $ \texttt{<saturation>} are then explicitly removed from $I_i$ and ${\bf r}_i$, so that this loss of information will be faithfully reflected in the output $U_{\alpha}$ and $\Sigma_{\alpha \alpha}$ maps.
+\end{itemize}
+Following on from the previous example, if the user wished to re-run IMCOM as before but rebuild all the matrices (perhaps following some change in the input conditions), they would then the command:
+\\ \newline
+\texttt{./imcom config\_example S 1.d-3 1.d-6 1 1}
+%\\ \newline
+%This concludes our simple description of IMCOM calling procedures.
+
+\section{The IMCOM v0.2 config files}\label{sect:config}
+The IMCOM config file contains filenames and paths to all the input images and essential information about what these contain, as well as defining filenames for the outputs of the IMCOM algorithm. 
+The best way to elucidate the configuration file is using the example given in the \texttt{./example/userxy1/} directory:
+
+\texttt{PSFXSCALE~~~0.1 \\
+PSFYSCALE~~~0.1 \\
+NEXP~~~~~~~~4 \\
+USERXY~~~~~~1 \\
+INCONFIG1~~~config\_example.input1 \\
+INCONFIG2~~~config\_example.input2 \\
+INCONFIG3~~~config\_example.input3 \\
+INCONFIG4~~~config\_example.input4 \\
+OUTCONFIG~~~config\_example.output \\
+AFILE~~~~~~~A.example.fits \\
+BFILE~~~~~~~B.example.fits \\
+QFILE~~~~~~~Q.example.fits \\
+LFILE~~~~~~~L.example.fits \\
+PFILE~~~~~~~P.example.fits   }
+
+Order and spacing matters for the simple interface used by IMCOM, although IDL scripts are provided in the directory \texttt{./idl/} to write this file automatically supplying the relevant parameters as keywords (see Section \ref{sect:idl}).
+We now give a brief description of these parameters (see also Rowe et al.\ 2011, in prep.):
+\begin{itemize}
+\item \texttt{PSFXSCALE} \& \texttt{PSFYSCALE} give the physical dimensions along $x$ and $y$ of the pixels in the input PSF images $G_i({\bf r})$ and $\Gamma({\bf r})$.
+
+\item \texttt{NEXP} is the number of exposures in the input images $I_i$.  In this implementation each of these exposures is supplied as a separate \texttt{FITS} image.
+
+\item \texttt{USERXY} switches between the two supported input formats for the user to supply ${\bf r}_i$ and ${\bf R}_{\alpha}$. This is discussed in detail in Sections \ref{sect:userxy1} \& \ref{sect:userxy0}.
+
+\item \texttt{INCONFIG\emph{N}} gives the filename of the configuration file for the \texttt{\emph{N}}th exposure where \texttt{\emph{N}}~$= 1,\ldots,$~\texttt{NEXP}.  See Sections \ref{sect:userxy1} \& \ref{sect:userxy0}.
+
+\item \texttt{OUTCONFIG} gives the filename of the configuration file for the output properties, see Sections \ref{sect:userxy1} \& \ref{sect:userxy0}.
+
+\item \texttt{AFILE}, \texttt{BFILE}, \texttt{QFILE}, \texttt{LFILE} \& \texttt{PFILE} give the filename of the \texttt{FITS} files used to store the $A_{\alpha i j}$, $B_{\alpha i}$, $Q_{i j}$, $\lambda_i$ \& $P_{\alpha i}$ system matrix/vector objects, respectively.  If the file does not exist, these objects will be calculated and saved to the corresponding \texttt{\emph{X}FILE}; if the file does exist it will be read in and used in subsequent calculations unless \texttt{forceSys} = 1 is specified at the command line.
+\end{itemize}
+
+So much for the primary configuration file; we now go on to describe its offshoots, the input and output configuration files, which differ in their content depending on the value of \texttt{USERXY}.
+
+\subsection{Input \& output config files in the general case USERXY = 1}\label{sect:userxy1}
+The most general and powerful way for the user to supply the input images and pixel locations is by giving \texttt{FITS} images of $x_i$ and $y_i$ corresponding to the input images for $I_i$, where ${\bf r}_i = (x_i, y_i)$. This choice is specified by setting \texttt{USERXY=1} in the primary configuration file.
+
+Each of the \texttt{NEXP} input configuration files then takes a format illustrated by the following example \\
+\texttt{config\_example.input1} (i.e.\ the input config file corresponding to the first exposure) from the \\
+\texttt{./example/userxy1/} directory:
+
+\texttt{PSFFILE~~~~~psf.example.fits \\
+GIMFILE~~~~~test1.example.fits \\
+ROTANGDEG~~~0.0000000\\
+NOISE~~~~~~~1.0000000\\
+GIMXFILE~~~~x1.example.fits\\
+GIMYFILE~~~~y1.example.fits}
+\begin{itemize}
+\item \texttt{PSFFILE} is the filename for the image of the PSF $G_i({\bf r})$, with $x$ and $y$ pixel dimensions given as \texttt{PSFXSCALE} and \texttt{PSFYSCALE} in the primary config file.  Note therefore that these units are fixed and may not vary from exposure to exposure.
+\item \texttt{GIMFILE} is the `galaxy'  image file for this exposure, making up part of $I_i$.
+\item \texttt{ROTANGDEG} is the angle at which the pixel grid for this input exposure is rotated, in degrees, relative to the output pixel grid. This needs to be known as it leads to a relative rotation of the PSF. As in \texttt{USERXY} = 1 the user specifies $x_i$ and $y_i$ as image files (see directly below) this would allow, in principle, this value to be determined from the input data without it needing to be specified. However, in this current version of IMCOM the author has been too lazy to do this!  Positive angles denote an anti-clockwise rotation.
+\item \texttt{NOISE} gives \emph{all} the diagonal values of the assumed stationary, diagonal input noise covariance $N_{ij}$ relating to this exposure.  Values of this parameter can vary between exposures, but not yet within them.
+\item \texttt{GIMXFILE} \& \texttt{GIMYFILE} give the filenames of the \texttt{FITS} files where the input $x_i$ and $y_i$ have been stored by the user. These must be in the same physical units as \texttt{PSFXSCALE} and \texttt{PSFYSCALE}.
+\end{itemize}
+
+The output config file similarly contains the location of the files needed to specify ${\bf R}_{\alpha}$, as well as the desired storage locations of the output image and objective functions $U_{\alpha}$ and $\Sigma_{\alpha \alpha}$.  Yet again, its format can be illustrated using one of files in the \texttt{./example/userxy1/} directory, \texttt{config\_example.output}:
+
+\texttt{GAMFILE~~~~~psf.example.fits \\
+OUTFILE~~~~~H.example.fits \\
+KFILE~~~~~~~K.example.fits \\
+TFILE~~~~~~~T.example.fits \\
+SFILE~~~~~~~S.example.fits \\
+UFILE~~~~~~~U.example.fits \\
+OUTXFILE~~~~xout.example.fits \\
+OUTYFILE~~~~yout.example.fits}
+
+\begin{itemize}
+\item \texttt{GAMFILE} is the filename for the image of the desired output PSF $\Gamma({\bf r})$, with $x$ and $y$ pixel dimensions given as \texttt{PSFXSCALE} and \texttt{PSFYSCALE} in the primary config file.
+\item \texttt{OUTFILE} is the filename for the output image $H_{\alpha}$.
+\item \texttt{KFILE} is the filename for the output $\kappa_{\alpha}$ solution map.
+\item \texttt{TFILE} is the filename for the output $T_{\alpha i}$ transformation matrix.   If the file does not exist, $T_{\alpha i}$ will be built and saved to the corresponding \texttt{TFILE}; if the file does exist it will be read in and used to generate $H_{\alpha}$, $U_{\alpha}$ and $\Sigma_{\alpha \alpha}$ unless \texttt{forceT} = 1 is specified at the command line.
+\item \texttt{SFILE} is the filename for the output noise variance $\Sigma_{\alpha \alpha}$.
+\item \texttt{UFILE} is the filename for the output leakage objective $U_{\alpha}$.
+\item \texttt{OUTXFILE} \& \texttt{OUTYFILE} are the filenames for the \texttt{FITS} files where the desired output sampling locations $(X_{\alpha}, Y_{\alpha}) = {\bf R}_{\alpha}$ have been stored by the user. These must be in the same physical units as \texttt{PSFXSCALE} and \texttt{PSFYSCALE}.
+\end{itemize}
+
+\subsection{Input \& output config files in the case USERXY = 0}\label{sect:userxy0}
+The values of ${\bf r}_i$ and ${\bf R}_{\alpha}$ can also be specified in a less general manner by setting \texttt{USERXY} = 0.  This calling procedure is illustrated by the example configuration files in the \texttt{./example/userxy0/} directory.  An example input file is as follows:
+
+\texttt{PSFFILE~~~~~psf.example.fits \\
+GIMFILE~~~~~test1.example.fits \\
+ROTANGDEG~~~0.0000000 \\
+NOISE~~~~~~~1.0000000 \\
+GIMXSCALE~~~0.4000000 \\
+GIMYSCALE~~~0.4000000 \\
+DITHER~~~~~~0.0000000 0.0000000 \\
+}
+The first four parameters are used exactly as before in Section \ref{sect:userxy0}.  The three different parameters are:
+\begin{itemize}
+\item \texttt{GIMXSCALE} \& \texttt{GIMYSCALE} specify the (constant) $x$ and $y$ dimensions of each pixel in the \texttt{GIMFILE} image. These must be in the same physical units as \texttt{PSFXSCALE} and \texttt{PSFYSCALE}.
+\item \texttt{DITHER} gives the position, in the same physical units as \texttt{PSFXSCALE} and \texttt{PSFYSCALE}, of the \emph{exact center of the lower-leftmost pixel.}
+\end{itemize}
+
+In the same directory can be found an example output configuration file:
+
+
+\texttt{GAMFILE~~~~~psf.example.fits \\
+OUTFILE~~~~~H.example.fits \\
+KFILE~~~~~~~K.example.fits \\
+TFILE~~~~~~~T.example.fits \\
+SFILE~~~~~~~S.example.fits \\
+UFILE~~~~~~~U.example.fits \\
+OUTXSCALE~~~0.200000000 \\
+OUTYSCALE~~~0.200000000 \\
+OUTPOS~~~~~~0.0000000 0.0000000 \\
+NOUT~~~~~~~~81 81}
+
+The first six parameters are those described in Section \ref{sect:userxy0}. The remaining parameters are
+\begin{itemize}
+\item \texttt{OUTXSCALE} \& \texttt{OUTYSCALE} specify the desired, constant $x$ and $y$ dimensions of each pixel in the output \texttt{HFILE} image. These must be in the same physical units as \texttt{PSFXSCALE} and \texttt{PSFYSCALE}.
+\item \texttt{OUTPOS} is analagous to \texttt{DITHER} and gives the desired position, in the same physical units as \texttt{PSFXSCALE} and \texttt{PSFYSCALE}, of the \emph{exact center of the lower-leftmost pixel} of $H_{\alpha}$.
+\item \texttt{NOUT} supplies as two arguments the overall $x$ and $y$ dimensions of the output $H_{\alpha}$ in numbers of pixels, $81$ pixels $\times$ 81 pixels in the example above.
+\end{itemize}
+
+This concludes the description of the somewhat lengthy configuration file interface for IMCOM v0.2.  
+
+\subsection{The IDL \texttt{imcom\_write\_config.pro} script}\label{sect:idl}
+To help alleviate the process of creating these long configuration files, I have created simple IDL scripts to generate them automatically with correct spacing.  These scripts can be found in the \texttt{./idl/} directory. 
+
+The main script is called \texttt{imcom\_write\_config.pro} and should be called from within your program unit as described in the example IDL script \texttt{example\_write\_config.pro} which can also be found in the \texttt{./example/} directory.  This script generates the config files shown above.
+
+There are plans for Python scripts to perform the same task, but as yet these are not written.  Since IMCOM communicates solely via ASCII text and \texttt{FITS} images it should be simple to script in a variety of high-level languages.
+
+\section{The example files}
+The example files that have been described in the previous Sections demonstrate a very simple $2 \times 2$ dither pattern, with an output at double the resolution of the input.  The input PSF is an Airy disc with a first minimum at around 1.22 in the physical units chosen convolved with the input pixel resonse (assumed to be boxcar).  There is also an `ideal' output, made using unfair knowledge of the sky profile, to allow you to compare with $H_{\alpha}$.  This is a rather facile case, but should produce predictable results: good luck!
+
+\end{document}

@@ -1,0 +1,61 @@
+!
+! Module for the routines associated with finding the pixel-by-pixel solution
+! for kappa that minimizes the noise (S) or leakage objective (U)
+!
+!-----------------------------------------------------------
+
+MODULE imcom_bisect
+
+USE imcom_data
+USE imcom_io
+USE imcom_proc
+
+implicit none
+
+CONTAINS
+
+!---
+
+SUBROUTINE imcom_bisect_T
+implicit none
+
+
+
+END SUBROUTINE imcom_bisect_T
+
+!---
+
+SUBROUTINE imcom_bisect_vector
+implicit none
+
+
+
+END SUBROUTINE imcom_bisect_vector
+
+!---
+
+FUNCTION imcom_root_func(x, T_dum, US)
+implicit none
+real(KIND=8), dimension(:), intent(IN) :: x
+
+character(LEN=1), intent(IN) :: US
+real(KIND=8), dimension(size(x)), intent(OUT) :: imcom_root_func
+logical :: UnotS
+
+if ((US.eq."U").or.(US.eq."u")) then
+  UnotS = .TRUE.
+else if ((US.eq."S").or.(US.eq."s"))
+  UnotS = .FALSE.
+else
+  write(*, FMT='(A)') "IMCOM ERROR: Specify minimization via U or S with single character U/u or S/s"
+  stop
+end if
+
+
+
+
+END FUNCTION imcom_root_func
+
+!---
+
+END MODULE imcom_bisect
