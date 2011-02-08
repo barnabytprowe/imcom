@@ -48,6 +48,11 @@ npoly = 11     ! Make these user specifiable?
 npad = 3       !
 maxNbis = 50
 
+! Also, currently kappa_min and kappa_max are now set via C_a * machine_epsilon
+! and C_a / machine_epsilon [accessed with DLAMCH('Eps')], rather than
+! being user-input... is this a good idea?
+
+
 call imcom_get_cmdline
 call imcom_welcome
 
