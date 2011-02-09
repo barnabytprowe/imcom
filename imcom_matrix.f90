@@ -20,7 +20,6 @@
 !                   IMCOM_IO.F90
 !                   BLAS LIBRARY
 !                   LAPACK LIBRARY
-!                   OPENMP LIBRARY (?NEED TO TOGGLE THIS?)
 !
 !    CONTAINS
 !    Routines for IMCOM for matrix building; lookup table building; 
@@ -32,7 +31,6 @@ MODULE imcom_matrix
 USE imcom_data
 USE imcom_io
 USE imcom_proc
-USE omp_lib
 
 implicit none
 
@@ -728,7 +726,7 @@ integer :: alstat
 write(*, FMT='(A)') "IMCOM: Building output leakage map U"
 ! C must already be built!
 ! Then the ATT + BT part
-nthmax = OMP_GET_MAX_THREADS()   ! Note that, while testing, the routine imcom_calc_ATTpBT uses I/O so should not be multi-threaded
+!nthmax = OMP_GET_MAX_THREADS()   ! Note that, while testing, the routine imcom_calc_ATTpBT uses I/O so should not be multi-threaded
 ATTplusBT = 0.d0
 ! Ready the solution matrix
 allocate(U_a(m), STAT=alstat)
@@ -741,8 +739,9 @@ U_a = 0.d0
 ! Begin loop, do OPEN MP stuff
 !$omp parallel
 !$omp do schedule(dynamic, 1) private(a_i, a_f)
-do i=1, nthmax
-
+do i=1, 4   ! Just use 4, thereby not using the OMP_GET_MAX_THREADS() function
+            ! ... If there are more than 4 cores there is lower level threading
+            ! within imcom_calc_ATTpBT
   a_i = 1 + (i - 1) * (m / nthmax)
   if (i.ne.nthmax) then
     a_f = i * (m / nthmax)
@@ -789,9 +788,15 @@ integer :: a
 AT_ia = 0.d0
 call DSYMM(side, uplo, n_dum, m_dum, alpha, A_dum, n_dum, T_dum, n_dum, &
            beta, AT_ia, n_dum)
+!$omp parallel
+!$omp workshare
 forall(a=1:m_dum) ATT(a) = sum(T_dum(:, a) * AT_ia(:, a))
 forall(a=1:m_dum) BT(a) = sum(T_dum(:, a) * B_dum(:, a))
+!$omp end workshare
+!$omp workshare
 forall(a=1:m_dum) U_dum(a) = sum(T_dum(:, a) * (AT_ia(:, a) + B_dum(:, a)))
+!$omp end workshare
+!$omp end parallel
 END SUBROUTINE imcom_calc_ATTpBT
 
 !---
