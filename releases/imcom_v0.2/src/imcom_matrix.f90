@@ -20,7 +20,6 @@
 !                   IMCOM_IO.F90
 !                   BLAS LIBRARY
 !                   LAPACK LIBRARY
-!                   OPENMP LIBRARY (?NEED TO TOGGLE THIS?)
 !
 !    CONTAINS
 !    Routines for IMCOM for matrix building; lookup table building; 
@@ -32,7 +31,6 @@ MODULE imcom_matrix
 USE imcom_data
 USE imcom_io
 USE imcom_proc
-USE omp_lib
 
 implicit none
 
@@ -198,7 +196,7 @@ SUBROUTINE imcom_lookup_A(npoly, npad, saveA)
 implicit none
 integer, intent(IN) :: npoly, npad, saveA
 real(KIND=8) :: Delx, Dely
-integer :: i, j, alstat, n1al, n2al
+integer :: i, j, alstat, n1al, n2al, ial
 
 write(*, FMT='(A)') "IMCOM: Building A matrix from lookup table"
 allocate(A_aij(n, n), STAT=alstat)
@@ -209,15 +207,16 @@ n2al = n2psf * npad
 !$omp workshare
 A_aij = 0.d0
 !$omp end workshare
-!$omp do schedule(dynamic, 16) private(Delx, Dely)
+!$omp do schedule(dynamic, 16) private(Delx, Dely, ial)
 do i=1, n
 
   do j=i, n
 
+    ial = exp_i(i) + exp_i(j) * (exp_i(j) - 1) / 2
     Delx = real(npad, 8) * (x_i(j) - x_i(i)) / psfxscale
     Dely = real(npad, 8) * (y_i(j) - y_i(i)) / psfyscale
-    A_aij(i, j) = imcom_interp_lookup(n1al, n2al, Alookup(:, :, exp_i(i),  &
-                                      exp_i(j)), Delx, Dely, npoly)
+    A_aij(i, j) = imcom_interp_lookup(n1al, n2al, Alookup(:, :, ial), Delx, &
+                                      Dely, npoly)
 
   end do
   if (i.eq.int(0.2 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 20% complete"
@@ -304,7 +303,7 @@ SUBROUTINE imcom_build_Alookup(npad)
 implicit none
 integer, intent(IN) :: npad
 complex(KIND=8), dimension(:, :), allocatable ::  A_tmp, ufunc
-integer :: alstat, iexp, jexp
+integer :: alstat, iexp, jexp, ial
 integer :: n1big, n2big, n1min, n2min, n1max, n2max, ntotal
 integer(KIND=8) :: ftplan
 !character(LEN=256) :: outfile
@@ -317,7 +316,7 @@ n1max = (n1big + n1psf) / 2
 n2max = (n2big + n2psf) / 2
 ntotal = n1big * n2big * npad * npad * nexp * nexp
 write(*, FMT='(A)') "IMCOM: Fourier transforming A matrix lookup table"
-allocate(Alookup(n1big, n2big, nexp, nexp), A_tmp(n1big, n2big), &
+allocate(Alookup(n1big, n2big, nexp * (nexp + 1) / 2), A_tmp(n1big, n2big), &
          ufunc(n1big, n2big), STAT=alstat)
 if (alstat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for A lookup tables"
@@ -328,11 +327,13 @@ call imcom_plan_invft_c2c(n1big, n2big, 0, ftplan)
 !$omp workshare
 Alookup = 0.d0
 !$omp end workshare
-!$omp do private(ufunc, A_tmp) 
+!$omp do private(ufunc, A_tmp, ial) schedule(dynamic, 1)
 do iexp=1, nexp
 
   do jexp=iexp, nexp
 
+! A matrix lookup tables per exposure stored in a packed upper triangular matrix
+    ial = iexp + jexp * (jexp - 1) / 2
     ufunc = dcmplx(0.d0, 0.d0)
 !  Fix all the padding with circular shifts... Probably not optimal in 
 !  N operations, but it saves me making stupid mistakes with counting...
@@ -343,8 +344,8 @@ do iexp=1, nexp
                                       n2psf / 2, 2), n1psf / 2, 1)
     ufunc = cshift(cshift(ufunc, n2big / 2, 2), n1big / 2, 1)
     call imcom_invft_c2c(n1big, n2big, ftplan, ufunc, A_tmp)
-    Alookup(:, :, iexp, jexp) = cshift(cshift(real(A_tmp, 8), n2big / 2, 2), &
-                                                              n1big / 2, 1)
+    Alookup(:, :, ial) = cshift(cshift(real(A_tmp, 8), n2big / 2, 2), &
+                                                       n1big / 2, 1)
 !    write(outfile, FMT='(A,I1,A,I1,A)') "Alookup.",iexp,"_",jexp,".fits"
 !    call imcom_writefits(trim(outfile), n1big, n2big, real(Alookup(:, :, iexp, jexp), 8))
 ! ...Origin is thus located at centre of pixel (n1big / 2 + 1, n2big / 2 + 1)
@@ -728,7 +729,7 @@ integer :: alstat
 write(*, FMT='(A)') "IMCOM: Building output leakage map U"
 ! C must already be built!
 ! Then the ATT + BT part
-nthmax = OMP_GET_MAX_THREADS()   ! Note that, while testing, the routine imcom_calc_ATTpBT uses I/O so should not be multi-threaded
+!nthmax = OMP_GET_MAX_THREADS()   ! Note that, while testing, the routine imcom_calc_ATTpBT uses I/O so should not be multi-threaded
 ATTplusBT = 0.d0
 ! Ready the solution matrix
 allocate(U_a(m), STAT=alstat)
@@ -741,8 +742,9 @@ U_a = 0.d0
 ! Begin loop, do OPEN MP stuff
 !$omp parallel
 !$omp do schedule(dynamic, 1) private(a_i, a_f)
-do i=1, nthmax
-
+do i=1, 4   ! Just use 4, thereby not using the OMP_GET_MAX_THREADS() function
+            ! ... If there are more than 4 cores there is lower level threading
+            ! within imcom_calc_ATTpBT
   a_i = 1 + (i - 1) * (m / nthmax)
   if (i.ne.nthmax) then
     a_f = i * (m / nthmax)
@@ -789,9 +791,15 @@ integer :: a
 AT_ia = 0.d0
 call DSYMM(side, uplo, n_dum, m_dum, alpha, A_dum, n_dum, T_dum, n_dum, &
            beta, AT_ia, n_dum)
+!$omp parallel
+!$omp workshare
 forall(a=1:m_dum) ATT(a) = sum(T_dum(:, a) * AT_ia(:, a))
 forall(a=1:m_dum) BT(a) = sum(T_dum(:, a) * B_dum(:, a))
+!$omp end workshare
+!$omp workshare
 forall(a=1:m_dum) U_dum(a) = sum(T_dum(:, a) * (AT_ia(:, a) + B_dum(:, a)))
+!$omp end workshare
+!$omp end parallel
 END SUBROUTINE imcom_calc_ATTpBT
 
 !---

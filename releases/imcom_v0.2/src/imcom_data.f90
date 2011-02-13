@@ -83,17 +83,17 @@ real(KIND=8), dimension(:, :), allocatable :: H
 real(KIND=8), dimension(:, :), allocatable :: U
 real(KIND=8), dimension(:, :), allocatable :: S
 real(KIND=8), dimension(:, :), allocatable :: K  ! kappa now varies across output image
-
-real(KIND=8), dimension(:), allocatable :: I_i, I_unmasked_i
-integer, dimension(:), allocatable :: mask_i, mask_subs_i, exp_unmasked_i, exp_i
 real(KIND=8), dimension(:, :, :), allocatable :: x_unmasked
 real(KIND=8), dimension(:, :, :), allocatable :: y_unmasked
-real(KIND=8), dimension(:), allocatable :: x_i, x_unmasked_i
-real(KIND=8), dimension(:), allocatable :: y_i, y_unmasked_i
-
-real(KIND=8), dimension(:), allocatable :: H_a
 real(KIND=8), dimension(:, :), allocatable :: Xa
 real(KIND=8), dimension(:, :), allocatable :: Ya
+
+! Similar things but arranged into big long 1D vectors...
+real(KIND=8), dimension(:), allocatable :: I_i, I_unmasked_i
+integer, dimension(:), allocatable :: mask_i, mask_subs_i, exp_unmasked_i, exp_i
+real(KIND=8), dimension(:), allocatable :: x_i, x_unmasked_i
+real(KIND=8), dimension(:), allocatable :: y_i, y_unmasked_i
+real(KIND=8), dimension(:), allocatable :: H_a
 real(KIND=8), dimension(:), allocatable :: X_a
 real(KIND=8), dimension(:), allocatable :: Y_a
 real(KIND=8), dimension(:), allocatable :: U_a
@@ -103,7 +103,7 @@ real(KIND=8), dimension(:), allocatable :: K_a
 ! Diagonal noise matrix (only diagonal noise implemented)
 real(KIND=8), dimension(:), allocatable :: Ndiag
 
-! (PSFs)
+! (PSFs: one per exposure)
 real(KIND=8), dimension(:, :, :), allocatable :: G_unrot
 real(KIND=8), dimension(:, :, :), allocatable :: G_rot
 
@@ -119,7 +119,7 @@ complex(KIND=8), dimension(:, :), allocatable :: Gammat
   
 ! Problem/work matrices
 real(KIND=8), dimension(:, :), allocatable :: A_aij
-real(KIND=8), dimension(:, :, :, :), allocatable :: Alookup
+real(KIND=8), dimension(:, :, :), allocatable :: Alookup ! now packed up-triang.
 real(KIND=8), dimension(:, :), allocatable :: Q_ij
 real(KIND=8), dimension(:), allocatable :: L_i
 real(KIND=8), dimension(:, :), allocatable :: B_ia
