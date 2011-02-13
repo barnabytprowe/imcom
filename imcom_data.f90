@@ -119,7 +119,7 @@ complex(KIND=8), dimension(:, :), allocatable :: Gammat
   
 ! Problem/work matrices
 real(KIND=8), dimension(:, :), allocatable :: A_aij
-real(KIND=8), dimension(:, :, :, :), allocatable :: Alookup
+real(KIND=8), dimension(:, :, :), allocatable :: Alookup ! now packed up-triang.
 real(KIND=8), dimension(:, :), allocatable :: Q_ij
 real(KIND=8), dimension(:), allocatable :: L_i
 real(KIND=8), dimension(:, :), allocatable :: B_ia

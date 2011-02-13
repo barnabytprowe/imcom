@@ -1,5 +1,5 @@
-GFORTRAN module version '0' created from imcom_proc.f90 on Fri Feb  4 09:22:31 2011
-MD5:15e6e4cafabd13bed5ae52b96eb42767 -- If you edit this, you'll get what you deserve.
+GFORTRAN module version '0' created from imcom_proc.f90 on Sun Feb 13 22:24:35 2011
+MD5:fbfbf4120bb43a733861379b9b850e80 -- If you edit this, you'll get what you deserve.
 
 (() () () () () () () () () () () () ()
 () () () () () () () () () () () () () ())
@@ -26,7 +26,7 @@ UNKNOWN EXPLICIT-SAVE) (CHARACTER 1 0 0 CHARACTER ((CONSTANT (INTEGER 4
 0 0 INTEGER ()) 0 '256'))) 0 0 () () 0 () () () 0 0)
 5 'alookup' 'imcom_data' 'alookup' 1 ((VARIABLE UNKNOWN-INTENT
 UNKNOWN-PROC UNKNOWN EXPLICIT-SAVE ALLOCATABLE DIMENSION) (REAL 8 0 0
-REAL ()) 0 0 () (4 DEFERRED () () () () () () () ()) 0 () () () 0 0)
+REAL ()) 0 0 () (3 DEFERRED () () () () () ()) 0 () () () 0 0)
 6 'b_ia' 'imcom_data' 'b_ia' 1 ((VARIABLE UNKNOWN-INTENT UNKNOWN-PROC
 UNKNOWN EXPLICIT-SAVE ALLOCATABLE DIMENSION) (REAL 8 0 0 REAL ()) 0 0 ()
 (2 DEFERRED () () () ()) 0 () () () 0 0)
