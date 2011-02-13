@@ -327,7 +327,7 @@ call imcom_plan_invft_c2c(n1big, n2big, 0, ftplan)
 !$omp workshare
 Alookup = 0.d0
 !$omp end workshare
-!$omp do private(ufunc, A_tmp, ial) 
+!$omp do private(ufunc, A_tmp, ial) schedule(dynamic, 1)
 do iexp=1, nexp
 
   do jexp=iexp, nexp
