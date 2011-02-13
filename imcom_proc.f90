@@ -77,8 +77,8 @@ if (alstat.ne.0) then
   write(*, FMT='(A)')"IMCOM ERROR: Cannot allocate memory for x_i, y_i"
   stop
 endif
-x_unmasked_i = reshape(x_unmasked, (/ n /))
-y_unmasked_i = reshape(y_unmasked, (/ n /))
+x_unmasked_i = reshape(x_unmasked, (/ n_unmasked /))
+y_unmasked_i = reshape(y_unmasked, (/ n_unmasked /))
 forall(i=1: n) x_i(i) = x_unmasked_i(mask_subs_i(i))
 forall(i=1: n) y_i(i) = y_unmasked_i(mask_subs_i(i))
 deallocate(x_unmasked, y_unmasked, x_unmasked_i, y_unmasked_i, STAT=dealstat)
