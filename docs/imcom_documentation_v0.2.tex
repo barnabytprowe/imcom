@@ -65,9 +65,9 @@ where
 
 \item \texttt{<U/S>} is either one of the single character strings \texttt{U} or \texttt{S} -- other values should produce an error message.  This command line input switches IMCOM behaviour between solving $\kappa_{\alpha}$ while requiring $U_{\alpha}^{\textrm{max}} - \Delta U_{\alpha}^{\textrm{max}} \le U_{\alpha} < U_{\alpha}^{\textrm{max}}$ (for input \texttt{U}) or requiring $ \Sigma_{\alpha \alpha}^{\textrm{max}} - \Delta \Sigma_{\alpha \alpha}^{\textrm{max}} \le \Sigma_{\alpha \alpha} < \Sigma_{\alpha \alpha}^{\textrm{max}}$ (for input \texttt{S}; see Rowe et al.\ 2011, in prep., for details of what these relations mean).
 
-\item \texttt{<U/S\_max>} should be a double precision floating point number, typically given in exponential format (e.g.\ \texttt{1.d-8}), which specifies the numerical value of either $U_{\alpha}^{\textrm{max}}$ or $\Sigma_{\alpha \alpha}^{\textrm{max}}$ as specified by \texttt{<U/S>}.
+\item \texttt{<U/S\_max>} should be a double precision floating point number, typically given in exponential, e.g.\ \texttt{1.d-8}), which specifies the numerical value of either $U_{\alpha}^{\textrm{max}}$ (in units of $C_{\alpha}$) or $\Sigma_{\alpha \alpha}^{\textrm{max}}$ as specified by \texttt{<U/S>}.
 
-\item \texttt{<U/S\_tol>} should be another double precision floating point number, typically given in exponential format (e.g.\ \texttt{1.d-12}), which specifies the numerical value of either $\Delta U_{\alpha}^{\textrm{max}}$ or $\Delta \Sigma_{\alpha \alpha}^{\textrm{max}}$ as specified by \texttt{<U/S>}.
+\item \texttt{<U/S\_tol>} should be another double precision floating point number, typically given in exponential format, e.g.\ \texttt{1.d-12}, which specifies the numerical value of either $\Delta U_{\alpha}^{\textrm{max}}$ (in units of $C_{\alpha}$) or $\Delta \Sigma_{\alpha \alpha}^{\textrm{max}}$ as specified by \texttt{<U/S>}.
 \end{itemize}
 
 We now give a simple example of this usage. The user has a set of images which are described in the file \texttt{config\_example}, along with an output PSF and sampling locations.  This user wishes to attempt to maintain $9.99 \times 10^{-4} \le \Sigma_{\alpha \alpha} < 1 \times 10^{-3}$ in their final output image, and therefore calls IMCOM using the command:

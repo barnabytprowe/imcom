@@ -1,4 +1,4 @@
-This is pdfeTeX, Version 3.141592-1.21a-2.2 (Web2C 7.5.4) (format=latex 2010.11.30)  8 FEB 2011 12:22
+This is pdfeTeX, Version 3.141592-1.21a-2.2 (Web2C 7.5.4) (format=latex 2010.11.30)  22 FEB 2011 10:58
 entering extended mode
 **imcom_documentation_v0.2.tex
 (./imcom_documentation_v0.2.tex
@@ -281,6 +281,6 @@ Here is how much of TeX's memory you used:
  5075 multiletter control sequences out of 10000+50000
  27508 words of font info for 43 fonts, out of 1200000 for 2000
  580 hyphenation exceptions out of 8191
- 32i,5n,24p,804b,177s stack positions out of 5000i,500n,6000p,200000b,5000s
+ 32i,5n,24p,804b,179s stack positions out of 5000i,500n,6000p,200000b,5000s
 
-Output written on imcom_documentation_v0.2.dvi (6 pages, 22192 bytes).
+Output written on imcom_documentation_v0.2.dvi (6 pages, 22264 bytes).
