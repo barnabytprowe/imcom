@@ -369,7 +369,7 @@ integer, intent(IN) :: naxis1, naxis2
 real(KIND=8), dimension(naxis1, naxis2), intent(OUT) :: image
 integer, parameter :: rwmode = 0    ! Read only for this subroutine
 integer, parameter :: maxdim = 2    ! Maximum dimension for images, 2D only
-real(KIND=8), parameter :: nullvar = -66.D6 ! Assigned to undefined pixel values
+real(KIND=8), parameter :: nullvar = -666.D0! Assigned to undefined pixel values
 real(KIND=8), dimension(naxis1 * naxis2) :: imtemp
 integer :: unit, stat, bitpix, naxis
 integer, dimension(maxdim) :: naxes
