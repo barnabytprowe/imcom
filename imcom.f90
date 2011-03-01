@@ -44,7 +44,7 @@ real(KIND=8) :: eps
 real(KIND=8), external :: DLAMCH
 logical :: Aexists, Bexists
 
-npoly = 11     ! Make these user specifiable?
+npoly = 7     ! Make these user specifiable?
 npad = 3       !
 maxNbis = 50
 
