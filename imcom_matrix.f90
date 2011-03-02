@@ -723,7 +723,7 @@ SUBROUTINE imcom_build_U
 ! Sigma_a noise image
 implicit none
 real(KIND=8), dimension(m) :: ATTplusBT
-integer :: nthmax, i, a_i, a_f
+integer :: i, a_i, a_f, nthreads
 integer :: alstat
 
 write(*, FMT='(A)') "IMCOM: Building output leakage map U"
@@ -739,15 +739,17 @@ if (alstat.ne.0) then
   stop
 end if
 U_a = 0.d0
+
+nthreads = 8 ! Just use 8, thereby not using the OMP_GET_MAX_THREADS() function
+             ! ... If there are more than 4 cores there is lower level threading
+             ! within imcom_calc_ATTpBT
 ! Begin loop, do OPEN MP stuff
 !$omp parallel
 !$omp do schedule(dynamic, 1) private(a_i, a_f)
-do i=1, 4   ! Just use 4, thereby not using the OMP_GET_MAX_THREADS() function
-            ! ... If there are more than 4 cores there is lower level threading
-            ! within imcom_calc_ATTpBT
-  a_i = 1 + (i - 1) * (m / nthmax)
-  if (i.ne.nthmax) then
-    a_f = i * (m / nthmax)
+do i=1, nthreads   
+  a_i = 1 + (i - 1) * (m / nthreads)
+  if (i.ne.nthreads) then
+    a_f = i * (m / nthreads)
   else
     a_f = m
   end if
