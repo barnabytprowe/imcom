@@ -46,7 +46,7 @@ logical :: Aexists, Bexists
 
 npoly = 7     ! Make these user specifiable?
 npad = 3       !
-maxNbis = 50
+maxNbis = 53       ! This since 2^-53 is the machine precision at real(KIND=8)
 
 ! Also, currently kappa_min and kappa_max are now set via C_a * machine_epsilon
 ! and C_a / machine_epsilon [accessed with DLAMCH('Eps')], rather than
