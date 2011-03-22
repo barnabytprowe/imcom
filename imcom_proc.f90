@@ -201,8 +201,8 @@ integer :: npoly, npm, iout, jout, imin, jmin, imax, jmax, ii, jj
 
 npoly = npoly_in
 if (mod(npoly, 2).eq.0) then
-  write(*, FMT='(A)') "IMCOM WARNING: Even-order polynomial interpolation specified..."
-  write(*, FMT='(A)') "IMCOM WARNING: Using NPOLY-1 for interpolation (e.g. linear, cubic, quintic...)"
+  write(*, FMT='(A)') "IMCOM WARNING: Odd-order polynomial interpolation specified..."
+  write(*, FMT='(A)') "IMCOM WARNING: Using NPOLY-1 for interpolation (e.g. quadratic...)"
   npoly = npoly - 1
 end if
 npm = npoly / 2    ! integer division rounds down, i.e. 1/2 = 0, 3/2 = 1
@@ -422,8 +422,8 @@ ns = ns-1
 do m=1, n-1
 
   den(1: n - m) = ho(1: n - m) - ho(1 + m: n)
-  if (any(den(1:n-m) == 0.d0)) then
-    write(*, FMT='(A)') "IMCOM ERROR: Identical x input locations to IMCOM_POLINT"
+  if (any(den(1:n-m).le.1.d-15)) then
+    write(*, FMT='(A)') "IMCOM ERROR: Two or more identical x input locations to IMCOM_POLINT"
     stop
   end if
   den(1: n - m) = (c(2: n - m + 1) - d(1: n - m)) / den(1: n - m)

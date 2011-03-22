@@ -1,5 +1,5 @@
-!    IMCOM_BISECT.F90 - Fortran 95 module that interval bisection root- 
-!                       finding for the prototype IMCOM package
+!    IMCOM_BISECT.F90 - Fortran 95 module that handles interval bisection  
+!                       root-finding for the prototype IMCOM package
 !    Copyright (C) 2011 Barnaby Rowe
 !
 !    This program is free software: you can redistribute it and/or modify
@@ -60,8 +60,8 @@ if (Texists.and.(forcebuild.eq.0)) then
   T_ia = 0.d0
   write(*, FMT='(A)') "IMCOM: Reading T matrix from "//trim(Tfile)
   call imcom_readfits(trim(Tfile), n1_tmp, n2_tmp, T_ia)
-  call imcom_build_U
-  call imcom_build_S
+!  call imcom_build_U  don't bother with these... they exist, if T exists.
+!  call imcom_build_S
 else
   call imcom_bisect_kappa(USB, US_max, kappa_min, kappa_max, US_tol, maxNbis)
   call imcom_build_T
