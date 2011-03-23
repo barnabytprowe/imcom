@@ -79,7 +79,6 @@ call imcom_build_uxuy
 
 inquire(FILE=trim(Afile), EXIST=Aexists)
 inquire(FILE=trim(Bfile), EXIST=Bexists)
-inquire(FILE=trim(Bfile), EXIST=Texists)
 if ((Bexists.eqv..FALSE.).or.(Aexists.eqv..FALSE.).or.(forceSys.eq.1)) then
 ! Rotate PSFs and calculate the Fourier transform Gt(ux, uy) of each
   write(*, FMT='(A)') "IMCOM: Rotating and Fourier transforming PSF images"
@@ -124,7 +123,8 @@ kappa_max = C_a / eps
 !call imcom_build_A_oldschool(1)
 !call imcom_eigen_Aold
 
-if (Texists.eqv.(.False.).or.(forceSys.ne.0).or.(forceT.ne.0)) then
+inquire(FILE=trim(Tfile), EXIST=Texists)
+if (((forceSys.ne.0).or.(forceT.ne.0)).or.(Texists.eqv..False.)) then
 ! Read / build the A array
   call imcom_get_A(npoly, npad, 1, forceSys)  ! arg#3 = save, arg#4 = force build
   call imcom_get_QL(1, forceSys)

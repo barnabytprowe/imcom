@@ -399,11 +399,11 @@ END FUNCTION imcom_iminloc
 
 !---
 
-SUBROUTINE imcom_polint(xa, ya, x, y, dy)
+SUBROUTINE imcom_polint(xa, ya, x, y, dy, eps)
 ! Adapted from Numerical recipes polint.f90
 implicit none
 REAL(KIND=8), DIMENSION(:), INTENT(IN) :: xa, ya
-REAL(KIND=8), INTENT(IN) :: x
+REAL(KIND=8), INTENT(IN) :: x, eps
 REAL(KIND=8), INTENT(OUT) :: y, dy
 INTEGER :: m, n, ns
 REAL(KIND=8), DIMENSION(size(xa)) :: c, d, den, ho
@@ -422,7 +422,7 @@ ns = ns-1
 do m=1, n-1
 
   den(1: n - m) = ho(1: n - m) - ho(1 + m: n)
-  if (any(den(1:n-m).le.1.d-15)) then
+  if (any(abs(den(1:n-m)).le.eps)) then
     write(*, FMT='(A)') "IMCOM ERROR: Two or more identical x input locations to IMCOM_POLINT"
     stop
   end if
@@ -452,6 +452,8 @@ REAL(KIND=8), INTENT(OUT) :: y, dy
 INTEGER :: j, m, ndum
 REAL(KIND=8), DIMENSION(size(x1a)) :: ymtmp
 REAL(KIND=8), DIMENSION(size(x2a)) :: yntmp
+REAL(KIND=8) :: eps
+REAL(KIND=8), EXTERNAL :: DLAMCH
 
 m = size(x1a) ! assert_eq(size(x1a),size(ya,1),'polin2: m')
 if (size(ya, 1).ne.m) then
@@ -463,13 +465,14 @@ if (size(ya, 2).ne.ndum) then
   write(*, FMT='(A)') "IMCOM ERROR: x2a and ya(1, :) input must be same size for IMCOM_POLIN2"
   stop
 end if
+eps = DLAMCH('Eps')   ! From LAPACK, machine epsilon, used in polint
 do j=1, m
 
   yntmp = ya(j, :)
-  call imcom_polint(x2a, yntmp, x2, ymtmp(j), dy)
+  call imcom_polint(x2a, yntmp, x2, ymtmp(j), dy, eps)
 
 end do
-call imcom_polint(x1a, ymtmp, x1, y, dy)
+call imcom_polint(x1a, ymtmp, x1, y, dy, eps)
 END SUBROUTINE imcom_polin2
 
 !---
