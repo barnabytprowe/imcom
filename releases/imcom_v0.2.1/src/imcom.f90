@@ -42,7 +42,7 @@ integer :: userxy, i, npoly, npad
 integer(KIND=8) :: ftplan
 real(KIND=8) :: eps
 real(KIND=8), external :: DLAMCH
-logical :: Aexists, Bexists
+logical :: Aexists, Bexists, Texists
 
 npoly = 7     ! Make these user specifiable?
 npad = 3       !
@@ -123,14 +123,16 @@ kappa_max = C_a / eps
 !call imcom_build_A_oldschool(1)
 !call imcom_eigen_Aold
 
+inquire(FILE=trim(Tfile), EXIST=Texists)
+if (((forceSys.ne.0).or.(forceT.ne.0)).or.(Texists.eqv..False.)) then
 ! Read / build the A array
-call imcom_get_A(npoly, npad, 1, forceSys)  ! arg#3 = save, arg#4 = force build
-call imcom_get_QL(1, forceSys)
+  call imcom_get_A(npoly, npad, 1, forceSys)  ! arg#3 = save, arg#4 = force build
+  call imcom_get_QL(1, forceSys)
 ! Read / build the B array
-call imcom_get_B(npoly, npad, 1, forceSys)
+  call imcom_get_B(npoly, npad, 1, forceSys)
 ! Construct the projection matrices
-call imcom_get_P(1, forceSys)
-
+  call imcom_get_P(1, forceSys)
+end if
 ! Read / solve the T array
 call imcom_get_T(forceT)
 

@@ -1,7 +1,7 @@
 %!PS-Adobe-2.0
 %%Creator: dvips(k) 5.95a Copyright 2005 Radical Eye Software
 %%Title: imcom_documentation_v0.2.dvi
-%%Pages: 6
+%%Pages: 7
 %%PageOrder: Ascend
 %%BoundingBox: 0 0 595 842
 %%DocumentFonts: Times-Bold Times-BoldItalic Times-Roman Courier CMSY10
@@ -13,7 +13,7 @@
 %DVIPSCommandLine: dvips imcom_documentation_v0.2.dvi -o
 %+ imcom_documentation.ps
 %DVIPSParameters: dpi=600
-%DVIPSSource:  TeX output 2011.02.22:1058
+%DVIPSSource:  TeX output 2011.03.23:1613
 %%BeginProcSet: tex.pro 0 0
 %!
 /TeXDict 300 dict def TeXDict begin/N{def}def/B{bind def}N/S{exch}N/X{S
@@ -989,8 +989,8 @@ TeXBase1Encoding ReEncodeFont}68 83.022 /Courier rf /Fn
 105[42 27[37 42 42 60 42 42 23 32 28 42 42 42 42 65 23
 42 23 23 42 42 28 37 42 37 42 37 28 6[60 1[78 60 60 51
 46 55 60 46 60 60 74 51 60 1[28 60 60 46 51 60 55 55
-60 3[47 1[23 23 42 42 1[42 42 42 42 42 42 42 23 21 28
-21 2[28 28 28 65 4[28 29[46 46 2[{TeXBase1Encoding ReEncodeFont}74
+60 3[47 1[23 23 42 42 42 42 42 42 42 42 42 42 23 21 28
+21 2[28 28 28 65 4[28 29[46 46 2[{TeXBase1Encoding ReEncodeFont}75
 83.022 /Times-Roman rf /Fo 134[37 1[55 4[32 2[42 46 8[37
 2[42 42 14[55 15[55 15[42 42 42 6[28 28 40[{
 TeXBase1Encoding ReEncodeFont}15 83.022 /Times-BoldItalic
@@ -1207,275 +1207,295 @@ y Fn(maps.)113 2572 y(F)o(ollo)n(wing)j(on)g(from)g(the)i(pre)n(vious)d
 b(\(perhaps)f(follo)n(wing)f(some)i(change)f(in)i(the)f(input)f
 (conditions\),)f(the)o(y)i(w)o(ould)f(then)h(the)g(command:)113
 2871 y Fm(./imcom)49 b(config_example)e(S)i(1.d-3)g(1.d-6)g(1)h(1)113
-3226 y Fq(4)119 b(The)31 b(IMCOM)e(v0.2)g(con\002g)i(\002les)113
-3486 y Fn(The)20 b(IMCOM)h(con\002g)f(\002le)h(contains)f(\002lenames)h
-(and)f(paths)g(to)h(all)g(the)g(input)f(images)g(and)g(essential)h
-(information)e(about)113 3585 y(what)j(these)h(contain,)e(as)i(well)g
-(as)g(de\002ning)d(\002lenames)i(for)g(the)g(outputs)f(of)h(the)g
-(IMCOM)h(algorithm.)29 b(The)22 b(best)g(w)o(ay)h(to)113
-3685 y(elucidate)d(the)g(con\002guration)d(\002le)k(is)g(using)f(the)g
-(e)o(xample)f(gi)n(v)o(en)g(in)h(the)g Fm(./example/userxy1/)e
-Fn(directory:)113 3859 y Fm(PSFXSCALE)148 b(0.1)113 3959
-y(PSFYSCALE)g(0.1)113 4059 y(NEXP)398 b(4)113 4158 y(USERXY)298
-b(1)113 4258 y(INCONFIG1)148 b(config_example.input1)113
-4358 y(INCONFIG2)g(config_example.input2)113 4457 y(INCONFIG3)g
-(config_example.input3)113 4557 y(INCONFIG4)g(config_example.input4)113
-4656 y(OUTCONFIG)g(config_example.output)113 4756 y(AFILE)348
-b(A.example.fits)113 4856 y(BFILE)g(B.example.fits)113
-4955 y(QFILE)g(Q.example.fits)113 5055 y(LFILE)g(L.example.fits)113
-5155 y(PFILE)g(P.example.fits)113 5329 y Fn(Order)18
-b(and)g(spacing)g(matters)g(for)g(the)h(simple)f(interf)o(ace)g(used)h
-(by)f(IMCOM,)g(although)f(IDL)h(scripts)h(are)g(pro)o(vided)d(in)j(the)
-113 5429 y(directory)d Fm(./idl/)i Fn(to)g(write)g(this)h(\002le)f
+3145 y Fn(One)20 b(further)f(point)g(w)o(orth)h(mentioning)d(is)22
+b(that)e(if)g(the)g Fj(T)1786 3157 y Fi(\013i)1877 3145
+y Fn(matrix)g(speci\002ed)f(in)i(the)f(con\002guration)d(\002les)k
+(already)e(e)o(xists)113 3244 y(at)24 b(run)e(time,)h(and)g(if)g
+Fm(<forceT>)f Fn(or)h Fm(<forceSys>)e Fn(are)i(not)g(set,)h(then)f(the)
+g(IMCOM)g(code)f(will)i(simply)e(read)h(in)g(the)113
+3344 y(pre-e)o(xisting)f Fj(T)582 3356 y Fi(\013i)677
+3344 y Fn(and)h(use)h(it)h(to)f(calculate)f Fj(H)1504
+3356 y Fi(\013)1576 3344 y Fn(from)g Fj(I)1798 3356 y
+Fi(i)1826 3344 y Fn(.)37 b(No)23 b(other)g(functions)g(will)i(be)e
+(performed)f(\(e.g.)35 b(calculating)113 3444 y Fj(A)175
+3456 y Fi(\013ij)277 3444 y Fn(,)26 b Fj(U)381 3456 y
+Fi(\013)453 3444 y Fn(etc.\).)36 b(This)25 b(is)g(done)e(to)i(allo)n(w)
+f(the)g(same)h(transformation)c(to)k(be)f(applied)f(to)i(man)o(y)e
+(small,)i(nearby)e(patches)113 3543 y(with)e(maximum)d(ef)n(\002cienc)o
+(y)h(for)g(those)h(cases)h(where)f Fj(T)1766 3555 y Fi(\013i)1857
+3543 y Fn(is)h(unchanged.)113 3898 y Fq(4)119 b(The)31
+b(IMCOM)e(v0.2)g(con\002g)i(\002les)113 4158 y Fn(The)20
+b(IMCOM)h(con\002g)f(\002le)h(contains)f(\002lenames)h(and)f(paths)g
+(to)h(all)g(the)g(input)f(images)g(and)g(essential)h(information)e
+(about)113 4258 y(what)j(these)h(contain,)e(as)i(well)g(as)g
+(de\002ning)d(\002lenames)i(for)g(the)g(outputs)f(of)h(the)g(IMCOM)h
+(algorithm.)29 b(The)22 b(best)g(w)o(ay)h(to)113 4358
+y(elucidate)d(the)g(con\002guration)d(\002le)k(is)g(using)f(the)g(e)o
+(xample)f(gi)n(v)o(en)g(in)h(the)g Fm(./example/userxy1/)e
+Fn(directory:)113 4532 y Fm(PSFXSCALE)148 b(0.1)113 4632
+y(PSFYSCALE)g(0.1)113 4731 y(NEXP)398 b(4)113 4831 y(USERXY)298
+b(1)113 4930 y(INCONFIG1)148 b(config_example.input1)113
+5030 y(INCONFIG2)g(config_example.input2)113 5130 y(INCONFIG3)g
+(config_example.input3)113 5229 y(INCONFIG4)g(config_example.input4)113
+5329 y(OUTCONFIG)g(config_example.output)113 5429 y(AFILE)348
+b(A.example.fits)113 5528 y(BFILE)g(B.example.fits)113
+5628 y(QFILE)g(Q.example.fits)1892 5909 y Fn(3)p eop
+end
+%%Page: 4 4
+TeXDict begin 4 3 bop 113 463 a Fm(LFILE)348 b(L.example.fits)113
+563 y(PFILE)g(P.example.fits)113 737 y Fn(Order)18 b(and)g(spacing)g
+(matters)g(for)g(the)h(simple)f(interf)o(ace)g(used)h(by)f(IMCOM,)g
+(although)f(IDL)h(scripts)h(are)g(pro)o(vided)d(in)j(the)113
+837 y(directory)d Fm(./idl/)i Fn(to)g(write)g(this)h(\002le)f
 (automatically)f(supplying)f(the)i(rele)n(v)n(ant)f(parameters)g(as)h
-(k)o(e)o(yw)o(ords)f(\(see)h(Section)113 5528 y(4.3\).)24
+(k)o(e)o(yw)o(ords)f(\(see)h(Section)113 936 y(4.3\).)24
 b(W)-7 b(e)21 b(no)n(w)f(gi)n(v)o(e)f(a)i(brief)f(description)e(of)i
 (these)h(parameters)e(\(see)h(also)g(Ro)n(we)h(et)g(al.)f(2011,)f(in)h
-(prep.\):)1892 5909 y(3)p eop end
-%%Page: 4 4
-TeXDict begin 4 3 bop 238 463 a Fl(\017)41 b Fm(PSFXSCALE)25
-b Fn(&)i Fm(PSFYSCALE)f Fn(gi)n(v)o(e)f(the)i(physical)f(dimensions)f
-(along)h Fj(x)i Fn(and)e Fj(y)k Fn(of)c(the)h(pix)o(els)f(in)h(the)f
-(input)321 563 y(PSF)21 b(images)f Fj(G)801 575 y Fi(i)829
-563 y Fg(\()p Fc(r)p Fg(\))h Fn(and)f Fg(\000\()p Fc(r)p
-Fg(\))p Fn(.)238 724 y Fl(\017)41 b Fm(NEXP)16 b Fn(is)h(the)f(number)f
-(of)h(e)o(xposures)e(in)i(the)h(input)e(images)h Fj(I)2106
-736 y Fi(i)2134 724 y Fn(.)24 b(In)16 b(this)h(implementation)d(each)i
-(of)g(these)g(e)o(xposures)321 823 y(is)21 b(supplied)e(as)i(a)f
-(separate)g Fm(FITS)g Fn(image.)238 985 y Fl(\017)41
+(prep.\):)238 1177 y Fl(\017)41 b Fm(PSFXSCALE)25 b Fn(&)i
+Fm(PSFYSCALE)f Fn(gi)n(v)o(e)f(the)i(physical)f(dimensions)f(along)h
+Fj(x)i Fn(and)e Fj(y)k Fn(of)c(the)h(pix)o(els)f(in)h(the)f(input)321
+1277 y(PSF)21 b(images)f Fj(G)801 1289 y Fi(i)829 1277
+y Fg(\()p Fc(r)p Fg(\))h Fn(and)f Fg(\000\()p Fc(r)p
+Fg(\))p Fn(.)238 1443 y Fl(\017)41 b Fm(NEXP)16 b Fn(is)h(the)f(number)
+f(of)h(e)o(xposures)e(in)i(the)h(input)e(images)h Fj(I)2106
+1455 y Fi(i)2134 1443 y Fn(.)24 b(In)16 b(this)h(implementation)d(each)
+i(of)g(these)g(e)o(xposures)321 1542 y(is)21 b(supplied)e(as)i(a)f
+(separate)g Fm(FITS)g Fn(image.)238 1708 y Fl(\017)41
 b Fm(USERXY)22 b Fn(switches)h(between)e(the)i(tw)o(o)g(supported)d
 (input)i(formats)g(for)g(the)g(user)h(to)f(supply)g Fc(r)3121
-997 y Fi(i)3172 985 y Fn(and)g Fc(R)3387 997 y Fi(\013)3434
-985 y Fn(.)32 b(This)23 b(is)321 1084 y(discussed)d(in)g(detail)g(in)h
-(Sections)f(4.1)f(&)i(4.2.)238 1245 y Fl(\017)41 b Fm(INCONFIG)p
+1720 y Fi(i)3172 1708 y Fn(and)g Fc(R)3387 1720 y Fi(\013)3434
+1708 y Fn(.)32 b(This)23 b(is)321 1808 y(discussed)d(in)g(detail)g(in)h
+(Sections)f(4.1)f(&)i(4.2.)238 1974 y Fl(\017)41 b Fm(INCONFIG)p
 Fb(N)24 b Fn(gi)n(v)o(es)16 b(the)g(\002lename)g(of)g(the)h
 (con\002guration)c(\002le)18 b(for)d(the)i Fb(N)9 b Fn(th)16
 b(e)o(xposure)f(where)g Fb(N)26 b Fg(=)d(1)p Fj(;)14
-b(:)g(:)g(:)f(;)k Fm(NEXP)p Fn(.)321 1345 y(See)j(Sections)g(4.1)g(&)g
-(4.2.)238 1506 y Fl(\017)41 b Fm(OUTCONFIG)21 b Fn(gi)n(v)o(es)h(the)h
+b(:)g(:)g(:)f(;)k Fm(NEXP)p Fn(.)321 2074 y(See)j(Sections)g(4.1)g(&)g
+(4.2.)238 2240 y Fl(\017)41 b Fm(OUTCONFIG)21 b Fn(gi)n(v)o(es)h(the)h
 (\002lename)f(of)g(the)g(con\002guration)e(\002le)j(for)f(the)h(output)
-e(properties,)g(see)i(Sections)g(4.1)f(&)321 1606 y(4.2.)238
-1767 y Fl(\017)41 b Fm(AFILE)p Fn(,)17 b Fm(BFILE)p Fn(,)h
+e(properties,)g(see)i(Sections)g(4.1)f(&)321 2339 y(4.2.)238
+2505 y Fl(\017)41 b Fm(AFILE)p Fn(,)17 b Fm(BFILE)p Fn(,)h
 Fm(QFILE)p Fn(,)g Fm(LFILE)g Fn(&)g Fm(PFILE)g Fn(gi)n(v)o(e)g(the)g
 (\002lename)g(of)g(the)g Fm(FITS)g Fn(\002les)h(used)f(to)h(store)f
-(the)h Fj(A)3591 1779 y Fi(\013ij)3692 1767 y Fn(,)321
-1866 y Fj(B)384 1878 y Fi(\013i)454 1866 y Fn(,)24 b
-Fj(Q)565 1878 y Fi(ij)623 1866 y Fn(,)f Fj(\025)715 1878
-y Fi(i)766 1866 y Fn(&)g Fj(P)907 1878 y Fi(\013i)1001
-1866 y Fn(system)f(matrix/v)o(ector)e(objects,)j(respecti)n(v)o(ely)-5
+(the)h Fj(A)3591 2517 y Fi(\013ij)3692 2505 y Fn(,)321
+2605 y Fj(B)384 2617 y Fi(\013i)454 2605 y Fn(,)24 b
+Fj(Q)565 2617 y Fi(ij)623 2605 y Fn(,)f Fj(\025)715 2617
+y Fi(i)766 2605 y Fn(&)g Fj(P)907 2617 y Fi(\013i)1001
+2605 y Fn(system)f(matrix/v)o(ector)e(objects,)j(respecti)n(v)o(ely)-5
 b(.)30 b(If)22 b(the)g(\002le)h(does)f(not)h(e)o(xist,)f(these)h
-(objects)321 1966 y(will)i(be)f(calculated)g(and)g(sa)n(v)o(ed)g(to)h
+(objects)321 2705 y(will)i(be)f(calculated)g(and)g(sa)n(v)o(ed)g(to)h
 (the)f(corresponding)d Fb(X)6 b Fm(FILE)p Fn(;)25 b(if)f(the)h(\002le)g
 (does)f(e)o(xist)h(it)g(will)g(be)g(read)f(in)g(and)321
-2066 y(used)c(in)g(subsequent)f(calculations)g(unless)h
+2804 y(used)c(in)g(subsequent)f(calculations)g(unless)h
 Fm(forceSys)g Fn(=)g(1)g(is)i(speci\002ed)d(at)i(the)f(command)f(line.)
-113 2291 y(So)29 b(much)g(for)f(the)h(primary)e(con\002guration)g
+113 3045 y(So)29 b(much)g(for)f(the)h(primary)e(con\002guration)g
 (\002le;)34 b(we)29 b(no)n(w)g(go)g(on)f(to)h(describe)g(its)h(of)n
-(fshoots,)f(the)g(input)f(and)h(output)113 2391 y(con\002guration)18
+(fshoots,)f(the)g(input)f(and)h(output)113 3145 y(con\002guration)18
 b(\002les,)j(which)e(dif)n(fer)g(in)i(their)f(content)f(depending)e(on)
-j(the)g(v)n(alue)g(of)g Fm(USERXY)p Fn(.)113 2695 y Fd(4.1)99
+j(the)g(v)n(alue)g(of)g Fm(USERXY)p Fn(.)113 3457 y Fd(4.1)99
 b(Input)26 b(&)f(output)h(con\002g)g(\002les)f(in)g(the)h(general)f
-(case)g(USERXY)g(=)g(1)113 2920 y Fn(The)e(most)g(general)f(and)g(po)n
+(case)g(USERXY)g(=)g(1)113 3687 y Fn(The)e(most)g(general)f(and)g(po)n
 (werful)f(w)o(ay)i(for)g(the)g(user)f(to)i(supply)e(the)h(input)f
 (images)g(and)h(pix)o(el)f(locations)h(is)g(by)g(gi)n(ving)113
-3020 y Fm(FITS)28 b Fn(images)g(of)g Fj(x)750 3032 y
-Fi(i)806 3020 y Fn(and)g Fj(y)996 3032 y Fi(i)1052 3020
+3787 y Fm(FITS)28 b Fn(images)g(of)g Fj(x)750 3799 y
+Fi(i)806 3787 y Fn(and)g Fj(y)996 3799 y Fi(i)1052 3787
 y Fn(corresponding)c(to)29 b(the)f(input)f(images)h(for)f
-Fj(I)2403 3032 y Fi(i)2432 3020 y Fn(,)j(where)d Fc(r)2753
-3032 y Fi(i)2819 3020 y Fg(=)37 b(\()p Fj(x)3000 3032
-y Fi(i)3029 3020 y Fj(;)14 b(y)3107 3032 y Fi(i)3134
-3020 y Fg(\))p Fn(.)49 b(This)28 b(choice)g(is)113 3119
+Fj(I)2403 3799 y Fi(i)2432 3787 y Fn(,)j(where)d Fc(r)2753
+3799 y Fi(i)2819 3787 y Fg(=)37 b(\()p Fj(x)3000 3799
+y Fi(i)3029 3787 y Fj(;)14 b(y)3107 3799 y Fi(i)3134
+3787 y Fg(\))p Fn(.)49 b(This)28 b(choice)g(is)113 3887
 y(speci\002ed)20 b(by)g(setting)g Fm(USERXY=1)f Fn(in)i(the)f(primary)e
-(con\002guration)g(\002le.)113 3288 y(Each)i(of)g(the)g
+(con\002guration)g(\002le.)113 4061 y(Each)i(of)g(the)g
 Fm(NEXP)g Fn(input)f(con\002guration)f(\002les)j(then)f(tak)o(es)g(a)h
 (format)e(illustrated)h(by)g(the)g(follo)n(wing)e(e)o(xample)113
-3388 y Fm(config_example.input1)f Fn(\(i.e.)j(the)g(input)g(con\002g)f
+4161 y Fm(config_example.input1)f Fn(\(i.e.)j(the)g(input)g(con\002g)f
 (\002le)i(corresponding)16 b(to)21 b(the)f(\002rst)h(e)o(xposure\))d
-(from)h(the)113 3487 y Fm(./example/userxy1/)f Fn(directory:)113
-3656 y Fm(PSFFILE)248 b(psf.example.fits)113 3756 y(GIMFILE)g
-(test1.example.fits)113 3855 y(ROTANGDEG)148 b(0.0000000)113
-3955 y(NOISE)348 b(1.0000000)113 4055 y(GIMXFILE)198
-b(x1.example.fits)113 4154 y(GIMYFILE)g(y1.example.fits)238
-4380 y Fl(\017)41 b Fm(PSFFILE)27 b Fn(is)i(the)g(\002lename)f(for)f
-(the)h(image)g(of)g(the)h(PSF)g Fj(G)2176 4392 y Fi(i)2204
-4380 y Fg(\()p Fc(r)p Fg(\))p Fn(,)i(with)e Fj(x)g Fn(and)f
+(from)h(the)113 4260 y Fm(./example/userxy1/)f Fn(directory:)113
+4435 y Fm(PSFFILE)248 b(psf.example.fits)113 4534 y(GIMFILE)g
+(test1.example.fits)113 4634 y(ROTANGDEG)148 b(0.0000000)113
+4733 y(NOISE)348 b(1.0000000)113 4833 y(GIMXFILE)198
+b(x1.example.fits)113 4933 y(GIMYFILE)g(y1.example.fits)238
+5173 y Fl(\017)41 b Fm(PSFFILE)27 b Fn(is)i(the)g(\002lename)f(for)f
+(the)h(image)g(of)g(the)h(PSF)g Fj(G)2176 5185 y Fi(i)2204
+5173 y Fg(\()p Fc(r)p Fg(\))p Fn(,)i(with)e Fj(x)g Fn(and)f
 Fj(y)j Fn(pix)o(el)d(dimensions)f(gi)n(v)o(en)g(as)321
-4479 y Fm(PSFXSCALE)18 b Fn(and)h Fm(PSFYSCALE)g Fn(in)h(the)f(primary)
+5273 y Fm(PSFXSCALE)18 b Fn(and)h Fm(PSFYSCALE)g Fn(in)h(the)f(primary)
 g(con\002g)f(\002le.)26 b(Note)19 b(therefore)f(that)i(these)g(units)g
-(are)f(\002x)o(ed)g(and)321 4579 y(may)g(not)h(v)n(ary)g(from)f(e)o
-(xposure)f(to)i(e)o(xposure.)238 4740 y Fl(\017)41 b
+(are)f(\002x)o(ed)g(and)321 5373 y(may)g(not)h(v)n(ary)g(from)f(e)o
+(xposure)f(to)i(e)o(xposure.)238 5539 y Fl(\017)41 b
 Fm(GIMFILE)19 b Fn(is)i(the)g(`galaxy')c(image)j(\002le)h(for)f(this)g
-(e)o(xposure,)e(making)h(up)h(part)g(of)g Fj(I)2784 4752
-y Fi(i)2812 4740 y Fn(.)238 4901 y Fl(\017)41 b Fm(ROTANGDEG)15
+(e)o(xposure,)e(making)h(up)h(part)g(of)g Fj(I)2784 5551
+y Fi(i)2812 5539 y Fn(.)1892 5909 y(4)p eop end
+%%Page: 5 5
+TeXDict begin 5 4 bop 238 463 a Fl(\017)41 b Fm(ROTANGDEG)15
 b Fn(is)i(the)f(angle)g(at)h(which)e(the)i(pix)o(el)e(grid)h(for)f
 (this)i(input)f(e)o(xposure)e(is)j(rotated,)f(in)g(de)o(grees,)g
-(relati)n(v)o(e)g(to)321 5001 y(the)h(output)f(pix)o(el)h(grid.)24
+(relati)n(v)o(e)g(to)321 563 y(the)h(output)f(pix)o(el)h(grid.)24
 b(This)17 b(needs)g(to)h(be)f(kno)n(wn)f(as)j(it)f(leads)f(to)h(a)g
 (relati)n(v)o(e)f(rotation)f(of)h(the)h(PSF)-7 b(.)18
-b(As)h(in)e Fm(USERXY)321 5100 y Fn(=)24 b(1)g(the)f(user)h
-(speci\002es)g Fj(x)1103 5112 y Fi(i)1156 5100 y Fn(and)f
-Fj(y)1341 5112 y Fi(i)1393 5100 y Fn(as)h(image)f(\002les)i(\(see)f
-(directly)f(belo)n(w\))g(this)h(w)o(ould)f(allo)n(w)-5
-b(,)24 b(in)g(principle,)f(this)321 5200 y(v)n(alue)d(to)h(be)f
-(determined)f(from)h(the)h(input)f(data)g(without)g(it)i(needing)d(to)i
-(be)g(speci\002ed.)26 b(Ho)n(we)n(v)o(er)m(,)19 b(in)i(this)g(current)
-321 5300 y(v)o(ersion)i(of)h(IMCOM)g(the)g(author)f(has)h(been)g(too)g
-(lazy)g(to)g(do)g(this!)37 b(Positi)n(v)o(e)24 b(angles)g(denote)f(an)h
-(anti-clockwise)321 5399 y(rotation.)238 5560 y Fl(\017)41
+b(As)h(in)e Fm(USERXY)321 662 y Fn(=)24 b(1)g(the)f(user)h(speci\002es)
+g Fj(x)1103 674 y Fi(i)1156 662 y Fn(and)f Fj(y)1341
+674 y Fi(i)1393 662 y Fn(as)h(image)f(\002les)i(\(see)f(directly)f
+(belo)n(w\))g(this)h(w)o(ould)f(allo)n(w)-5 b(,)24 b(in)g(principle,)f
+(this)321 762 y(v)n(alue)d(to)h(be)f(determined)f(from)h(the)h(input)f
+(data)g(without)g(it)i(needing)d(to)i(be)g(speci\002ed.)26
+b(Ho)n(we)n(v)o(er)m(,)19 b(in)i(this)g(current)321 862
+y(v)o(ersion)i(of)h(IMCOM)g(the)g(author)f(has)h(been)g(too)g(lazy)g
+(to)g(do)g(this!)37 b(Positi)n(v)o(e)24 b(angles)g(denote)f(an)h
+(anti-clockwise)321 961 y(rotation.)238 1127 y Fl(\017)41
 b Fm(NOISE)25 b Fn(gi)n(v)o(es)h Fk(all)g Fn(the)g(diagonal)f(v)n
 (alues)g(of)h(the)g(assumed)g(stationary)-5 b(,)26 b(diagonal)e(input)h
-(noise)h(co)o(v)n(ariance)e Fj(N)3655 5572 y Fi(ij)321
-5660 y Fn(relating)16 b(to)i(this)f(e)o(xposure.)22 b(V)-9
+(noise)h(co)o(v)n(ariance)e Fj(N)3655 1139 y Fi(ij)321
+1226 y Fn(relating)16 b(to)i(this)f(e)o(xposure.)22 b(V)-9
 b(alues)18 b(of)f(this)g(parameter)f(can)h(v)n(ary)f(between)h(e)o
-(xposures,)f(b)n(ut)h(not)g(yet)g(within)g(them.)1892
-5909 y(4)p eop end
-%%Page: 5 5
-TeXDict begin 5 4 bop 238 463 a Fl(\017)41 b Fm(GIMXFILE)23
-b Fn(&)h Fm(GIMYFILE)e Fn(gi)n(v)o(e)h(the)h(\002lenames)g(of)f(the)h
-Fm(FITS)g Fn(\002les)h(where)e(the)h(input)f Fj(x)3089
-475 y Fi(i)3141 463 y Fn(and)g Fj(y)3326 475 y Fi(i)3378
-463 y Fn(ha)n(v)o(e)g(been)321 563 y(stored)c(by)h(the)g(user)-5
-b(.)26 b(These)20 b(must)g(be)g(in)g(the)h(same)f(physical)f(units)h
-(as)h Fm(PSFXSCALE)e Fn(and)h Fm(PSFYSCALE)p Fn(.)113
-803 y(The)g(output)f(con\002g)g(\002le)i(similarly)f(contains)f(the)h
+(xposures,)f(b)n(ut)h(not)g(yet)g(within)g(them.)238
+1392 y Fl(\017)41 b Fm(GIMXFILE)23 b Fn(&)h Fm(GIMYFILE)e
+Fn(gi)n(v)o(e)h(the)h(\002lenames)g(of)f(the)h Fm(FITS)g
+Fn(\002les)h(where)e(the)h(input)f Fj(x)3089 1404 y Fi(i)3141
+1392 y Fn(and)g Fj(y)3326 1404 y Fi(i)3378 1392 y Fn(ha)n(v)o(e)g(been)
+321 1491 y(stored)c(by)h(the)g(user)-5 b(.)26 b(These)20
+b(must)g(be)g(in)g(the)h(same)f(physical)f(units)h(as)h
+Fm(PSFXSCALE)e Fn(and)h Fm(PSFYSCALE)p Fn(.)113 1730
+y(The)g(output)f(con\002g)g(\002le)i(similarly)f(contains)f(the)h
 (location)g(of)g(the)g(\002les)h(needed)e(to)h(specify)f
-Fc(R)2919 815 y Fi(\013)2966 803 y Fn(,)i(as)g(well)f(as)h(the)f
-(desired)113 903 y(storage)29 b(locations)h(of)f(the)h(output)f(image)g
-(and)h(objecti)n(v)o(e)e(functions)g Fj(U)2299 915 y
-Fi(\013)2377 903 y Fn(and)h Fg(\006)2587 915 y Fi(\013\013)2678
-903 y Fn(.)54 b(Y)-8 b(et)30 b(again,)h(its)g(format)e(can)h(be)113
-1003 y(illustrated)20 b(using)g(one)f(of)h(\002les)h(in)g(the)f
+Fc(R)2919 1742 y Fi(\013)2966 1730 y Fn(,)i(as)g(well)f(as)h(the)f
+(desired)113 1830 y(storage)29 b(locations)h(of)f(the)h(output)f(image)
+g(and)h(objecti)n(v)o(e)e(functions)g Fj(U)2299 1842
+y Fi(\013)2377 1830 y Fn(and)h Fg(\006)2587 1842 y Fi(\013\013)2678
+1830 y Fn(.)54 b(Y)-8 b(et)30 b(again,)h(its)g(format)e(can)h(be)113
+1930 y(illustrated)20 b(using)g(one)f(of)h(\002les)h(in)g(the)f
 Fm(./example/userxy1/)d Fn(directory)-5 b(,)18 b Fm
-(config_example.output)p Fn(:)113 1177 y Fm(GAMFILE)248
-b(psf.example.fits)113 1277 y(OUTFILE)g(H.example.fits)113
-1376 y(KFILE)348 b(K.example.fits)113 1476 y(TFILE)g(T.example.fits)113
-1576 y(SFILE)g(S.example.fits)113 1675 y(UFILE)g(U.example.fits)113
-1775 y(OUTXFILE)198 b(xout.example.fits)113 1874 y(OUTYFILE)g
-(yout.example.fits)238 2132 y Fl(\017)41 b Fm(GAMFILE)18
+(config_example.output)p Fn(:)113 2103 y Fm(GAMFILE)248
+b(psf.example.fits)113 2203 y(OUTFILE)g(H.example.fits)113
+2302 y(KFILE)348 b(K.example.fits)113 2402 y(TFILE)g(T.example.fits)113
+2502 y(SFILE)g(S.example.fits)113 2601 y(UFILE)g(U.example.fits)113
+2701 y(OUTXFILE)198 b(xout.example.fits)113 2801 y(OUTYFILE)g
+(yout.example.fits)238 3056 y Fl(\017)41 b Fm(GAMFILE)18
 b Fn(is)j(the)e(\002lename)g(for)g(the)h(image)e(of)i(the)f(desired)g
 (output)f(PSF)j Fg(\000\()p Fc(r)p Fg(\))p Fn(,)f(with)g
-Fj(x)g Fn(and)f Fj(y)k Fn(pix)o(el)c(dimensions)321 2231
+Fj(x)g Fn(and)f Fj(y)k Fn(pix)o(el)c(dimensions)321 3155
 y(gi)n(v)o(en)g(as)i Fm(PSFXSCALE)e Fn(and)g Fm(PSFYSCALE)g
-Fn(in)i(the)f(primary)e(con\002g)i(\002le.)238 2397 y
+Fn(in)i(the)f(primary)e(con\002g)i(\002le.)238 3321 y
 Fl(\017)41 b Fm(OUTFILE)19 b Fn(is)i(the)g(\002lename)e(for)h(the)g
-(output)f(image)h Fj(H)1961 2409 y Fi(\013)2008 2397
-y Fn(.)238 2563 y Fl(\017)41 b Fm(KFILE)20 b Fn(is)h(the)f(\002lename)g
-(for)f(the)h(output)f Fj(\024)1616 2575 y Fi(\013)1684
-2563 y Fn(solution)h(map.)238 2730 y Fl(\017)41 b Fm(TFILE)22
+(output)f(image)h Fj(H)1961 3333 y Fi(\013)2008 3321
+y Fn(.)238 3486 y Fl(\017)41 b Fm(KFILE)20 b Fn(is)h(the)f(\002lename)g
+(for)f(the)h(output)f Fj(\024)1616 3498 y Fi(\013)1684
+3486 y Fn(solution)h(map.)238 3652 y Fl(\017)41 b Fm(TFILE)22
 b Fn(is)h(the)f(\002lename)g(for)f(the)i(output)e Fj(T)1632
-2742 y Fi(\013i)1725 2730 y Fn(transformation)e(matrix.)31
+3664 y Fi(\013i)1725 3652 y Fn(transformation)e(matrix.)31
 b(If)22 b(the)g(\002le)h(does)f(not)g(e)o(xist,)h Fj(T)3390
-2742 y Fi(\013i)3483 2730 y Fn(will)g(be)321 2829 y(b)n(uilt)18
+3664 y Fi(\013i)3483 3652 y Fn(will)g(be)321 3751 y(b)n(uilt)18
 b(and)g(sa)n(v)o(ed)g(to)g(the)h(corresponding)c Fm(TFILE)p
 Fn(;)j(if)g(the)h(\002le)g(does)f(e)o(xist)g(it)h(will)g(be)f(read)g
-(in)h(and)e(used)h(to)h(generate)321 2929 y Fj(H)390
-2941 y Fi(\013)437 2929 y Fn(,)i Fj(U)536 2941 y Fi(\013)603
-2929 y Fn(and)f Fg(\006)804 2941 y Fi(\013\013)915 2929
+(in)h(and)e(used)h(to)h(generate)321 3851 y Fj(H)390
+3863 y Fi(\013)437 3851 y Fn(,)i Fj(U)536 3863 y Fi(\013)603
+3851 y Fn(and)f Fg(\006)804 3863 y Fi(\013\013)915 3851
 y Fn(unless)g Fm(forceT)g Fn(=)h(1)f(is)h(speci\002ed)f(at)h(the)f
-(command)e(line.)238 3095 y Fl(\017)41 b Fm(SFILE)20
+(command)e(line.)238 4017 y Fl(\017)41 b Fm(SFILE)20
 b Fn(is)h(the)f(\002lename)g(for)f(the)h(output)f(noise)h(v)n(ariance)f
-Fg(\006)2124 3107 y Fi(\013\013)2215 3095 y Fn(.)238
-3261 y Fl(\017)41 b Fm(UFILE)20 b Fn(is)h(the)f(\002lename)g(for)f(the)
-h(output)f(leakage)h(objecti)n(v)o(e)e Fj(U)2221 3273
-y Fi(\013)2268 3261 y Fn(.)238 3427 y Fl(\017)41 b Fm(OUTXFILE)28
+Fg(\006)2124 4029 y Fi(\013\013)2215 4017 y Fn(.)238
+4182 y Fl(\017)41 b Fm(UFILE)20 b Fn(is)h(the)f(\002lename)g(for)f(the)
+h(output)f(leakage)h(objecti)n(v)o(e)e Fj(U)2221 4194
+y Fi(\013)2268 4182 y Fn(.)238 4347 y Fl(\017)41 b Fm(OUTXFILE)28
 b Fn(&)h Fm(OUTYFILE)f Fn(are)h(the)g(\002lenames)f(for)h(the)g
 Fm(FITS)g Fn(\002les)g(where)g(the)g(desired)f(output)g(sampling)321
-3527 y(locations)23 b Fg(\()p Fj(X)746 3539 y Fi(\013)793
-3527 y Fj(;)14 b(Y)878 3539 y Fi(\013)926 3527 y Fg(\))30
-b(=)f Fc(R)1154 3539 y Fi(\013)1225 3527 y Fn(ha)n(v)o(e)24
+4447 y(locations)23 b Fg(\()p Fj(X)746 4459 y Fi(\013)793
+4447 y Fj(;)14 b(Y)878 4459 y Fi(\013)926 4447 y Fg(\))30
+b(=)f Fc(R)1154 4459 y Fi(\013)1225 4447 y Fn(ha)n(v)o(e)24
 b(been)f(stored)g(by)g(the)h(user)-5 b(.)36 b(These)24
 b(must)g(be)g(in)g(the)f(same)h(physical)f(units)h(as)321
-3626 y Fm(PSFXSCALE)19 b Fn(and)g Fm(PSFYSCALE)p Fn(.)113
-3939 y Fd(4.2)99 b(Input)26 b(&)f(output)h(con\002g)g(\002les)f(in)g
-(the)h(case)f(USERXY)g(=)g(0)113 4169 y Fn(The)c(v)n(alues)f(of)h
-Fc(r)625 4181 y Fi(i)674 4169 y Fn(and)g Fc(R)888 4181
-y Fi(\013)956 4169 y Fn(can)g(also)g(be)g(speci\002ed)g(in)g(a)g(less)h
+4547 y Fm(PSFXSCALE)19 b Fn(and)g Fm(PSFYSCALE)p Fn(.)113
+4858 y Fd(4.2)99 b(Input)26 b(&)f(output)h(con\002g)g(\002les)f(in)g
+(the)h(case)f(USERXY)g(=)g(0)113 5088 y Fn(The)c(v)n(alues)f(of)h
+Fc(r)625 5100 y Fi(i)674 5088 y Fn(and)g Fc(R)888 5100
+y Fi(\013)956 5088 y Fn(can)g(also)g(be)g(speci\002ed)g(in)g(a)g(less)h
 (general)e(manner)g(by)g(setting)h Fm(USERXY)f Fn(=)i(0.)27
-b(This)21 b(calling)113 4269 y(procedure)k(is)j(illustrated)g(by)f(the)
+b(This)21 b(calling)113 5187 y(procedure)k(is)j(illustrated)g(by)f(the)
 g(e)o(xample)f(con\002guration)f(\002les)j(in)g(the)f
 Fm(./example/userxy0/)e Fn(directory)-5 b(.)45 b(An)113
-4368 y(e)o(xample)19 b(input)g(\002le)i(is)g(as)g(follo)n(ws:)113
-4543 y Fm(PSFFILE)248 b(psf.example.fits)113 4642 y(GIMFILE)g
-(test1.example.fits)113 4742 y(ROTANGDEG)148 b(0.0000000)113
-4841 y(NOISE)348 b(1.0000000)113 4941 y(GIMXSCALE)148
-b(0.4000000)113 5041 y(GIMYSCALE)g(0.4000000)113 5140
-y(DITHER)298 b(0.0000000)48 b(0.0000000)113 5240 y Fn(The)20
-b(\002rst)h(four)e(parameters)g(are)h(used)g(e)o(xactly)f(as)i(before)e
-(in)h(Section)g(4.2.)k(The)c(three)g(dif)n(ferent)f(parameters)g(are:)
-238 5481 y Fl(\017)41 b Fm(GIMXSCALE)16 b Fn(&)h Fm(GIMYSCALE)g
-Fn(specify)f(the)h(\(constant\))f Fj(x)j Fn(and)d Fj(y)21
-b Fn(dimensions)16 b(of)h(each)g(pix)o(el)g(in)g(the)g
-Fm(GIMFILE)321 5580 y Fn(image.)24 b(These)c(must)g(be)g(in)h(the)f
-(same)g(physical)f(units)i(as)g Fm(PSFXSCALE)e Fn(and)g
-Fm(PSFYSCALE)p Fn(.)1892 5909 y(5)p eop end
+5287 y(e)o(xample)19 b(input)g(\002le)i(is)g(as)g(follo)n(ws:)113
+5461 y Fm(PSFFILE)248 b(psf.example.fits)113 5560 y(GIMFILE)g
+(test1.example.fits)113 5660 y(ROTANGDEG)148 b(0.0000000)1892
+5909 y Fn(5)p eop end
 %%Page: 6 6
-TeXDict begin 6 5 bop 238 463 a Fl(\017)41 b Fm(DITHER)19
-b Fn(gi)n(v)o(es)g(the)h(position,)f(in)h(the)g(same)g(physical)f
-(units)h(as)g Fm(PSFXSCALE)f Fn(and)h Fm(PSFYSCALE)p
-Fn(,)e(of)i(the)g Fk(e)n(xact)321 563 y(center)g(of)g(the)g(lower)n
-(-leftmost)h(pixel.)113 803 y Fn(In)f(the)g(same)h(directory)d(can)i
+TeXDict begin 6 5 bop 113 463 a Fm(NOISE)348 b(1.0000000)113
+563 y(GIMXSCALE)148 b(0.4000000)113 662 y(GIMYSCALE)g(0.4000000)113
+762 y(DITHER)298 b(0.0000000)48 b(0.0000000)113 862 y
+Fn(The)20 b(\002rst)h(four)e(parameters)g(are)h(used)g(e)o(xactly)f(as)
+i(before)e(in)h(Section)g(4.2.)k(The)c(three)g(dif)n(ferent)f
+(parameters)g(are:)238 1102 y Fl(\017)41 b Fm(GIMXSCALE)16
+b Fn(&)h Fm(GIMYSCALE)g Fn(specify)f(the)h(\(constant\))f
+Fj(x)j Fn(and)d Fj(y)21 b Fn(dimensions)16 b(of)h(each)g(pix)o(el)g(in)
+g(the)g Fm(GIMFILE)321 1202 y Fn(image.)24 b(These)c(must)g(be)g(in)h
+(the)f(same)g(physical)f(units)i(as)g Fm(PSFXSCALE)e
+Fn(and)g Fm(PSFYSCALE)p Fn(.)238 1368 y Fl(\017)41 b
+Fm(DITHER)19 b Fn(gi)n(v)o(es)g(the)h(position,)f(in)h(the)g(same)g
+(physical)f(units)h(as)g Fm(PSFXSCALE)f Fn(and)h Fm(PSFYSCALE)p
+Fn(,)e(of)i(the)g Fk(e)n(xact)321 1468 y(center)g(of)g(the)g(lower)n
+(-leftmost)h(pixel.)113 1708 y Fn(In)f(the)g(same)h(directory)d(can)i
 (be)g(found)f(an)h(e)o(xample)f(output)g(con\002guration)e(\002le:)113
-978 y Fm(GAMFILE)248 b(psf.example.fits)113 1077 y(OUTFILE)g
-(H.example.fits)113 1177 y(KFILE)348 b(K.example.fits)113
-1277 y(TFILE)g(T.example.fits)113 1376 y(SFILE)g(S.example.fits)113
-1476 y(UFILE)g(U.example.fits)113 1576 y(OUTXSCALE)148
-b(0.200000000)113 1675 y(OUTYSCALE)g(0.200000000)113
-1775 y(OUTPOS)298 b(0.0000000)48 b(0.0000000)113 1874
-y(NOUT)398 b(81)49 b(81)113 2049 y Fn(The)20 b(\002rst)h(six)g
+1883 y Fm(GAMFILE)248 b(psf.example.fits)113 1982 y(OUTFILE)g
+(H.example.fits)113 2082 y(KFILE)348 b(K.example.fits)113
+2182 y(TFILE)g(T.example.fits)113 2281 y(SFILE)g(S.example.fits)113
+2381 y(UFILE)g(U.example.fits)113 2480 y(OUTXSCALE)148
+b(0.200000000)113 2580 y(OUTYSCALE)g(0.200000000)113
+2680 y(OUTPOS)298 b(0.0000000)48 b(0.0000000)113 2779
+y(NOUT)398 b(81)49 b(81)113 2954 y Fn(The)20 b(\002rst)h(six)g
 (parameters)e(are)h(those)g(described)f(in)h(Section)g(4.2.)k(The)c
-(remaining)e(parameters)h(are)238 2290 y Fl(\017)41 b
+(remaining)e(parameters)h(are)238 3194 y Fl(\017)41 b
 Fm(OUTXSCALE)25 b Fn(&)i Fm(OUTYSCALE)f Fn(specify)g(the)h(desired,)g
 (constant)f Fj(x)i Fn(and)e Fj(y)k Fn(dimensions)c(of)g(each)h(pix)o
-(el)f(in)h(the)321 2389 y(output)19 b Fm(HFILE)g Fn(image.)25
+(el)f(in)h(the)321 3294 y(output)19 b Fm(HFILE)g Fn(image.)25
 b(These)20 b(must)g(be)g(in)h(the)f(same)g(physical)f(units)h(as)h
-Fm(PSFXSCALE)e Fn(and)h Fm(PSFYSCALE)p Fn(.)238 2555
+Fm(PSFXSCALE)e Fn(and)h Fm(PSFYSCALE)p Fn(.)238 3460
 y Fl(\017)41 b Fm(OUTPOS)14 b Fn(is)j(analagous)c(to)j
 Fm(DITHER)e Fn(and)h(gi)n(v)o(es)g(the)g(desired)f(position,)i(in)f
 (the)g(same)h(physical)e(units)h(as)h Fm(PSFXSCALE)321
-2655 y Fn(and)j Fm(PSFYSCALE)p Fn(,)g(of)h(the)g Fk(e)n(xact)h(center)f
+3560 y Fn(and)j Fm(PSFYSCALE)p Fn(,)g(of)h(the)g Fk(e)n(xact)h(center)f
 (of)g(the)g(lower)n(-leftmost)h(pixel)f Fn(of)g Fj(H)2633
-2667 y Fi(\013)2681 2655 y Fn(.)238 2821 y Fl(\017)41
+3572 y Fi(\013)2681 3560 y Fn(.)238 3726 y Fl(\017)41
 b Fm(NOUT)17 b Fn(supplies)h(as)g(tw)o(o)g(ar)o(guments)e(the)h(o)o(v)o
 (erall)g Fj(x)h Fn(and)f Fj(y)k Fn(dimensions)c(of)g(the)h(output)e
-Fj(H)2955 2833 y Fi(\013)3021 2821 y Fn(in)i(numbers)e(of)h(pix)o(els,)
-321 2920 y Fg(81)i Fn(pix)o(els)h Fl(\002)h Fn(81)e(pix)o(els)h(in)h
-(the)f(e)o(xample)f(abo)o(v)o(e.)113 3161 y(This)i(concludes)d(the)i
+Fj(H)2955 3738 y Fi(\013)3021 3726 y Fn(in)i(numbers)e(of)h(pix)o(els,)
+321 3825 y Fg(81)i Fn(pix)o(els)h Fl(\002)h Fn(81)e(pix)o(els)h(in)h
+(the)f(e)o(xample)f(abo)o(v)o(e.)113 4066 y(This)i(concludes)d(the)i
 (description)f(of)h(the)g(some)n(what)g(lengthy)e(con\002guration)g
-(\002le)i(interf)o(ace)g(for)f(IMCOM)i(v0.2.)113 3474
+(\002le)i(interf)o(ace)g(for)f(IMCOM)i(v0.2.)113 4379
 y Fd(4.3)99 b(The)26 b(IDL)f Fa(imcom_write_config.pro)20
-b Fd(script)113 3704 y Fn(T)-7 b(o)25 b(help)e(alle)n(viate)h(the)h
+b Fd(script)113 4609 y Fn(T)-7 b(o)25 b(help)e(alle)n(viate)h(the)h
 (process)e(of)h(creating)g(these)g(long)f(con\002guration)f(\002les,)k
 (I)e(ha)n(v)o(e)g(created)g(simple)g(IDL)g(scripts)h(to)113
-3804 y(generate)19 b(them)h(automatically)f(with)h(correct)f(spacing.)
+4709 y(generate)19 b(them)h(automatically)f(with)h(correct)f(spacing.)
 24 b(These)c(scripts)h(can)f(be)g(found)e(in)j(the)f
-Fm(./idl/)g Fn(directory)-5 b(.)113 3978 y(The)26 b(main)g(script)g(is)
+Fm(./idl/)g Fn(directory)-5 b(.)113 4883 y(The)26 b(main)g(script)g(is)
 h(called)e Fm(imcom_write_config.pro)e Fn(and)i(should)g(be)h(called)g
-(from)f(within)h(your)f(program)113 4078 y(unit)e(as)h(described)d(in)j
+(from)f(within)h(your)f(program)113 4983 y(unit)e(as)h(described)d(in)j
 (the)f(e)o(xample)e(IDL)i(script)g Fm(example_write_config.pro)d
-Fn(which)i(can)h(also)g(be)g(found)f(in)113 4177 y(the)e
+Fn(which)i(can)h(also)g(be)g(found)f(in)113 5082 y(the)e
 Fm(./example/)f Fn(directory)-5 b(.)23 b(This)d(script)h(generates)e
 (the)h(con\002g)f(\002les)j(sho)n(wn)d(abo)o(v)o(e.)113
-4352 y(There)i(are)h(plans)g(for)g(Python)e(scripts)j(to)f(perform)e
+5257 y(There)i(are)h(plans)g(for)g(Python)e(scripts)j(to)f(perform)e
 (the)i(same)g(task,)h(b)n(ut)f(as)g(yet)h(these)f(are)g(not)f(written.)
-31 b(Since)22 b(IMCOM)113 4451 y(communicates)d(solely)h(via)g(ASCII)h
+31 b(Since)22 b(IMCOM)113 5356 y(communicates)d(solely)h(via)g(ASCII)h
 (te)o(xt)f(and)g Fm(FITS)h Fn(images)f(it)h(should)e(be)i(simple)f(to)g
 (script)h(in)f(a)h(v)n(ariety)f(of)g(high-le)n(v)o(el)113
-4551 y(languages.)113 4906 y Fq(5)119 b(The)31 b(example)f(\002les)113
-5166 y Fn(The)23 b(e)o(xample)e(\002les)j(that)f(ha)n(v)o(e)f(been)h
+5456 y(languages.)1892 5909 y(6)p eop end
+%%Page: 7 7
+TeXDict begin 7 6 bop 113 463 a Fq(5)119 b(The)31 b(example)f(\002les)
+113 723 y Fn(The)23 b(e)o(xample)e(\002les)j(that)f(ha)n(v)o(e)f(been)h
 (described)e(in)i(the)g(pre)n(vious)e(Sections)i(demonstrate)f(a)h(v)o
 (ery)f(simple)h Fg(2)c Fl(\002)i Fg(2)h Fn(dither)113
-5266 y(pattern,)33 b(with)e(an)f(output)g(at)h(double)f(the)h
+823 y(pattern,)33 b(with)e(an)f(output)g(at)h(double)f(the)h
 (resolution)e(of)i(the)g(input.)56 b(The)30 b(input)g(PSF)i(is)g(an)f
-(Airy)f(disc)i(with)f(a)g(\002rst)113 5365 y(minimum)20
+(Airy)f(disc)i(with)f(a)g(\002rst)113 923 y(minimum)20
 b(at)i(around)e(1.22)h(in)g(the)h(physical)f(units)g(chosen)g(con)m(v)n
 (olv)o(ed)e(with)j(the)f(input)g(pix)o(el)g(resonse)g(\(assumed)g(to)h
-(be)113 5465 y(boxcar\).)46 b(There)28 b(is)g(also)h(an)f(`ideal')f
+(be)113 1022 y(boxcar\).)46 b(There)28 b(is)g(also)h(an)f(`ideal')f
 (output,)h(made)f(using)h(unf)o(air)f(kno)n(wledge)e(of)j(the)g(sk)o(y)
-g(pro\002le,)h(to)f(allo)n(w)g(you)f(to)113 5565 y(compare)19
-b(with)h Fj(H)657 5577 y Fi(\013)704 5565 y Fn(.)26 b(This)20
+g(pro\002le,)h(to)f(allo)n(w)g(you)f(to)113 1122 y(compare)19
+b(with)h Fj(H)657 1134 y Fi(\013)704 1122 y Fn(.)26 b(This)20
 b(is)h(a)g(rather)e(f)o(acile)i(case,)f(b)n(ut)g(should)f(produce)g
 (predictable)f(results:)26 b(good)19 b(luck!)1892 5909
-y(6)p eop end
+y(7)p eop end
 %%Trailer
 
 userdict /end-hook known{end-hook}if

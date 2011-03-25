@@ -102,6 +102,9 @@ These latter three optional input parameters, which must come in that order, ful
 Following on from the previous example, if the user wished to re-run IMCOM as before but rebuild all the matrices (perhaps following some change in the input conditions), they would then the command:
 \\ \newline
 \texttt{./imcom config\_example S 1.d-3 1.d-6 1 1}
+\newline
+
+One further point worth mentioning is that if the $T_{\alpha i}$ matrix specified in the configuration files already exists at run time, and if \texttt{<forceT>} or \texttt{<forceSys>} are not set, then the IMCOM code will simply read in the pre-existing $T_{\alpha i}$ and use it to calculate $H_{\alpha}$ from $I_i$.  No other functions will be performed (e.g. calculating $A_{\alpha i j}$, $U_{\alpha}$ etc.).  This is done to allow the same transformation to be applied to many small, nearby patches with maximum efficiency for those cases where $T_{\alpha i }$ is unchanged.
 %\\ \newline
 %This concludes our simple description of IMCOM calling procedures.
 

@@ -201,8 +201,8 @@ integer :: npoly, npm, iout, jout, imin, jmin, imax, jmax, ii, jj
 
 npoly = npoly_in
 if (mod(npoly, 2).eq.0) then
-  write(*, FMT='(A)') "IMCOM WARNING: Even-order polynomial interpolation specified..."
-  write(*, FMT='(A)') "IMCOM WARNING: Using NPOLY-1 for interpolation (e.g. linear, cubic, quintic...)"
+  write(*, FMT='(A)') "IMCOM WARNING: Odd-order polynomial interpolation specified..."
+  write(*, FMT='(A)') "IMCOM WARNING: Using NPOLY-1 for interpolation (e.g. quadratic...)"
   npoly = npoly - 1
 end if
 npm = npoly / 2    ! integer division rounds down, i.e. 1/2 = 0, 3/2 = 1
@@ -399,11 +399,11 @@ END FUNCTION imcom_iminloc
 
 !---
 
-SUBROUTINE imcom_polint(xa, ya, x, y, dy)
+SUBROUTINE imcom_polint(xa, ya, x, y, dy, eps)
 ! Adapted from Numerical recipes polint.f90
 implicit none
 REAL(KIND=8), DIMENSION(:), INTENT(IN) :: xa, ya
-REAL(KIND=8), INTENT(IN) :: x
+REAL(KIND=8), INTENT(IN) :: x, eps
 REAL(KIND=8), INTENT(OUT) :: y, dy
 INTEGER :: m, n, ns
 REAL(KIND=8), DIMENSION(size(xa)) :: c, d, den, ho
@@ -422,8 +422,8 @@ ns = ns-1
 do m=1, n-1
 
   den(1: n - m) = ho(1: n - m) - ho(1 + m: n)
-  if (any(den(1:n-m) == 0.d0)) then
-    write(*, FMT='(A)') "IMCOM ERROR: Identical x input locations to IMCOM_POLINT"
+  if (any(abs(den(1:n-m)).le.eps)) then
+    write(*, FMT='(A)') "IMCOM ERROR: Two or more identical x input locations to IMCOM_POLINT"
     stop
   end if
   den(1: n - m) = (c(2: n - m + 1) - d(1: n - m)) / den(1: n - m)
@@ -452,6 +452,8 @@ REAL(KIND=8), INTENT(OUT) :: y, dy
 INTEGER :: j, m, ndum
 REAL(KIND=8), DIMENSION(size(x1a)) :: ymtmp
 REAL(KIND=8), DIMENSION(size(x2a)) :: yntmp
+REAL(KIND=8) :: eps
+REAL(KIND=8), EXTERNAL :: DLAMCH
 
 m = size(x1a) ! assert_eq(size(x1a),size(ya,1),'polin2: m')
 if (size(ya, 1).ne.m) then
@@ -463,13 +465,14 @@ if (size(ya, 2).ne.ndum) then
   write(*, FMT='(A)') "IMCOM ERROR: x2a and ya(1, :) input must be same size for IMCOM_POLIN2"
   stop
 end if
+eps = DLAMCH('Eps')   ! From LAPACK, machine epsilon, used in polint
 do j=1, m
 
   yntmp = ya(j, :)
-  call imcom_polint(x2a, yntmp, x2, ymtmp(j), dy)
+  call imcom_polint(x2a, yntmp, x2, ymtmp(j), dy, eps)
 
 end do
-call imcom_polint(x1a, ymtmp, x1, y, dy)
+call imcom_polint(x1a, ymtmp, x1, y, dy, eps)
 END SUBROUTINE imcom_polin2
 
 !---

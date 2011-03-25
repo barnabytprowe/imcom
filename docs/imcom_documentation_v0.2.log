@@ -1,4 +1,4 @@
-This is pdfeTeX, Version 3.141592-1.21a-2.2 (Web2C 7.5.4) (format=latex 2010.11.30)  22 FEB 2011 10:58
+This is pdfeTeX, Version 3.141592-1.21a-2.2 (Web2C 7.5.4) (format=latex 2010.11.30)  23 MAR 2011 16:13
 entering extended mode
 **imcom_documentation_v0.2.tex
 (./imcom_documentation_v0.2.tex
@@ -257,23 +257,28 @@ Underfull \hbox (badness 10000) in paragraph at lines 82--97
  []
 
 [2]
-Underfull \hbox (badness 10000) in paragraph at lines 102--107
+Underfull \hbox (badness 10000) in paragraph at lines 102--106
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 102--106
 
  []
 
 [3]
 LaTeX Font Info:    Font shape `T1/pcr/m/it' in size <10> not available
-(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 136.
+(Font)              Font shape `T1/pcr/m/sl' tried instead on input line 139.
  [4] [5]
-Overfull \hbox (14.92583pt too wide) in paragraph at lines 221--222
+Overfull \hbox (14.92583pt too wide) in paragraph at lines 224--225
 []\T1/pcr/m/n/10 OUTPOS \T1/ptm/m/n/10 is analagous to \T1/pcr/m/n/10 DITHER \T
 1/ptm/m/n/10 and gives the de-sired po-si-tion, in the same phys-i-cal units as
  \T1/pcr/m/n/10 PSFXSCALE
  []
 
 LaTeX Font Info:    Font shape `T1/pcr/bx/n' in size <12> not available
-(Font)              Font shape `T1/pcr/b/n' tried instead on input line 227.
-[6] (./imcom_documentation_v0.2.aux) ) 
+(Font)              Font shape `T1/pcr/b/n' tried instead on input line 230.
+[6] [7] (./imcom_documentation_v0.2.aux) ) 
 Here is how much of TeX's memory you used:
  1919 strings out of 94501
  22113 string characters out of 1176136
@@ -283,4 +288,4 @@ Here is how much of TeX's memory you used:
  580 hyphenation exceptions out of 8191
  32i,5n,24p,804b,179s stack positions out of 5000i,500n,6000p,200000b,5000s
 
-Output written on imcom_documentation_v0.2.dvi (6 pages, 22264 bytes).
+Output written on imcom_documentation_v0.2.dvi (7 pages, 23032 bytes).
