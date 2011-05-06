@@ -437,10 +437,16 @@ integer :: npoly, npm
 integer :: ia_floor, ia_ceiling, ja_floor, ja_ceiling
 integer :: imin, imax, jmin, jmax, ii, jj
 
+!
+! THIS SHOULD BE REWRITTEN TO BE:
+! a) PROPER IN IT'S DEFINITION OF WHAT NPOLY IS!!!!!
+! b) MORE EFFICIENT, CURRENTLY IT IS WHOLE FACTOR OF N TOO SLOW!
+
+
 npoly = npoly_in
 if (mod(npoly, 2).eq.0) then
-  write(*, FMT='(A)') "IMCOM WARNING: Even-order polynomial specified for IMCOM_INTERP_LOOKUP..."
-  write(*, FMT='(A)') "IMCOM WARNING: Using NPOLY-1 for interpolation (e.g. linear, cubic, quintic...)"
+  write(*, FMT='(A)') "IMCOM WARNING: Odd-order polynomial specified for IMCOM_INTERP_LOOKUP..."
+  write(*, FMT='(A)') "IMCOM WARNING: Using input NPOLY-1 for interpolation (e.g. quadratic, quartic...)"
   npoly = npoly - 1
 end if
 npm = npoly / 2

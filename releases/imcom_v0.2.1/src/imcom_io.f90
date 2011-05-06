@@ -1004,9 +1004,9 @@ nargs = iargc()
 if (nargs.ge.4) then
   call getarg(1, config)
   call getarg(2, US_string)
-  if((US_string.eq."U").or.(US_string.eq."u")) then
+  if ((US_string.eq."U").or.(US_string.eq."u")) then
     USB = .TRUE.    ! Solve for T_ia with U_a < US_min
-  else if((US_string.eq."S").or.(US_string.eq."s")) then
+  else if ((US_string.eq."S").or.(US_string.eq."s")) then
     USB = .FALSE.   ! Solve for T_ia with S_a < US_min
   else
     call imcom_usage_message
