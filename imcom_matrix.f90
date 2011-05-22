@@ -212,7 +212,9 @@ do i=1, n
 
   do j=i, n
 
-    ial = exp_i(i) + exp_i(j) * (exp_i(j) - 1) / 2
+!    ial = exp_i(i) + exp_i(j) * (exp_i(j) - 1) / 2
+! CODE ABOVE IS CORRECT, CODE BELOW IS TO SAVE MEMORY FOR PROJ TESTS
+    ial = 1
     Delx = real(npad, 8) * (x_i(j) - x_i(i)) / psfxscale
     Dely = real(npad, 8) * (y_i(j) - y_i(i)) / psfyscale
     A_aij(i, j) = imcom_interp_lookup(n1al, n2al, Alookup(:, :, ial), Delx, &
@@ -271,8 +273,11 @@ do i=1, n
 
     Delx = real(npad, 8) * (x_i(i) - X_a(a)) / psfxscale
     Dely = real(npad, 8) * (y_i(i) - Y_a(a)) / psfyscale 
-    B_ia(i, a) = imcom_interp_lookup(n1bl, n2bl, Blookup(:, :, exp_i(i)), &
-                                                         Delx, Dely, npoly)
+!    B_ia(i, a) = imcom_interp_lookup(n1bl, n2bl, Blookup(:, :, exp_i(i)), &
+!                                     Delx, Dely, npoly)
+! CODE ABOVE IS CORRECT, CODE BELOW IS TO SAVE MEMORY FOR PROJ TESTS
+    B_ia(i, a) = imcom_interp_lookup(n1bl, n2bl, Blookup(:, :, 1), &
+                                     Delx, Dely, npoly)
 
   end do
   if (i.eq.int(0.2 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 20% complete"
@@ -316,7 +321,10 @@ n1max = (n1big + n1psf) / 2
 n2max = (n2big + n2psf) / 2
 ntotal = n1big * n2big * npad * npad * nexp * nexp
 write(*, FMT='(A)') "IMCOM: Fourier transforming A matrix lookup table"
-allocate(Alookup(n1big, n2big, nexp * (nexp + 1) / 2), A_tmp(n1big, n2big), &
+!allocate(Alookup(n1big, n2big, nexp * (nexp + 1) / 2), A_tmp(n1big, n2big), &
+!         ufunc(n1big, n2big), STAT=alstat)
+! CODE ABOVE IS CORRECT, CODE BELOW IS TO SAVE MEMORY FOR PROJ TESTS
+allocate(Alookup(n1big, n2big, 1), A_tmp(n1big, n2big), &
          ufunc(n1big, n2big), STAT=alstat)
 if (alstat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for A lookup tables"
@@ -328,9 +336,13 @@ call imcom_plan_invft_c2c(n1big, n2big, 0, ftplan)
 Alookup = 0.d0
 !$omp end workshare
 !$omp do private(ufunc, A_tmp, ial) schedule(dynamic, 1)
-do iexp=1, nexp
+!do iexp=1, nexp
+! CODE ABOVE IS CORRECT, CODE BELOW IS TO SAVE MEMORY FOR PROJ TESTS
+do iexp = 1, 1
 
-  do jexp=iexp, nexp
+!  do jexp=iexp, nexp
+! CODE ABOVE IS CORRECT, CODE BELOW IS TO SAVE MEMORY FOR PROJ TESTS
+   do jexp=iexp, 1
 
 ! A matrix lookup tables per exposure stored in a packed upper triangular matrix
     ial = iexp + jexp * (jexp - 1) / 2
@@ -385,7 +397,10 @@ n2min = (n2big - n2psf) / 2 + 1
 n1max = (n1big + n1psf) / 2
 n2max = (n2big + n2psf) / 2
 write(*, FMT='(A)') "IMCOM: Fourier transforming B matrix lookup tables"
-allocate(Blookup(n1big, n2big, nexp), B_tmp(n1big, n2big), &
+!allocate(Blookup(n1big, n2big, nexp), B_tmp(n1big, n2big), &
+!         ufunc(n1big, n2big), STAT=alstat)
+! CODE ABOVE IS CORRECT, CODE BELOW IS TO SAVE MEMORY FOR PROJ TESTS
+allocate(Blookup(n1big, n2big, 1), B_tmp(n1big, n2big), &
          ufunc(n1big, n2big), STAT=alstat)
 if (alstat.ne.0) then
   write(*, FMT='(A)')"IMCOM ERROR: Cannot allocate memory for B lookup tables"
@@ -397,7 +412,9 @@ call imcom_plan_invft_c2c(n1big, n2big, 0, ftplan)
 Blookup = 0.d0
 !$omp end workshare
 !$omp do private(ufunc, B_tmp)
-do iexp=1, nexp
+!do iexp=1, nexp
+! CODE ABOVE IS CORRECT, CODE BELOW IS TO SAVE MEMORY FOR PROJ TESTS
+do iexp=1, 1
 
   ufunc = dcmplx(0.d0, 0.d0)
   ufunc(n1min:n1max, n2min:n2max) = cshift(cshift(dconjg(Gammat(:, :)) &
@@ -732,7 +749,14 @@ real(KIND=8), dimension(m) :: ATTplusBT
 integer :: i, a_i, a_f, nthreads
 integer :: alstat
 
+! THIS SHOULD BE REWRITTEN TO NOT DEPEND ON A or B BUT ONLY ON Qij, Pia or Tia.
+! ...THAT WOULD ALLOW A & B TO BE DEALLOCATED AFTER THE CALCULATION OF Pia.
+!
+
 write(*, FMT='(A)') "IMCOM: Building output leakage map U"
+
+
+
 ! C must already be built!
 ! Then the ATT + BT part
 !nthmax = OMP_GET_MAX_THREADS()   ! Note that, while testing, the routine imcom_calc_ATTpBT uses I/O so should not be multi-threaded
@@ -940,8 +964,6 @@ real(KIND=8), dimension(n_dum) :: denom
 real(KIND=8) :: Ssum
 real(KIND=8), external :: DDOT
 
-! Note that summing vector elements with BLAS requires a dot product with 
-! a vector of ones... Is this faster than SUM()?  Test...
 vec1s = 1.d0
 denom = (L_i(1:n_dum) + k_dum) * (L_i(1:n_dum) + k_dum)
 Ssum = DDOT(n_dum, Ndiag(1:n_dum) * P2_ia(1:n_dum, a_dum) / denom, 1, vec1s, 1)
