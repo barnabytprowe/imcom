@@ -38,7 +38,7 @@ USE imcom_matrix
 USE imcom_bisect
 
 implicit none
-integer :: userxy, i, npoly, npad
+integer :: userxy, i, npoly, npad, alstat
 integer(KIND=8) :: ftplan
 real(KIND=8) :: eps
 real(KIND=8), external :: DLAMCH
@@ -132,6 +132,11 @@ if (((forceSys.ne.0).or.(forceT.ne.0)).or.(Texists.eqv..False.)) then
   call imcom_get_B(npoly, npad, 1, forceSys)
 ! Construct the projection matrices
   call imcom_get_P(1, forceSys)
+end if
+deallocate(A_aij, B_ia, STAT=alstat)
+if (alstat.ne.0) then
+  write(*, FMT='(A)') "IMCOM ERROR: Cannot deallocate A & B matrices"
+  stop
 end if
 ! Read / solve the T array
 call imcom_get_T(forceT)
