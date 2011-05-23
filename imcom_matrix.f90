@@ -745,8 +745,8 @@ SUBROUTINE imcom_build_U
 ! Uses the T matrices and the input images (stored in Im) to get the output
 ! Sigma_a noise image
 implicit none
-real(KIND=8), dimension(m) :: ATTplusBT
-integer :: i, a_i, a_f, nthreads
+!real(KIND=8), dimension(m) :: ATTplusBT
+integer :: a !i, a_i, a_f, nthreads
 integer :: alstat
 
 ! THIS SHOULD BE REWRITTEN TO NOT DEPEND ON A or B BUT ONLY ON Qij, Pia or Tia.
@@ -754,14 +754,6 @@ integer :: alstat
 !
 
 write(*, FMT='(A)') "IMCOM: Building output leakage map U"
-
-
-
-! C must already be built!
-! Then the ATT + BT part
-!nthmax = OMP_GET_MAX_THREADS()   ! Note that, while testing, the routine imcom_calc_ATTpBT uses I/O so should not be multi-threaded
-ATTplusBT = 0.d0
-! Ready the solution matrix
 allocate(U_a(m), STAT=alstat)
 if (alstat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for leakage matrix U"
@@ -769,27 +761,13 @@ if (alstat.ne.0) then
   stop
 end if
 U_a = 0.d0
+!$omp parallel do
+do a=1, m
 
-nthreads = 8 ! Just use 8, thereby not using the OMP_GET_MAX_THREADS() function
-             ! ... If there are more than 4 cores there is lower level threading
-             ! within imcom_calc_ATTpBT
-! Begin loop, do OPEN MP stuff
-!$omp parallel
-!$omp do schedule(dynamic, 1) private(a_i, a_f)
-do i=1, nthreads   
-  a_i = 1 + (i - 1) * (m / nthreads)
-  if (i.ne.nthreads) then
-    a_f = i * (m / nthreads)
-  else
-    a_f = m
-  end if
-  call imcom_calc_ATTpBT(n, (1 + a_f - a_i), A_aij, B_ia(:, a_i:a_f), &
-                         T_ia(:, a_i:a_f), U_a(a_i:a_f))
+  U_a(a) = imcom_U_from_kappa(a, n, K_a(a))
 
 end do
-!$omp end do
-!$omp end parallel
-U_a = U_a + C_a
+!$omp end parallel do
 allocate(U(n1out, n2out), STAT=alstat)
 if (alstat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for output leakage matrix U -- insufficient memory?"
@@ -802,40 +780,10 @@ if (alstat.ne.0) then
   stop
 endif
 write(*, FMT='(A)') "IMCOM: Saving U vector to "//trim(Ufile)
-call imcom_writefits(trim(Ufile), n1out, n2out, U / C_a)
+call imcom_writefits(trim(Ufile), n1out, n2out, U)
 END SUBROUTINE imcom_build_U
 
 !---
-
-SUBROUTINE imcom_calc_ATTpBT(n_dum, m_dum, A_dum, B_dum, T_dum, U_dum)
-
-implicit none
-integer, intent(IN) :: n_dum, m_dum
-real(KIND=8), dimension(n_dum, n_dum), intent(IN) :: A_dum
-real(KIND=8), dimension(n_dum, m_dum), intent(IN) :: B_dum, T_dum
-real(KIND=8), dimension(m_dum), intent(OUT) :: U_dum
-real(KIND=8), dimension(m_dum) :: ATT, BT
-character, parameter :: side= 'L', uplo = 'U'
-real(KIND=8), parameter :: alpha = 1.d0, beta = 0.d0
-real(KIND=8), dimension(n_dum, m_dum) :: AT_ia
-integer :: a
-
-AT_ia = 0.d0
-call DSYMM(side, uplo, n_dum, m_dum, alpha, A_dum, n_dum, T_dum, n_dum, &
-           beta, AT_ia, n_dum)
-!$omp parallel
-!$omp workshare
-forall(a=1:m_dum) ATT(a) = sum(T_dum(:, a) * AT_ia(:, a))
-forall(a=1:m_dum) BT(a) = sum(T_dum(:, a) * B_dum(:, a))
-!$omp end workshare
-!$omp workshare
-forall(a=1:m_dum) U_dum(a) = sum(T_dum(:, a) * (AT_ia(:, a) + B_dum(:, a)))
-!$omp end workshare
-!$omp end parallel
-END SUBROUTINE imcom_calc_ATTpBT
-
-!---
-
 
 SUBROUTINE imcom_build_S
 ! Uses the T matrices and to get the output S image
