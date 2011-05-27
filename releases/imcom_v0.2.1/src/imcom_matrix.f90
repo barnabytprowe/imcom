@@ -212,7 +212,9 @@ do i=1, n
 
   do j=i, n
 
-    ial = exp_i(i) + exp_i(j) * (exp_i(j) - 1) / 2
+!    ial = exp_i(i) + exp_i(j) * (exp_i(j) - 1) / 2
+! CODE ABOVE IS CORRECT, CODE BELOW IS TO SAVE MEMORY FOR PROJ TESTS
+    ial = 1
     Delx = real(npad, 8) * (x_i(j) - x_i(i)) / psfxscale
     Dely = real(npad, 8) * (y_i(j) - y_i(i)) / psfyscale
     A_aij(i, j) = imcom_interp_lookup(n1al, n2al, Alookup(:, :, ial), Delx, &
@@ -271,8 +273,11 @@ do i=1, n
 
     Delx = real(npad, 8) * (x_i(i) - X_a(a)) / psfxscale
     Dely = real(npad, 8) * (y_i(i) - Y_a(a)) / psfyscale 
-    B_ia(i, a) = imcom_interp_lookup(n1bl, n2bl, Blookup(:, :, exp_i(i)), &
-                                                         Delx, Dely, npoly)
+!    B_ia(i, a) = imcom_interp_lookup(n1bl, n2bl, Blookup(:, :, exp_i(i)), &
+!                                     Delx, Dely, npoly)
+! CODE ABOVE IS CORRECT, CODE BELOW IS TO SAVE MEMORY FOR PROJ TESTS
+    B_ia(i, a) = imcom_interp_lookup(n1bl, n2bl, Blookup(:, :, 1), &
+                                     Delx, Dely, npoly)
 
   end do
   if (i.eq.int(0.2 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 20% complete"
@@ -316,7 +321,10 @@ n1max = (n1big + n1psf) / 2
 n2max = (n2big + n2psf) / 2
 ntotal = n1big * n2big * npad * npad * nexp * nexp
 write(*, FMT='(A)') "IMCOM: Fourier transforming A matrix lookup table"
-allocate(Alookup(n1big, n2big, nexp * (nexp + 1) / 2), A_tmp(n1big, n2big), &
+!allocate(Alookup(n1big, n2big, nexp * (nexp + 1) / 2), A_tmp(n1big, n2big), &
+!         ufunc(n1big, n2big), STAT=alstat)
+! CODE ABOVE IS CORRECT, CODE BELOW IS TO SAVE MEMORY FOR PROJ TESTS
+allocate(Alookup(n1big, n2big, 1), A_tmp(n1big, n2big), &
          ufunc(n1big, n2big), STAT=alstat)
 if (alstat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for A lookup tables"
@@ -328,9 +336,13 @@ call imcom_plan_invft_c2c(n1big, n2big, 0, ftplan)
 Alookup = 0.d0
 !$omp end workshare
 !$omp do private(ufunc, A_tmp, ial) schedule(dynamic, 1)
-do iexp=1, nexp
+!do iexp=1, nexp
+! CODE ABOVE IS CORRECT, CODE BELOW IS TO SAVE MEMORY FOR PROJ TESTS
+do iexp = 1, 1
 
-  do jexp=iexp, nexp
+!  do jexp=iexp, nexp
+! CODE ABOVE IS CORRECT, CODE BELOW IS TO SAVE MEMORY FOR PROJ TESTS
+   do jexp=iexp, 1
 
 ! A matrix lookup tables per exposure stored in a packed upper triangular matrix
     ial = iexp + jexp * (jexp - 1) / 2
@@ -385,7 +397,10 @@ n2min = (n2big - n2psf) / 2 + 1
 n1max = (n1big + n1psf) / 2
 n2max = (n2big + n2psf) / 2
 write(*, FMT='(A)') "IMCOM: Fourier transforming B matrix lookup tables"
-allocate(Blookup(n1big, n2big, nexp), B_tmp(n1big, n2big), &
+!allocate(Blookup(n1big, n2big, nexp), B_tmp(n1big, n2big), &
+!         ufunc(n1big, n2big), STAT=alstat)
+! CODE ABOVE IS CORRECT, CODE BELOW IS TO SAVE MEMORY FOR PROJ TESTS
+allocate(Blookup(n1big, n2big, 1), B_tmp(n1big, n2big), &
          ufunc(n1big, n2big), STAT=alstat)
 if (alstat.ne.0) then
   write(*, FMT='(A)')"IMCOM ERROR: Cannot allocate memory for B lookup tables"
@@ -397,7 +412,9 @@ call imcom_plan_invft_c2c(n1big, n2big, 0, ftplan)
 Blookup = 0.d0
 !$omp end workshare
 !$omp do private(ufunc, B_tmp)
-do iexp=1, nexp
+!do iexp=1, nexp
+! CODE ABOVE IS CORRECT, CODE BELOW IS TO SAVE MEMORY FOR PROJ TESTS
+do iexp=1, 1
 
   ufunc = dcmplx(0.d0, 0.d0)
   ufunc(n1min:n1max, n2min:n2max) = cshift(cshift(dconjg(Gammat(:, :)) &
@@ -728,16 +745,15 @@ SUBROUTINE imcom_build_U
 ! Uses the T matrices and the input images (stored in Im) to get the output
 ! Sigma_a noise image
 implicit none
-real(KIND=8), dimension(m) :: ATTplusBT
-integer :: i, a_i, a_f, nthreads
+!real(KIND=8), dimension(m) :: ATTplusBT
+integer :: a !i, a_i, a_f, nthreads
 integer :: alstat
 
+! THIS SHOULD BE REWRITTEN TO NOT DEPEND ON A or B BUT ONLY ON Qij, Pia or Tia.
+! ...THAT WOULD ALLOW A & B TO BE DEALLOCATED AFTER THE CALCULATION OF Pia.
+!
+
 write(*, FMT='(A)') "IMCOM: Building output leakage map U"
-! C must already be built!
-! Then the ATT + BT part
-!nthmax = OMP_GET_MAX_THREADS()   ! Note that, while testing, the routine imcom_calc_ATTpBT uses I/O so should not be multi-threaded
-ATTplusBT = 0.d0
-! Ready the solution matrix
 allocate(U_a(m), STAT=alstat)
 if (alstat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for leakage matrix U"
@@ -745,27 +761,13 @@ if (alstat.ne.0) then
   stop
 end if
 U_a = 0.d0
+!$omp parallel do
+do a=1, m
 
-nthreads = 8 ! Just use 8, thereby not using the OMP_GET_MAX_THREADS() function
-             ! ... If there are more than 4 cores there is lower level threading
-             ! within imcom_calc_ATTpBT
-! Begin loop, do OPEN MP stuff
-!$omp parallel
-!$omp do schedule(dynamic, 1) private(a_i, a_f)
-do i=1, nthreads   
-  a_i = 1 + (i - 1) * (m / nthreads)
-  if (i.ne.nthreads) then
-    a_f = i * (m / nthreads)
-  else
-    a_f = m
-  end if
-  call imcom_calc_ATTpBT(n, (1 + a_f - a_i), A_aij, B_ia(:, a_i:a_f), &
-                         T_ia(:, a_i:a_f), U_a(a_i:a_f))
+  U_a(a) = imcom_U_from_kappa(a, n, K_a(a))
 
 end do
-!$omp end do
-!$omp end parallel
-U_a = U_a + C_a
+!$omp end parallel do
 allocate(U(n1out, n2out), STAT=alstat)
 if (alstat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for output leakage matrix U -- insufficient memory?"
@@ -778,40 +780,10 @@ if (alstat.ne.0) then
   stop
 endif
 write(*, FMT='(A)') "IMCOM: Saving U vector to "//trim(Ufile)
-call imcom_writefits(trim(Ufile), n1out, n2out, U / C_a)
+call imcom_writefits(trim(Ufile), n1out, n2out, U)
 END SUBROUTINE imcom_build_U
 
 !---
-
-SUBROUTINE imcom_calc_ATTpBT(n_dum, m_dum, A_dum, B_dum, T_dum, U_dum)
-
-implicit none
-integer, intent(IN) :: n_dum, m_dum
-real(KIND=8), dimension(n_dum, n_dum), intent(IN) :: A_dum
-real(KIND=8), dimension(n_dum, m_dum), intent(IN) :: B_dum, T_dum
-real(KIND=8), dimension(m_dum), intent(OUT) :: U_dum
-real(KIND=8), dimension(m_dum) :: ATT, BT
-character, parameter :: side= 'L', uplo = 'U'
-real(KIND=8), parameter :: alpha = 1.d0, beta = 0.d0
-real(KIND=8), dimension(n_dum, m_dum) :: AT_ia
-integer :: a
-
-AT_ia = 0.d0
-call DSYMM(side, uplo, n_dum, m_dum, alpha, A_dum, n_dum, T_dum, n_dum, &
-           beta, AT_ia, n_dum)
-!$omp parallel
-!$omp workshare
-forall(a=1:m_dum) ATT(a) = sum(T_dum(:, a) * AT_ia(:, a))
-forall(a=1:m_dum) BT(a) = sum(T_dum(:, a) * B_dum(:, a))
-!$omp end workshare
-!$omp workshare
-forall(a=1:m_dum) U_dum(a) = sum(T_dum(:, a) * (AT_ia(:, a) + B_dum(:, a)))
-!$omp end workshare
-!$omp end parallel
-END SUBROUTINE imcom_calc_ATTpBT
-
-!---
-
 
 SUBROUTINE imcom_build_S
 ! Uses the T matrices and to get the output S image
@@ -940,8 +912,6 @@ real(KIND=8), dimension(n_dum) :: denom
 real(KIND=8) :: Ssum
 real(KIND=8), external :: DDOT
 
-! Note that summing vector elements with BLAS requires a dot product with 
-! a vector of ones... Is this faster than SUM()?  Test...
 vec1s = 1.d0
 denom = (L_i(1:n_dum) + k_dum) * (L_i(1:n_dum) + k_dum)
 Ssum = DDOT(n_dum, Ndiag(1:n_dum) * P2_ia(1:n_dum, a_dum) / denom, 1, vec1s, 1)
