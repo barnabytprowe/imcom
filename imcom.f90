@@ -79,24 +79,26 @@ call imcom_build_uxuy
 
 inquire(FILE=trim(Afile), EXIST=Aexists)
 inquire(FILE=trim(Bfile), EXIST=Bexists)
-if ((Bexists.eqv..FALSE.).or.(Aexists.eqv..FALSE.).or.(forceSys.eq.1)) then
+inquire(FILE=trim(Tfile), EXIST=Texists)
+if ((((Bexists.eqv..FALSE.).or.(Aexists.eqv..FALSE.)) &
+    .and.(Texists.eqv..FALSE.)).or.(forceSys.eq.1)) then
 ! Rotate PSFs and calculate the Fourier transform Gt(ux, uy) of each
-  write(*, FMT='(A)') "IMCOM: Rotating and Fourier transforming PSF images"
-  eps = DLAMCH('Epsilon')
-  call imcom_plan_ft_r2c(n1psf, n2psf, 0, ftplan)
-  do i=1, nexp
+    write(*, FMT='(A)') "IMCOM: Rotating and Fourier transforming PSF images"
+    eps = DLAMCH('Epsilon')
+    call imcom_plan_ft_r2c(n1psf, n2psf, 0, ftplan)
+    do i=1, nexp
 
-    if (abs(rotangdeg(i)).gt.(2.d0 * pi * eps)) then
-      call imcom_rotate_image(G_unrot(:, :, i), rotangdeg(i), npoly, 1, &
-                              G_rot(:, :, i))
-    else
-      G_rot(:, :, i) = G_unrot(:, :, i)
-    end if
-    call imcom_ft_r2c(n1psf, n2psf, ftplan, G_rot(:, :, i), Gt_rot(:, :, i))
+      if (abs(rotangdeg(i)).gt.(2.d0 * pi * eps)) then
+        call imcom_rotate_image(G_unrot(:, :, i), rotangdeg(i), npoly, 1, &
+                                G_rot(:, :, i))
+      else
+        G_rot(:, :, i) = G_unrot(:, :, i)
+      end if
+      call imcom_ft_r2c(n1psf, n2psf, ftplan, G_rot(:, :, i), Gt_rot(:, :, i))
 
-  end do
-  call imcom_destroy_plan(ftplan)
-end if
+    end do
+    call imcom_destroy_plan(ftplan)
+endif
 ! Calculate the Fourier transform Gammat(ux, uy) of Gamma(y, y)
 call imcom_plan_ft_r2c(n1psf, n2psf, 0, ftplan)
 call imcom_ft_r2c(n1psf, n2psf, ftplan, Gamma(:, :), Gammat(:, :))
@@ -123,7 +125,7 @@ kappa_max = C_a / eps
 !call imcom_build_A_oldschool(1)
 !call imcom_eigen_Aold
 
-inquire(FILE=trim(Tfile), EXIST=Texists)
+
 if (((forceSys.ne.0).or.(forceT.ne.0)).or.(Texists.eqv..False.)) then
 ! Read / build the A array
   call imcom_get_A(npoly, npad, 1, forceSys)  ! arg#3 = save, arg#4 = force build
