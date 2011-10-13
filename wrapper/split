@@ -1,0 +1,89 @@
+#!/usr/local/bin/python
+
+import pyfits
+import os
+
+from optparse import OptionParser
+
+parser= OptionParser()
+parser.add_option("-f","--basename",dest="basename",help="the base on which to build the input file names")
+parser.add_option("-b","--begin",dest="begin",help="first file number")
+parser.add_option("-e","--end",dest="end",help="last file number")
+parser.add_option("-s","--stampsize",dest="windowsize",default=16,help="size of the cropped sections to work on")
+
+(options,args) = parser.parse_args()
+
+filelist = []
+spotfiles = []
+for i in range(int(options.begin),int(options.end)+1):
+ f = '%s%04d.fits' % (options.basename, i)
+ s = '%s%04d_spots.fits' % (options.basename, i)
+ spotfiles.append(s)
+ filelist.append(f)
+
+spotsfits = pyfits.open(spotfiles[0])
+
+#spotsfits.info()
+
+spotsdata = spotsfits['LDAC_OBJECTS'].data
+
+spots=[]
+for i in spotsdata:
+ #print i
+ if i[1] == 0:
+  spots.append([])
+ spots[i[0]].append(i)
+
+
+corners=[[0,0],[len(spots)-1,len(spots[-1])-1]]
+#print spots[corners[1][0]][corners[1][1]]
+#print corners
+
+#deal with empty rows/columns
+if spots[corners[0][0]][corners[0][1]][7] <= 0:
+ corners[0][0]+=1
+if spots[corners[0][0]][corners[0][1]][8] <= 0:
+ corners[0][1]+=1
+if spots[corners[1][0]][corners[1][1]][7] <= 0:
+ corners[1][0]-=1
+if spots[corners[1][0]][corners[1][1]][8] <= 0:
+ corners[1][1]-=1
+
+#print corners
+
+#verify the corners
+#print spots[corners[0][0]][corners[0][1]]
+#print spots[corners[0][0]][corners[1][1]]
+#print spots[corners[1][0]][corners[1][0]]
+#print spots[corners[1][0]][corners[1][1]]
+
+pixcorners = [
+              ['tr',round(spots[corners[0][0]][corners[1][1]][7]),round(spots[corners[0][0]][corners[1][1]][8])],
+              ['tl',round(spots[corners[0][0]][corners[0][1]][7]),round(spots[corners[0][0]][corners[0][1]][8])],
+              ['bl',round(spots[corners[1][0]][corners[1][0]][7]),round(spots[corners[1][0]][corners[1][0]][8])],
+              ['br',round(spots[corners[1][0]][corners[1][1]][7]),round(spots[corners[1][0]][corners[1][1]][8])]
+             ]
+
+#print pixcorners
+cropwindow = options.windowsize
+
+for f in filelist:
+ img = pyfits.open(f)
+ imo = pyfits.open(f)
+ #print img.info()
+ for c in pixcorners:
+  b1,b2 = c[1]-cropwindow/2,c[2]-cropwindow/2
+  e1,e2 = c[1]+cropwindow/2,c[2]+cropwindow/2
+  im = img['PRIMARY'].data[b2:e2,b1:e1]
+  #print b1,e1,b2,e2
+  imo['PRIMARY'].data=im
+  outname = f[:-5]+'_'+c[0]+'_cropped.fits'
+  print "cropping:  output file is "+outname
+  if os.path.exists(outname) : os.remove(outname)
+  imo.writeto(outname)
+
+#test work
+#for f in filelist:
+# for c in pixcorners:
+#  test = pyfits.open(f[:-5]+'_'+c[0]+'_cropped.fits')
+#  print test.info()
