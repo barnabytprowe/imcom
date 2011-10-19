@@ -123,7 +123,7 @@ forall(i=1: n) I_i(i) = I_unmasked_i(mask_subs_i(i))
 forall(i=1: n) exp_i(i) = exp_unmasked_i(mask_subs_i(i))
 deallocate(n1, n2, bitpix, I_unmasked_i, exp_unmasked_i, STAT=dealstat)
 if (dealstat.ne.0) then
-  write(*, FMT='(A)') "IMCOM ERROR: Cannot de allocate memory for image property arrays"
+  write(*, FMT='(A)') "IMCOM ERROR: Cannot deallocate memory for image property arrays"
   stop
 end if
 END SUBROUTINE imcom_alloc_gims
