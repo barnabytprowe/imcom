@@ -107,9 +107,6 @@ call imcom_destroy_plan(ftplan)
 ! Output some checks
 !call imcom_writefits('./fits/ux_check.fits', n1psf, n2psf, ux)
 !call imcom_writefits('./fits/uy_check.fits', n1psf, n2psf, uy)
-!call imcom_writefits('./fits/mtf1.real.fits', n1psf, n2psf, real(Gt_rot(:, :, 1), 8))
-!call imcom_writefits('./fits/mtf1.imag.fits', n1psf, n2psf, dimag(Gt_rot(:, :, 1)))
-!call imcom_writefits('./fits/mtf1.abs.fits', n1psf, n2psf, abs(Gt_rot(:, :, 1)))
 
 ! Calculate the N (diagonal only, currently) noise array
 call imcom_build_Ndiag
