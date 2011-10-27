@@ -14,8 +14,8 @@ cp ./*.f90 ./releases/imcom_v${VERSION}/src/
 cp ./releases/generic_Makefile ./releases/imcom_v${VERSION}/src/Makefile
 
 # Then copy the example files and IDL scripts over
-cp ./example/* ./releases/imcom_v${VERSION}/example/
-cp ./idl/* ./releases/imcom_v${VERSION}/idl/
+cp -r ./example/* ./releases/imcom_v${VERSION}/example/
+cp -r ./idl/* ./releases/imcom_v${VERSION}/idl/
 
 # Then make a copy of the documentation
 cp ./imcom_documentation.pdf ./releases/imcom_v${VERSION}/
