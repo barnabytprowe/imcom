@@ -1,1 +1,3 @@
+#!/bin/bash
+
 cp ./*.f90 ./releases/imcom_v0.2.2/src/
