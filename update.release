@@ -1,12 +1,25 @@
 #!/bin/bash
 
+# Set the version to match the repository tag in Mercurial
 VERSION=0.2.3
 
 # First make all the required directories
 mkdir -p ./releases/imcom_v${VERSION}/
 mkdir -p ./releases/imcom_v${VERSION}/src/
-mkdir -p ./releases/imcom_v${VERSION}/examples/
+mkdir -p ./releases/imcom_v${VERSION}/example/
 mkdir -p ./releases/imcom_v${VERSION}/idl/
 
+# Then copy the source code and a generic Makefile
 cp ./*.f90 ./releases/imcom_v${VERSION}/src/
 cp ./releases/generic_Makefile ./releases/imcom_v${VERSION}/src/Makefile
+
+# Then copy the example files and IDL scripts over
+cp ./example/* ./releases/imcom_v${VERSION}/example/
+cp ./idl/* ./releases/imcom_v${VERSION}/idl/
+
+# Then make a copy of the documentation
+cp ./imcom_documentation.pdf ./releases/imcom_v${VERSION}/
+
+# Then make a copy of the GNU license
+cp ./gnu_public_license-3.0.txt ./releases/imcom_v${VERSION}/
+
