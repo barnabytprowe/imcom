@@ -23,3 +23,9 @@ cp ./imcom_documentation.pdf ./releases/imcom_v${VERSION}/
 # Then make a copy of the GNU license
 cp ./gnu_public_license-3.0.txt ./releases/imcom_v${VERSION}/
 
+# Then, finally, tar up a version in the ./releases/ directory
+rm -f ./releases/imcom_v${VERSION}.tar.gz
+cd releases
+tar cvfz imcom_v${VERSION}.tar.gz ./imcom_v${VERSION}/*
+cd ..
+
