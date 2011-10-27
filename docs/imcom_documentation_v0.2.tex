@@ -63,7 +63,7 @@ where
 \begin{itemize}
 \item \texttt{<config\_file>} gives the path and filename of the important IMCOM config file, described in detail in Section \ref{sect:config} below.
 
-\item \texttt{<U/S>} is either one of the single character strings \texttt{U} or \texttt{S} -- other values should produce an error message.  This command line input switches IMCOM behaviour between solving $\kappa_{\alpha}$ while requiring $U_{\alpha}^{\textrm{max}} - \Delta U_{\alpha}^{\textrm{max}} \le U_{\alpha} < U_{\alpha}^{\textrm{max}}$ (for input \texttt{U}) or requiring $ \Sigma_{\alpha \alpha}^{\textrm{max}} - \Delta \Sigma_{\alpha \alpha}^{\textrm{max}} \le \Sigma_{\alpha \alpha} < \Sigma_{\alpha \alpha}^{\textrm{max}}$ (for input \texttt{S}; see Rowe et al.\ 2011, for details of what these relations mean).
+\item \texttt{<U/S>} is either one of the single character strings \texttt{U} or \texttt{S} -- other values should produce an error message.  This command line input switches IMCOM behaviour between solving $\kappa_{\alpha}$ while requiring $U_{\alpha}^{\textrm{max}} - \Delta U_{\alpha}^{\textrm{max}} \le U_{\alpha} < U_{\alpha}^{\textrm{max}}$ (for input \texttt{U}) or requiring $ \Sigma_{\alpha \alpha}^{\textrm{max}} - \Delta \Sigma_{\alpha \alpha}^{\textrm{max}} \le \Sigma_{\alpha \alpha} < \Sigma_{\alpha \alpha}^{\textrm{max}}$ (for input \texttt{S}; see Rowe et al.\ 2011 for details of what these relations mean).
 
 \item \texttt{<U/S\_max>} should be a double precision floating point number, typically given in exponential, e.g.\ \texttt{1.d-8}), which specifies the numerical value of either $U_{\alpha}^{\textrm{max}}$ (in units of $C_{\alpha}$) or $\Sigma_{\alpha \alpha}^{\textrm{max}}$ as specified by \texttt{<U/S>}.
 

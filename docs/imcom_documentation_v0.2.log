@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.11 (TeX Live 2010/Fink) (format=latex 2011.9.9)  27 OCT 2011 12:35
+This is pdfTeX, Version 3.1415926-1.40.11 (TeX Live 2010/Fink) (format=latex 2011.9.9)  27 OCT 2011 12:39
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -293,6 +293,6 @@ Here is how much of TeX's memory you used:
  5206 multiletter control sequences out of 15000+200000
  27508 words of font info for 43 fonts, out of 3000000 for 9000
  714 hyphenation exceptions out of 8191
- 32i,5n,24p,794b,179s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 32i,5n,24p,793b,179s stack positions out of 5000i,500n,10000p,200000b,50000s
 
 Output written on imcom_documentation_v0.2.dvi (7 pages, 23008 bytes).
