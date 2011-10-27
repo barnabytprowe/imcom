@@ -1,3 +1,11 @@
 #!/bin/bash
 
-cp ./*.f90 ./releases/imcom_v0.2.2/src/
+VERSION=0.2.3
+
+# First make all the required directories
+mkdir ./releases/imcom_v${VERSION}/
+mkdir ./releases/imcom_v${VERSION}/src/
+mkdir ./releases/imcom_v${VERSION}/examples/
+mkdir ./releases/imcom_v${VERSION}/idl/
+
+cp ./*.f90 ./releases/imcom_v${VERSION}/src/
