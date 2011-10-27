@@ -63,7 +63,7 @@ where
 \begin{itemize}
 \item \texttt{<config\_file>} gives the path and filename of the important IMCOM config file, described in detail in Section \ref{sect:config} below.
 
-\item \texttt{<U/S>} is either one of the single character strings \texttt{U} or \texttt{S} -- other values should produce an error message.  This command line input switches IMCOM behaviour between solving $\kappa_{\alpha}$ while requiring $U_{\alpha}^{\textrm{max}} - \Delta U_{\alpha}^{\textrm{max}} \le U_{\alpha} < U_{\alpha}^{\textrm{max}}$ (for input \texttt{U}) or requiring $ \Sigma_{\alpha \alpha}^{\textrm{max}} - \Delta \Sigma_{\alpha \alpha}^{\textrm{max}} \le \Sigma_{\alpha \alpha} < \Sigma_{\alpha \alpha}^{\textrm{max}}$ (for input \texttt{S}; see Rowe et al.\ 2011, in prep., for details of what these relations mean).
+\item \texttt{<U/S>} is either one of the single character strings \texttt{U} or \texttt{S} -- other values should produce an error message.  This command line input switches IMCOM behaviour between solving $\kappa_{\alpha}$ while requiring $U_{\alpha}^{\textrm{max}} - \Delta U_{\alpha}^{\textrm{max}} \le U_{\alpha} < U_{\alpha}^{\textrm{max}}$ (for input \texttt{U}) or requiring $ \Sigma_{\alpha \alpha}^{\textrm{max}} - \Delta \Sigma_{\alpha \alpha}^{\textrm{max}} \le \Sigma_{\alpha \alpha} < \Sigma_{\alpha \alpha}^{\textrm{max}}$ (for input \texttt{S}; see Rowe et al.\ 2011, for details of what these relations mean).
 
 \item \texttt{<U/S\_max>} should be a double precision floating point number, typically given in exponential, e.g.\ \texttt{1.d-8}), which specifies the numerical value of either $U_{\alpha}^{\textrm{max}}$ (in units of $C_{\alpha}$) or $\Sigma_{\alpha \alpha}^{\textrm{max}}$ as specified by \texttt{<U/S>}.
 
@@ -99,7 +99,7 @@ These latter three optional input parameters, which must come in that order, ful
 \item \texttt{<forceSys>} is similar to \texttt{<forceT>} and should be set to integer value \texttt{1} to force IMCOM to recalculate the $A_{\alpha ij}$, $B_{\alpha i}$ etc. system matrices (including the eigendecomposition and projection matrices) rather than read them in from the filenames specified in the configuration files (see Section \ref{sect:config} below). 
 \item \texttt{<saturation>} is means of specifying saturated, cosmic ray-corrupted or otherwise bad pixels in the input images.  Input pixels for which $I_i \ge $ \texttt{<saturation>} are then explicitly removed from $I_i$ and ${\bf r}_i$, so that this loss of information will be faithfully reflected in the output $U_{\alpha}$ and $\Sigma_{\alpha \alpha}$ maps.
 \end{itemize}
-Following on from the previous example, if the user wished to re-run IMCOM as before but rebuild all the matrices (perhaps following some change in the input conditions), they would then the command:
+Following on from the previous example, if the user wished to re-run IMCOM as before but rebuild all the matrices (perhaps following some change in the input conditions), they would then use the command:
 \\ \newline
 \texttt{./imcom config\_example S 1.d-3 1.d-6 1 1}
 \newline
@@ -128,7 +128,7 @@ LFILE~~~~~~~L.example.fits \\
 PFILE~~~~~~~P.example.fits   }
 
 Order and spacing matters for the simple interface used by IMCOM, although IDL scripts are provided in the directory \texttt{./idl/} to write this file automatically supplying the relevant parameters as keywords (see Section \ref{sect:idl}).
-We now give a brief description of these parameters (see also Rowe et al.\ 2011, in prep.):
+We now give a brief description of these parameters (see also Rowe et al.\ 2011):
 \begin{itemize}
 \item \texttt{PSFXSCALE} \& \texttt{PSFYSCALE} give the physical dimensions along $x$ and $y$ of the pixels in the input PSF images $G_i({\bf r})$ and $\Gamma({\bf r})$.
 
@@ -143,7 +143,7 @@ We now give a brief description of these parameters (see also Rowe et al.\ 2011,
 \item \texttt{AFILE}, \texttt{BFILE}, \texttt{QFILE}, \texttt{LFILE} \& \texttt{PFILE} give the filename of the \texttt{FITS} files used to store the $A_{\alpha i j}$, $B_{\alpha i}$, $Q_{i j}$, $\lambda_i$ \& $P_{\alpha i}$ system matrix/vector objects, respectively.  If the file does not exist, these objects will be calculated and saved to the corresponding \texttt{\emph{X}FILE}; if the file does exist it will be read in and used in subsequent calculations unless \texttt{forceSys} = 1 is specified at the command line.
 \end{itemize}
 
-So much for the primary configuration file; we now go on to describe its offshoots, the input and output configuration files, which differ in their content depending on the value of \texttt{USERXY}.
+So much for the primary configuration file.  We now go on to describe its offshoots, the input and output configuration files, which differ in their content depending on the value of \texttt{USERXY}.
 
 \subsection{Input \& output config files in the general case USERXY = 1}\label{sect:userxy1}
 The most general and powerful way for the user to supply the input images and pixel locations is by giving \texttt{FITS} images of $x_i$ and $y_i$ corresponding to the input images for $I_i$, where ${\bf r}_i = (x_i, y_i)$. This choice is specified by setting \texttt{USERXY=1} in the primary configuration file.
