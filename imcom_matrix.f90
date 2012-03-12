@@ -356,10 +356,9 @@ SUBROUTINE imcom_build_Alookup(npad, psfconst)
 implicit none
 integer, intent(IN) :: npad, psfconst
 complex(KIND=8), dimension(:, :), allocatable ::  A_tmp, ufunc
-integer :: alstat, iexp, jexp, ial
+integer :: alstat, iexp, jexp, ial, ijmax
 integer :: n1big, n2big, n1min, n2min, n1max, n2max, ntotal
 integer(KIND=8) :: ftplan
-!character(LEN=256) :: outfile
 
 n1big = n1psf * npad
 n2big = n2psf * npad
@@ -372,10 +371,13 @@ write(*, FMT='(A)') "IMCOM: Fourier transforming A matrix lookup table"
 allocate(A_tmp(n1big, n2big), ufunc(n1big, n2big), STAT=alstat)
 if (psfconst.eq.0) then
   allocate(Alookup(n1big, n2big, nexp * (nexp + 1) / 2), STAT=alstat)
+  ijmax = nexp
 else if (psfconst.eq.1) then
   allocate(Alookup(n1big, n2big, 1), STAT=alstat)
+  ijmax = 1
 else
-
+  write(*, FMT='(A)') "IMCOM ERROR: PSFCONST must be 1 or 0!"
+  stop
 end if
 if (alstat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for A lookup tables"
@@ -386,14 +388,10 @@ call imcom_plan_invft_c2c(n1big, n2big, 0, ftplan)
 !$omp workshare
 Alookup = 0.d0
 !$omp end workshare
-!$omp do private(ufunc, A_tmp, ial) schedule(dynamic, 1)
-!do iexp=1, nexp
-! CODE ABOVE IS CORRECT, CODE BELOW IS TO SAVE MEMORY FOR PROJ TESTS
-do iexp = 1, 1
+!$omp do private(ufunc, A_tmp, ial, ijmax) schedule(dynamic, 1)
+do iexp=1, ijmax   ! Note use of ijmax here as defined above depending on psfconst
 
-!  do jexp=iexp, nexp
-! CODE ABOVE IS CORRECT, CODE BELOW IS TO SAVE MEMORY FOR PROJ TESTS
-   do jexp=iexp, 1
+  do jexp=iexp, ijmax
 
 ! A matrix lookup tables per exposure stored in a packed upper triangular matrix
     ial = iexp + jexp * (jexp - 1) / 2
@@ -409,8 +407,6 @@ do iexp = 1, 1
     call imcom_invft_c2c(n1big, n2big, ftplan, ufunc, A_tmp)
     Alookup(:, :, ial) = cshift(cshift(real(A_tmp, 8), n2big / 2, 2), &
                                                        n1big / 2, 1)
-!    write(outfile, FMT='(A,I1,A,I1,A)') "Alookup.",iexp,"_",jexp,".fits"
-!    call imcom_writefits(trim(outfile), n1big, n2big, real(Alookup(:, :, iexp, jexp), 8))
 ! ...Origin is thus located at centre of pixel (n1big / 2 + 1, n2big / 2 + 1)
 
   end do
