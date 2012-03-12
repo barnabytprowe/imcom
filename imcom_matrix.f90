@@ -151,7 +151,7 @@ if (Pexists.and.(forcebuild.eq.0)) then
   if (alstat.ne.0) then
     write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for P^2 matrix -- too large? Sparse Matrix formalism not yet coded."
     stop
-  endif
+  end if
 !$omp parallel workshare
   P2_ia = P_ia * P_ia
 !$omp end parallel workshare
@@ -223,19 +223,18 @@ allocate(A_aij(n, n), STAT=alstat)
 ! Initialize, get correct lookup table size
 n1al = n1psf * npad
 n2al = n2psf * npad
-!$omp parallel
-!$omp workshare
+!$omp parallel workshare
 A_aij = 0.d0
-!$omp end workshare
+!$omp end parallel workshare
 ! Check whether PSF varies between exposures, and if not lookup from a smaller lookup 
 ! table accordingly
 if (psfconst.eq.1) then
-!$omp parallel do schedule(dynamic, 64) private(Delx, Dely, ial)
+  ial = 1
+!$omp parallel do schedule(dynamic, 64) private(Delx, Dely)
   do i=1, n
 
     do j=i, n
 
-      ial = 1
       Delx = real(npad, 8) * (x_i(j) - x_i(i)) / psfxscale
       Dely = real(npad, 8) * (y_i(j) - y_i(i)) / psfyscale
       A_aij(i, j) = imcom_interp_lookup(n1al, n2al, Alookup(:, :, ial), Delx, &
@@ -289,7 +288,7 @@ deallocate(Alookup, STAT=alstat)
 if (alstat.ne.0) then
   write(*, FMT='(A)')"IMCOM ERROR: Cannot deallocate memory for A lookup tables"
   stop
-endif
+end if
 END SUBROUTINE imcom_lookup_A
 
 !---
@@ -311,7 +310,7 @@ n1bl = n1psf * npad
 n2bl = n2psf * npad
 ! Check whether PSF varies between exposures, and if not lookup from a smaller lookup 
 ! table accordingly
-if (psfconst.eq.0) then
+if (psfconst.eq.1) then
 !$omp parallel do schedule(dynamic, 64) private(Delx, Dely)
   do i=1, n
 
@@ -319,9 +318,6 @@ if (psfconst.eq.0) then
 
       Delx = real(npad, 8) * (x_i(i) - X_a(a)) / psfxscale
       Dely = real(npad, 8) * (y_i(i) - Y_a(a)) / psfyscale 
-!    B_ia(i, a) = imcom_interp_lookup(n1bl, n2bl, Blookup(:, :, exp_i(i)), &
-!                                     Delx, Dely, npoly)
-! CODE ABOVE IS CORRECT, CODE BELOW IS TO SAVE MEMORY FOR PROJ TESTS
       B_ia(i, a) = imcom_interp_lookup(n1bl, n2bl, Blookup(:, :, 1), &
                                        Delx, Dely, npoly)
 
@@ -333,7 +329,7 @@ if (psfconst.eq.0) then
 
   end do
 !$omp end parallel do
-else if (psfconst.eq.1) then
+else if (psfconst.eq.0) then
 !$omp parallel do schedule(dynamic, 64) private(Delx, Dely)
   do i=1, n
 
@@ -376,7 +372,7 @@ SUBROUTINE imcom_build_Alookup(npad, psfconst)
 implicit none
 integer, intent(IN) :: npad, psfconst
 complex(KIND=8), dimension(:, :), allocatable ::  A_tmp, ufunc
-integer :: alstat, iexp, jexp, ial, ijmax
+integer :: alstat, iexp, jexp, nexpcross, ial, ijmax
 integer :: n1big, n2big, n1min, n2min, n1max, n2max, ntotal
 integer(KIND=8) :: ftplan
 
@@ -389,6 +385,10 @@ n2max = (n2big + n2psf) / 2
 ntotal = n1big * n2big * npad * npad * nexp * nexp
 write(*, FMT='(A)') "IMCOM: Fourier transforming A matrix lookup table"
 allocate(A_tmp(n1big, n2big), ufunc(n1big, n2big), STAT=alstat)
+if (alstat.ne.0) then
+  write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for A lookup tables"
+  stop
+endif
 if (psfconst.eq.0) then
   allocate(Alookup(n1big, n2big, nexp * (nexp + 1) / 2), STAT=alstat)
   ijmax = nexp
@@ -408,7 +408,7 @@ call imcom_plan_invft_c2c(n1big, n2big, 0, ftplan)
 !$omp workshare
 Alookup = 0.d0
 !$omp end workshare
-!$omp do private(ufunc, A_tmp, ial, ijmax) schedule(dynamic, 1)
+!$omp do private(ufunc, A_tmp, ial) schedule(dynamic, 1)
 do iexp=1, ijmax   ! Note use of ijmax here as defined above depending on psfconst
 
   do jexp=iexp, ijmax
@@ -453,7 +453,7 @@ SUBROUTINE imcom_build_Blookup(npad, psfconst)
 implicit none
 integer, intent(IN) :: npad, psfconst
 complex(KIND=8), dimension(:, :), allocatable ::  B_tmp, ufunc
-integer :: alstat, iexp
+integer :: alstat, iexp, ijmax
 integer :: n1min, n2min, n1max, n2max, n1big, n2big
 integer(KIND=8) :: ftplan
 
@@ -488,7 +488,7 @@ call imcom_plan_invft_c2c(n1big, n2big, 0, ftplan)
 !$omp workshare
 Blookup = 0.d0
 !$omp end workshare
-!$omp do private(ufunc, B_tmp, ijmax)
+!$omp do private(ufunc, B_tmp)
 do iexp=1, ijmax
 
   ufunc = dcmplx(0.d0, 0.d0)
