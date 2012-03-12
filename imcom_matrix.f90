@@ -191,10 +191,10 @@ END SUBROUTINE imcom_get_QL
 
 !---
 
-SUBROUTINE imcom_lookup_A(npoly, npad, saveA)
+SUBROUTINE imcom_lookup_A(npoly, npad, saveA, psfconst)
 ! Calculate the A matrix using the lookup table and polynomial interpolation at degree npoly
 implicit none
-integer, intent(IN) :: npoly, npad, saveA
+integer, intent(IN) :: npoly, npad, saveA, psfconst
 real(KIND=8) :: Delx, Dely
 integer :: i, j, alstat, n1al, n2al, ial
 
@@ -207,35 +207,59 @@ n2al = n2psf * npad
 !$omp workshare
 A_aij = 0.d0
 !$omp end workshare
-!$omp do schedule(dynamic, 16) private(Delx, Dely, ial)
-do i=1, n
+! Check whether PSF varies between exposures, and if not lookup from a smaller lookup 
+! table accordingly
+if (psfconst.eq.1) then
+!$omp parallel do schedule(dynamic, 64) private(Delx, Dely, ial)
+  do i=1, n
 
-  do j=i, n
+    do j=i, n
 
-!    ial = exp_i(i) + exp_i(j) * (exp_i(j) - 1) / 2
-! CODE ABOVE IS CORRECT, CODE BELOW IS TO SAVE MEMORY FOR PROJ TESTS
-    ial = 1
-    Delx = real(npad, 8) * (x_i(j) - x_i(i)) / psfxscale
-    Dely = real(npad, 8) * (y_i(j) - y_i(i)) / psfyscale
-    A_aij(i, j) = imcom_interp_lookup(n1al, n2al, Alookup(:, :, ial), Delx, &
-                                      Dely, npoly)
+      ial = 1
+      Delx = real(npad, 8) * (x_i(j) - x_i(i)) / psfxscale
+      Dely = real(npad, 8) * (y_i(j) - y_i(i)) / psfyscale
+      A_aij(i, j) = imcom_interp_lookup(n1al, n2al, Alookup(:, :, ial), Delx, &
+                                        Dely, npoly)
+
+    end do
+    if (i.eq.int(0.2 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 20% complete"
+    if (i.eq.int(0.4 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 40% complete"
+    if (i.eq.int(0.6 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 60% complete"
+    if (i.eq.int(0.8 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 80% complete"
 
   end do
-  if (i.eq.int(0.2 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 20% complete"
-  if (i.eq.int(0.4 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 40% complete"
-  if (i.eq.int(0.6 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 60% complete"
-  if (i.eq.int(0.8 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 80% complete"
+!$omp end parallel do
+else if (psfconst.eq.0) then
+!$omp parallel do schedule(dynamic, 64) private(Delx, Dely, ial)
+  do i=1, n
 
-end do
-!$omp end do
-!$omp do
+    do j=i, n
+
+      ial = exp_i(i) + exp_i(j) * (exp_i(j) - 1) / 2
+      Delx = real(npad, 8) * (x_i(j) - x_i(i)) / psfxscale
+      Dely = real(npad, 8) * (y_i(j) - y_i(i)) / psfyscale
+      A_aij(i, j) = imcom_interp_lookup(n1al, n2al, Alookup(:, :, ial), Delx, &
+                                        Dely, npoly)
+
+    end do
+    if (i.eq.int(0.2 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 20% complete"
+    if (i.eq.int(0.4 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 40% complete"
+    if (i.eq.int(0.6 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 60% complete"
+    if (i.eq.int(0.8 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 80% complete"
+
+  end do
+!$omp end parallel do
+else
+  write(*, FMT='(A)') "IMCOM ERROR: PSFCONST must be 1 or 0!"
+  stop
+end if
+!$omp parallel do
 do i=2, n
 
   forall(j=1: i-1) A_aij(i, j) = A_aij(j, i)
 
 end do
-!$omp end do
-!$omp end parallel
+!$omp end parallel do
 write(*, FMT='(A)') "IMCOM: A matrix complete"
 if (saveA.eq.1) then 
   write(*, FMT='(A)') "IMCOM: Saving A matrix to "//trim(Afile)
@@ -250,10 +274,10 @@ END SUBROUTINE imcom_lookup_A
 
 !---
 
-SUBROUTINE imcom_lookup_B(npoly, npad, saveB)
+SUBROUTINE imcom_lookup_B(npoly, npad, saveB, psfconst)
 ! Calculate the B matrix using the lookup table and polynomial interpolation at degree npoly
 implicit none
-integer, intent(IN) :: npoly, npad, saveB
+integer, intent(IN) :: npoly, npad, saveB, psfconst
 real(KIND=8) :: Delx, Dely
 integer :: i, a, alstat, n1bl, n2bl
 
@@ -265,29 +289,53 @@ B_ia = 0.d0
 !$omp end parallel workshare
 n1bl = n1psf * npad
 n2bl = n2psf * npad
-!$omp parallel
-!$omp do schedule(dynamic, 64) private(Delx, Dely)
-do i=1, n
+! Check whether PSF varies between exposures, and if not lookup from a smaller lookup 
+! table accordingly
+if (psfconst.eq.0) then
+!$omp parallel do schedule(dynamic, 64) private(Delx, Dely)
+  do i=1, n
 
-  do a=1, m
+    do a=1, m
 
-    Delx = real(npad, 8) * (x_i(i) - X_a(a)) / psfxscale
-    Dely = real(npad, 8) * (y_i(i) - Y_a(a)) / psfyscale 
+      Delx = real(npad, 8) * (x_i(i) - X_a(a)) / psfxscale
+      Dely = real(npad, 8) * (y_i(i) - Y_a(a)) / psfyscale 
 !    B_ia(i, a) = imcom_interp_lookup(n1bl, n2bl, Blookup(:, :, exp_i(i)), &
 !                                     Delx, Dely, npoly)
 ! CODE ABOVE IS CORRECT, CODE BELOW IS TO SAVE MEMORY FOR PROJ TESTS
-    B_ia(i, a) = imcom_interp_lookup(n1bl, n2bl, Blookup(:, :, 1), &
-                                     Delx, Dely, npoly)
+      B_ia(i, a) = imcom_interp_lookup(n1bl, n2bl, Blookup(:, :, 1), &
+                                       Delx, Dely, npoly)
+
+    end do
+    if (i.eq.int(0.2 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 20% complete"
+    if (i.eq.int(0.4 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 40% complete"
+    if (i.eq.int(0.6 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 60% complete"
+    if (i.eq.int(0.8 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 80% complete"
 
   end do
-  if (i.eq.int(0.2 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 20% complete"
-  if (i.eq.int(0.4 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 40% complete"
-  if (i.eq.int(0.6 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 60% complete"
-  if (i.eq.int(0.8 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 80% complete"
+!$omp end parallel do
+else if (psfconst.eq.1) then
+!$omp parallel do schedule(dynamic, 64) private(Delx, Dely)
+  do i=1, n
 
-end do
-!$omp end do
-!$omp end parallel
+    do a=1, m
+
+      Delx = real(npad, 8) * (x_i(i) - X_a(a)) / psfxscale
+      Dely = real(npad, 8) * (y_i(i) - Y_a(a)) / psfyscale 
+      B_ia(i, a) = imcom_interp_lookup(n1bl, n2bl, Blookup(:, :, exp_i(i)), &
+                                       Delx, Dely, npoly)
+
+    end do
+    if (i.eq.int(0.2 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 20% complete"
+    if (i.eq.int(0.4 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 40% complete"
+    if (i.eq.int(0.6 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 60% complete"
+    if (i.eq.int(0.8 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 80% complete"
+
+  end do
+!$omp end parallel do
+else
+  write(*, FMT='(A)') "IMCOM ERROR: PSFCONST must be 1 or 0!"
+  stop
+end if
 write(*, FMT='(A)') "IMCOM: B vectors complete"
 if (saveB.eq.1) then 
   write(*, FMT='(A)') "IMCOM: Saving B vectors to "//trim(Bfile)
@@ -302,11 +350,11 @@ END SUBROUTINE imcom_lookup_B
 
 !---
 
-SUBROUTINE imcom_build_Alookup(npad)
+SUBROUTINE imcom_build_Alookup(npad, psfconst)
 ! Build the A matrix lookup table using Fourier transforms
 !
 implicit none
-integer, intent(IN) :: npad
+integer, intent(IN) :: npad, psfconst
 complex(KIND=8), dimension(:, :), allocatable ::  A_tmp, ufunc
 integer :: alstat, iexp, jexp, ial
 integer :: n1big, n2big, n1min, n2min, n1max, n2max, ntotal
@@ -321,11 +369,14 @@ n1max = (n1big + n1psf) / 2
 n2max = (n2big + n2psf) / 2
 ntotal = n1big * n2big * npad * npad * nexp * nexp
 write(*, FMT='(A)') "IMCOM: Fourier transforming A matrix lookup table"
-!allocate(Alookup(n1big, n2big, nexp * (nexp + 1) / 2), A_tmp(n1big, n2big), &
-!         ufunc(n1big, n2big), STAT=alstat)
-! CODE ABOVE IS CORRECT, CODE BELOW IS TO SAVE MEMORY FOR PROJ TESTS
-allocate(Alookup(n1big, n2big, 1), A_tmp(n1big, n2big), &
-         ufunc(n1big, n2big), STAT=alstat)
+allocate(A_tmp(n1big, n2big), ufunc(n1big, n2big), STAT=alstat)
+if (psfconst.eq.0) then
+  allocate(Alookup(n1big, n2big, nexp * (nexp + 1) / 2), STAT=alstat)
+else if (psfconst.eq.1) then
+  allocate(Alookup(n1big, n2big, 1), STAT=alstat)
+else
+
+end if
 if (alstat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for A lookup tables"
   stop
@@ -677,7 +728,7 @@ if (alstat.ne.0) then
   stop
 end if
 !$omp parallel
-!$omp do schedule(dynamic, 32)
+!$omp do schedule(dynamic, 64)
 do a=1, m
 
   call DGEMV(notrans, n, n, alpha, Q_ij, n, P_ia(:, a) / (L_i(:) + K_a(a)), &
