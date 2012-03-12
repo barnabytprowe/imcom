@@ -427,11 +427,11 @@ END SUBROUTINE imcom_build_Alookup
 
 !---
 
-SUBROUTINE imcom_build_Blookup(npad)
+SUBROUTINE imcom_build_Blookup(npad, psfconst)
 ! Build the B matrix lookup table using Fourier transforms
 !
 implicit none
-integer, intent(IN) :: npad
+integer, intent(IN) :: npad, psfconst
 complex(KIND=8), dimension(:, :), allocatable ::  B_tmp, ufunc
 integer :: alstat, iexp
 integer :: n1min, n2min, n1max, n2max, n1big, n2big
@@ -444,11 +444,21 @@ n2min = (n2big - n2psf) / 2 + 1
 n1max = (n1big + n1psf) / 2
 n2max = (n2big + n2psf) / 2
 write(*, FMT='(A)') "IMCOM: Fourier transforming B matrix lookup tables"
-!allocate(Blookup(n1big, n2big, nexp), B_tmp(n1big, n2big), &
-!         ufunc(n1big, n2big), STAT=alstat)
-! CODE ABOVE IS CORRECT, CODE BELOW IS TO SAVE MEMORY FOR PROJ TESTS
-allocate(Blookup(n1big, n2big, 1), B_tmp(n1big, n2big), &
-         ufunc(n1big, n2big), STAT=alstat)
+allocate(B_tmp(n1big, n2big), ufunc(n1big, n2big), STAT=alstat)
+if (alstat.ne.0) then
+  write(*, FMT='(A)')"IMCOM ERROR: Cannot allocate memory for B lookup tables"
+  stop
+endif
+if (psfconst.eq.0) then
+  allocate(Blookup(n1big, n2big, nexp), STAT=alstat)
+  ijmax = nexp
+else if (psfconst.eq.1) then
+  allocate(Blookup(n1big, n2big, 1), STAT=alstat)
+  ijmax = 1
+else
+  write(*, FMT='(A)') "IMCOM ERROR: PSFCONST must be 1 or 0!"
+  stop
+end if
 if (alstat.ne.0) then
   write(*, FMT='(A)')"IMCOM ERROR: Cannot allocate memory for B lookup tables"
   stop
@@ -458,10 +468,8 @@ call imcom_plan_invft_c2c(n1big, n2big, 0, ftplan)
 !$omp workshare
 Blookup = 0.d0
 !$omp end workshare
-!$omp do private(ufunc, B_tmp)
-!do iexp=1, nexp
-! CODE ABOVE IS CORRECT, CODE BELOW IS TO SAVE MEMORY FOR PROJ TESTS
-do iexp=1, 1
+!$omp do private(ufunc, B_tmp, ijmax)
+do iexp=1, ijmax
 
   ufunc = dcmplx(0.d0, 0.d0)
   ufunc(n1min:n1max, n2min:n2max) = cshift(cshift(dconjg(Gammat(:, :)) &
