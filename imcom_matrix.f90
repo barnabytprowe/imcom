@@ -372,7 +372,7 @@ SUBROUTINE imcom_build_Alookup(npad, psfconst)
 implicit none
 integer, intent(IN) :: npad, psfconst
 complex(KIND=8), dimension(:, :), allocatable ::  A_tmp, ufunc
-integer :: alstat, iexp, jexp, nexpcross, ial, ijmax
+integer :: alstat, iexp, jexp, ial, ijmax
 integer :: n1big, n2big, n1min, n2min, n1max, n2max, ntotal
 integer(KIND=8) :: ftplan
 
@@ -393,6 +393,7 @@ if (psfconst.eq.0) then
   allocate(Alookup(n1big, n2big, nexp * (nexp + 1) / 2), STAT=alstat)
   ijmax = nexp
 else if (psfconst.eq.1) then
+  write(*, FMT='(A)') "IMCOM: All input PSFs the same, using this to save memory"
   allocate(Alookup(n1big, n2big, 1), STAT=alstat)
   ijmax = 1
 else
@@ -407,6 +408,7 @@ call imcom_plan_invft_c2c(n1big, n2big, 0, ftplan)
 !$omp parallel
 !$omp workshare
 Alookup = 0.d0
+A_tmp = 0.d0
 !$omp end workshare
 !$omp do private(ufunc, A_tmp, ial) schedule(dynamic, 1)
 do iexp=1, ijmax   ! Note use of ijmax here as defined above depending on psfconst
@@ -487,6 +489,7 @@ call imcom_plan_invft_c2c(n1big, n2big, 0, ftplan)
 !$omp parallel
 !$omp workshare
 Blookup = 0.d0
+B_tmp = 0.d0
 !$omp end workshare
 !$omp do private(ufunc, B_tmp)
 do iexp=1, ijmax

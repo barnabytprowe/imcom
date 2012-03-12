@@ -1,9 +1,9 @@
-FC = gfortran -t#-t - v
+FC = gfortran -t -v
 RM = rm
 RMFLAGS = -f
 MAKE = make
 MAKEFLAGS = b
-ERRTRACE=-fbacktrace
+ERRTRACE=#-fbacktrace
 WARN= -Wall -Wextra -Wconversion -pedantic -fbounds-check
 DEBUG= -g
 OPENMP= -fopenmp
