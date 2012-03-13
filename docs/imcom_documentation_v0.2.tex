@@ -21,13 +21,13 @@
 \setlength{\parskip}{2.0ex plus 0.5ex minus 0.5ex}
 \setlength{\parindent}{0cm} 
 
-\section*{IMCOM: IMage COMbination \\ Documentation for Version 0.2 (\emph{alpha})}
+\section*{IMCOM: IMage COMbination \\ Documentation for Version 0.2.4 (\emph{alpha})}
 \subsubsection*{\emph{Barnaby Rowe (2011)}}
 
 \section{Introduction}
-This is some (very) light documentation describing how to use this early, prototype version (v0.2) of the IMCOM image combination software described in Rowe, Hirata \& Rhodes (2011).  For theoretical details and discussion of the precise implementation we follow, please see that paper: the purpose of this documentation is to make it easier for you to get IMCOM running.
+This is some (very) light documentation describing how to use this early, prototype version (v0.2.4) of the IMCOM image combination software described in Rowe, Hirata \& Rhodes (2011).  For theoretical details and discussion of the precise implementation we follow, please see that paper: the purpose of this documentation is to make it easier for you to get IMCOM running.
 
-\section{Compiling IMCOM v0.2}
+\section{Compiling IMCOM v0.2.4}
 IMCOM is written in Fortran 95, and is well-tested using GNU Fortran (\texttt{gfortran}) which is available as part of the GNU Compiler Collection (GCC) at \newline
 \texttt{http://gcc.gnu.org/} \newline
 Version 4.3 or later of GCC allows the use of OpenMP-based multi-threading to speed up many of the IMCOM calculations on multi-cored systems.  The OpenMP directives can be ignored for earlier versions of GCC by omitting the OpenMP compiler flag \texttt{-fopenmp} in the \texttt{Makefile}.  This \texttt{Makefile} for the IMCOM package can be found in the directory \texttt{./src/} (all paths given as navigated from the directory containing this document).
@@ -44,7 +44,7 @@ Both libraries depend for speed on the implementation of the BLAS.  Quoting from
 
 \item The CFITSIO/FITSIO library (Version 3.25 is tested as compatible with IMCOM) of C and Fortran subroutines for reading and writing data files in FITS (Flexible Image Transport System) data format, available to download free from NASA at \newline \texttt{http://heasarc.gsfc.nasa.gov/fitsio/fitsio.html}.
 
-\item The FFTW library of C subroutines with Fortran wrappers for computing the discrete Fourier transform (DFT) in one or more dimensions (Version 3.2.2 is tested as compatible with IMCOM), available and documented at \newline
+\item The FFTW library of C subroutines with Fortran wrappers for computing the discrete Fourier transform (DFT) in one or more dimensions (Version 3.2.2 and above are compatible with IMCOM), available and documented at \newline
 \texttt{http://www.fftw.org/}
 \end{itemize}
 
@@ -52,7 +52,7 @@ These libraries should be installed on your system and the paths to these librar
 
 Once this is done, typing \texttt{make} from the terminal in this \texttt{./src/} directory should compile the code.  This will not take long as IMCOM is not a large piece of software.
 
-\section{Running IMCOM v0.2 from the command line}
+\section{Running IMCOM v0.2.4 from the command line}
 The IMCOM package is called using the minimum-possible set of command line arguments as follows:
 \newline
 \newline
@@ -81,7 +81,7 @@ This is an exercise you yourself can try using the images and \texttt{config\_ex
 \subsection{Optional parameters}
 If you call IMCOM with too few (or far too many) command line arguments, something like the following message should be printed:
 \newline \newline
-\texttt{IMCOM: IMage COMbination v0.2 (B. Rowe \& C. Hirata 2010-2011) \\
+\texttt{IMCOM: IMage COMbination v0.2.4 (B. Rowe \& C. Hirata 2010-2011) \\
 IMCOM: [usage] \\
  ./imcom <config\_file> <U/S> <U/S\_max> <U/S\_tol> [...<forceT> <forceSys> \\ <saturation>] \\
  \newline
@@ -108,7 +108,7 @@ One further point worth mentioning is that if the $T_{\alpha i}$ matrix specifie
 %\\ \newline
 %This concludes our simple description of IMCOM calling procedures.
 
-\section{The IMCOM v0.2 config files}\label{sect:config}
+\section{The IMCOM v0.2.4 config files}\label{sect:config}
 The IMCOM config file contains filenames and paths to all the input images and essential information about what these contain, as well as defining filenames for the outputs of the IMCOM algorithm. 
 The best way to elucidate the configuration file is using the example given in the \texttt{./example/userxy1/} directory:
 
@@ -140,7 +140,7 @@ We now give a brief description of these parameters (see also Rowe et al.\ 2011)
 
 \item \texttt{OUTCONFIG} gives the filename of the configuration file for the output properties, see Sections \ref{sect:userxy1} \& \ref{sect:userxy0}.
 
-\item \texttt{AFILE}, \texttt{BFILE}, \texttt{QFILE}, \texttt{LFILE} \& \texttt{PFILE} give the filename of the \texttt{FITS} files used to store the $A_{\alpha i j}$, $B_{\alpha i}$, $Q_{i j}$, $\lambda_i$ \& $P_{\alpha i}$ system matrix/vector objects, respectively.  If the file does not exist, these objects will be calculated and saved to the corresponding \texttt{\emph{X}FILE}; if the file does exist it will be read in and used in subsequent calculations unless \texttt{forceSys} = 1 is specified at the command line.
+\item \texttt{AFILE}, \texttt{BFILE}, \texttt{QFILE}, \texttt{LFILE} \& \texttt{PFILE} give the filename of the \texttt{FITS} files used to store the $A_{\alpha i j}$, $B_{\alpha i}$, $Q_{i j}$, $\lambda_i$ \& $P_{\alpha i}$ system matrix/vector objects, respectively.  If the file does not exist, these objects will be calculated and saved to the corresponding \texttt{\emph{X}FILE}, \emph{unless} the filename is given as \texttt{None} (case sensitive): in this case the system matrices are not saved.  If the file specified in \texttt{\emph{X}FILE} does exist it will be read in and used in subsequent calculations unless \texttt{forceSys} = 1 is specified at the command line.
 \end{itemize}
 
 So much for the primary configuration file.  We now go on to describe its offshoots, the input and output configuration files, which differ in their content depending on the value of \texttt{USERXY}.
@@ -225,7 +225,7 @@ The first six parameters are those described in Section \ref{sect:userxy0}. The 
 \item \texttt{NOUT} supplies as two arguments the overall $x$ and $y$ dimensions of the output $H_{\alpha}$ in numbers of pixels, $81$ pixels $\times$ 81 pixels in the example above.
 \end{itemize}
 
-This concludes the description of the somewhat lengthy configuration file interface for IMCOM v0.2.  
+This concludes the description of the somewhat lengthy configuration file interface for IMCOM v0.2.4.  
 
 \subsection{The IDL \texttt{imcom\_write\_config.pro} script}\label{sect:idl}
 To help alleviate the process of creating these long configuration files, I have created simple IDL scripts to generate them automatically with correct spacing.  These scripts can be found in the \texttt{./idl/} directory. 
