@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.11 (TeX Live 2010/Fink) (format=latex 2011.9.9)  27 OCT 2011 13:17
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011/Fink) (format=latex 2012.2.21)  12 MAR 2012 20:38
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -6,15 +6,16 @@ entering extended mode
 (./imcom_documentation_v0.2.tex
 LaTeX2e <2009/09/24>
 Babel <v3.8l> and hyphenation patterns for english, dumylang, nohyphenation, ge
-rman-x-2009-06-19, ngerman-x-2009-06-19, ancientgreek, ibycus, arabic, armenian
-, basque, bulgarian, catalan, pinyin, coptic, croatian, czech, danish, dutch, u
-kenglish, usenglishmax, esperanto, estonian, farsi, finnish, french, galician, 
-german, ngerman, swissgerman, monogreek, greek, hungarian, icelandic, assamese,
- bengali, gujarati, hindi, kannada, malayalam, marathi, oriya, panjabi, tamil, 
-telugu, indonesian, interlingua, irish, italian, kurmanji, lao, latin, latvian,
- lithuanian, mongolian, mongolianlmc, bokmal, nynorsk, polish, portuguese, roma
-nian, russian, sanskrit, serbian, slovak, slovenian, spanish, swedish, turkish,
- turkmen, ukrainian, uppersorbian, welsh, loaded.
+rman-x-2009-06-19, ngerman-x-2009-06-19, afrikaans, ancientgreek, ibycus, arabi
+c, armenian, basque, bulgarian, catalan, pinyin, coptic, croatian, czech, danis
+h, dutch, ukenglish, usenglishmax, esperanto, estonian, ethiopic, farsi, finnis
+h, french, galician, german, ngerman, swissgerman, monogreek, greek, hungarian,
+ icelandic, assamese, bengali, gujarati, hindi, kannada, malayalam, marathi, or
+iya, panjabi, tamil, telugu, indonesian, interlingua, irish, italian, kurmanji,
+ lao, latin, latvian, lithuanian, mongolian, mongolianlmc, bokmal, nynorsk, pol
+ish, portuguese, romanian, russian, sanskrit, serbian, serbianc, slovak, sloven
+ian, spanish, swedish, turkish, turkmen, ukrainian, uppersorbian, welsh, loaded
+.
 (/sw/share/texmf-dist/tex/latex/base/article.cls
 Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
 (/sw/share/texmf-dist/tex/latex/base/size10.clo
@@ -287,12 +288,12 @@ LaTeX Font Info:    Font shape `T1/pcr/bx/n' in size <12> not available
 (Font)              Font shape `T1/pcr/b/n' tried instead on input line 230.
 [6] [7] (./imcom_documentation_v0.2.aux) ) 
 Here is how much of TeX's memory you used:
- 1926 strings out of 493748
- 22150 string characters out of 3149410
- 71578 words of memory out of 3000000
- 5206 multiletter control sequences out of 15000+200000
+ 1926 strings out of 493634
+ 22150 string characters out of 3149138
+ 71753 words of memory out of 3000000
+ 5214 multiletter control sequences out of 15000+200000
  27508 words of font info for 43 fonts, out of 3000000 for 9000
- 714 hyphenation exceptions out of 8191
+ 831 hyphenation exceptions out of 8191
  32i,5n,24p,793b,179s stack positions out of 5000i,500n,10000p,200000b,50000s
 
-Output written on imcom_documentation_v0.2.dvi (7 pages, 23008 bytes).
+Output written on imcom_documentation_v0.2.dvi (7 pages, 23208 bytes).
