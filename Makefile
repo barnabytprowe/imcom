@@ -1,9 +1,9 @@
-FC = gfortran -t#-t - v
+FC = gfortran -t -v
 RM = rm
 RMFLAGS = -f
 MAKE = make
 MAKEFLAGS = b
-ERRTRACE=-fbacktrace
+ERRTRACE=#-fbacktrace
 WARN= -Wall -Wextra -Wconversion -pedantic -fbounds-check
 DEBUG= -g
 OPENMP= -fopenmp
@@ -22,7 +22,6 @@ imcom: imcom_data.o imcom_proc.o imcom_io.o imcom_matrix.o imcom_bisect.o imcom.
 	cp ./imcom ../bin/
 	cp ./imcom ../jdem/
 	cp ./imcom ~/fortran/bin/
-	cp ./imcom ../../pproj/code/
 
 imcom_bisect.o: imcom_data.o imcom_proc.o imcom_io.o imcom_matrix.o imcom_bisect.f90
 	$(FC) $(WARN) $(ERRTRACE) $(OPTIMIZE) $(OPENMP) -c imcom_bisect.f90 -o $@

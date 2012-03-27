@@ -4,7 +4,7 @@ Within this package please see imcom_documentation.pdf for some (very) light
 documentation describing how to use this early, prototype version (v0.2.X) of 
 the IMCOM IMage COMbination software described in Rowe, Hirata \& Rhodes 
 (2011). This document, a practical introduction to IMCOM, can be found within 
-the ./releases/ subdirectory.
+the individual ./releases/ subdirectories.
 
 This releases directory is simply there to gather tarballs together for 
 people not using Hg! However, that directory is a good place to look for 

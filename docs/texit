@@ -1,4 +1,4 @@
 latex imcom_documentation_v0.2.tex
 dvips imcom_documentation_v0.2.dvi -o imcom_documentation.ps 
 ps2pdf imcom_documentation.ps
-cp ./imcom_documentation.pdf ../releases/imcom_v0.2.2/imcom_documentation.pdf
+cp ./imcom_documentation.pdf ../imcom_documentation.pdf

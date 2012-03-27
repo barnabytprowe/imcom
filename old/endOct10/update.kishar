@@ -1,1 +1,0 @@
-rsync -cuvt *.f90 browe@kishar1.caltech.edu:~/jdem/imcom/src/

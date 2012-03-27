@@ -43,15 +43,14 @@ integer(KIND=8) :: ftplan
 real(KIND=8) :: eps
 real(KIND=8), external :: DLAMCH
 logical :: Aexists, Bexists, Texists
+integer :: saveA, saveB, saveQL, saveP
 
 npoly = 7     ! Make these user specifiable?
 npad = 3      !
 maxNbis = 53       ! This since 2^-53 is the machine precision at real(KIND=8)
-
 ! Also, currently kappa_min and kappa_max are now set via C_a * machine_epsilon
 ! and C_a / machine_epsilon [accessed with DLAMCH('Eps')], rather than
 ! being user-input... is this a good idea?
-
 
 call imcom_get_cmdline
 call imcom_welcome
@@ -104,36 +103,47 @@ call imcom_plan_ft_r2c(n1psf, n2psf, 0, ftplan)
 call imcom_ft_r2c(n1psf, n2psf, ftplan, Gamma(:, :), Gammat(:, :))
 call imcom_destroy_plan(ftplan)
 
-! Output some checks
-!call imcom_writefits('./fits/ux_check.fits', n1psf, n2psf, ux)
-!call imcom_writefits('./fits/uy_check.fits', n1psf, n2psf, uy)
-!call imcom_writefits('./fits/mtf1.real.fits', n1psf, n2psf, real(Gt_rot(:, :, 1), 8))
-!call imcom_writefits('./fits/mtf1.imag.fits', n1psf, n2psf, dimag(Gt_rot(:, :, 1)))
-!call imcom_writefits('./fits/mtf1.abs.fits', n1psf, n2psf, abs(Gt_rot(:, :, 1)))
-
 ! Calculate the N (diagonal only, currently) noise array
 call imcom_build_Ndiag
 
 ! Calulate C (really quick) and build the (currently diagonal only) noise cov.
 call imcom_calc_C
 
+! Set kappa min / max from machine precision limits
 eps = DLAMCH('Epsilon')
 kappa_min = C_a * eps
 kappa_max = C_a / eps
 
-! Testing
-!call imcom_build_A_oldschool(1)
-!call imcom_eigen_Aold
-
-
+! New feature: if the specified system matrix filenames are 'None' then don't bother saving them...
+if (Afile.eq."None") then
+  saveA = 0
+else
+  saveA = 1
+end if
+if (Bfile.eq."None") then
+  saveB = 0
+else
+  saveB = 1
+end if
+if ((Qfile.eq."None").and.(Lfile.eq."None")) then
+  saveQL = 0
+else
+  saveQL = 1
+end if
+if (Pfile.eq."None") then
+  saveP = 0
+else
+  saveP = 1
+end if
+! If they can't be loaded in, or if T needs to be rebuilt, build the systems matrices
 if (((forceSys.ne.0).or.(forceT.ne.0)).or.(Texists.eqv..False.)) then
 ! Read / build the A array
-  call imcom_get_A(npoly, npad, 1, forceSys)  ! arg#3 = save, arg#4 = force build
-  call imcom_get_QL(1, forceSys)
+  call imcom_get_A(npoly, npad, saveA, forceSys)  ! arg#3 = save, arg#4 = force build
+  call imcom_get_QL(saveQL, forceSys)
 ! Read / build the B array
-  call imcom_get_B(npoly, npad, 1, forceSys)
+  call imcom_get_B(npoly, npad, saveB, forceSys)
 ! Construct the projection matrices
-  call imcom_get_P(1, forceSys)
+  call imcom_get_P(saveP, forceSys)
   deallocate(A_aij, B_ia, STAT=alstat)
   if (alstat.ne.0) then
     write(*, FMT='(A)') "IMCOM ERROR: Cannot deallocate A & B matrices"
@@ -142,8 +152,8 @@ if (((forceSys.ne.0).or.(forceT.ne.0)).or.(Texists.eqv..False.)) then
 end if
 ! Read / solve the T array
 call imcom_get_T(forceT)
-
-! Build the output products using the galaxy images, A, B, C and our calculated T transformation
+! Build the output products using the galaxy images, A, B, C and our calculated T 
+! transformation
 call imcom_build_image
 
 END PROGRAM imcom
