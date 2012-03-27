@@ -1,0 +1,6 @@
+PSFFILE     psf.example.fits
+GIMFILE     test2.example.fits
+ROTANGDEG   0.0000000
+NOISE       1.0000000
+GIMXFILE    x2.example.fits
+GIMYFILE    y2.example.fits

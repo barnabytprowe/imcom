@@ -1,0 +1,10 @@
+GAMFILE     psf.example.fits
+OUTFILE     H.example.fits
+KFILE       K.example.fits
+TFILE       T.example.fits
+SFILE       S.example.fits
+UFILE       U.example.fits
+OUTXSCALE   0.200000000
+OUTYSCALE   0.200000000
+OUTPOS      0.0000000 0.0000000
+NOUT        81 81

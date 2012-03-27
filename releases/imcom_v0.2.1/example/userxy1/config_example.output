@@ -1,0 +1,8 @@
+GAMFILE     psf.example.fits
+OUTFILE     H.example.fits
+KFILE       K.example.fits
+TFILE       T.example.fits
+SFILE       S.example.fits
+UFILE       U.example.fits
+OUTXFILE    xout.example.fits
+OUTYFILE    yout.example.fits
