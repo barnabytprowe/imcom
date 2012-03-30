@@ -72,7 +72,8 @@ else
 end if
 
 psfconst = imcom_test_psfconst() ! Set global switch psfconst
-if (psfconst.eq.1) then ! and related nexppsf
+if (psfconst.eq.1) then ! and likewise set related nexppsf
+  write(*, FMT='(A)') "IMCOM: All input PSFs the same, using this to save memory and I/O"
   nexppsf = 1
 else
   nexppsf = nexp

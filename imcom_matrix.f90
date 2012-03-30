@@ -369,9 +369,6 @@ if (alstat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for A lookup tables"
   stop
 endif
-if (psfconst.eq.1) then
-  write(*, FMT='(A)') "IMCOM: All input PSFs the same, using this to save memory"
-end if
 allocate(Alookup(n1big, n2big, nexppsf * (nexppsf + 1) / 2), STAT=alstat)
 if (alstat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for A lookup tables"
