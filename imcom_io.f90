@@ -248,14 +248,9 @@ implicit none
 integer, intent(OUT) :: n1pad, n2pad
 integer, dimension(:), allocatable :: n1, n2, bitpix
 real(KIND=8), dimension(:, :), allocatable :: Gtemp
-integer :: i, alstat, dealstat, nexppsf
+integer :: i, alstat, dealstat
 integer :: n1min, n2min, n1max, n2max
 
-if (psfconst.eq.1) then
-  nexppsf = 1
-else
-  nexppsf = nexp
-end if
 allocate(n1(nexppsf + 1), n2(nexppsf + 1), bitpix(nexppsf + 1), STAT=alstat)
 if (alstat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for PSF image property arrays"

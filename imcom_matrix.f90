@@ -43,7 +43,7 @@ implicit none
 integer, intent(IN) :: npoly, npad, saveA, forcebuild
 logical :: Aexists
 integer :: n1_tmp, n2_tmp, bit_tmp
-integer :: alstat, psfconst, i
+integer :: alstat, i
 
 inquire(FILE=trim(Afile), EXIST=Aexists)
 if (Aexists.and.(forcebuild.eq.0)) then
@@ -64,18 +64,8 @@ if (Aexists.and.(forcebuild.eq.0)) then
   write(*, FMT='(A)') "IMCOM: Reading A matrix from "//trim(Afile)
   call imcom_readfits(trim(Afile), n1_tmp, n2_tmp, A_aij)
 else
-  psfconst = 1
-! Check whether all PSFFILEs have the same name...
-  do i=2, nexp
-
-    if (psffile(i).ne.psffile(1)) then
-      psfconst = 0
-      exit
-    end if
-
-  end do
-  call imcom_build_Alookup(npad, psfconst)
-  call imcom_lookup_A(npoly, npad, saveA, psfconst)
+  call imcom_build_Alookup(npad)
+  call imcom_lookup_A(npoly, npad, saveA)
 end if
 END SUBROUTINE imcom_get_A
 
@@ -86,7 +76,7 @@ implicit none
 integer, intent(IN) :: npoly, npad, saveB, forcebuild
 logical :: Bexists
 integer :: n1_tmp, n2_tmp, bit_tmp
-integer :: alstat, psfconst, i
+integer :: alstat, i
 
 inquire(FILE=trim(Bfile), EXIST=Bexists)
 if (Bexists.and.(forcebuild.eq.0)) then
@@ -105,18 +95,8 @@ if (Bexists.and.(forcebuild.eq.0)) then
   write(*, FMT='(A)') "IMCOM: Reading B matrix from "//trim(Bfile)
   call imcom_readfits(trim(Bfile), n1_tmp, n2_tmp, B_ia)
 else
-  psfconst = 1
-! Check whether all PSFFILEs have the same name...
-  do i=2, nexp
-
-    if (psffile(i).ne.psffile(1)) then
-      psfconst = 0
-      exit
-    end if
-
-  end do
-  call imcom_build_Blookup(npad, psfconst)
-  call imcom_lookup_B(npoly, npad, saveB, psfconst)
+  call imcom_build_Blookup(npad)
+  call imcom_lookup_B(npoly, npad, saveB)
 end if
 END SUBROUTINE imcom_get_B
 
@@ -211,10 +191,10 @@ END SUBROUTINE imcom_get_QL
 
 !---
 
-SUBROUTINE imcom_lookup_A(npoly, npad, saveA, psfconst)
+SUBROUTINE imcom_lookup_A(npoly, npad, saveA)
 ! Calculate the A matrix using the lookup table and polynomial interpolation at degree npoly
 implicit none
-integer, intent(IN) :: npoly, npad, saveA, psfconst
+integer, intent(IN) :: npoly, npad, saveA
 real(KIND=8) :: Delx, Dely
 integer :: i, j, alstat, n1al, n2al, ial
 

@@ -43,7 +43,7 @@ integer(KIND=8) :: ftplan
 real(KIND=8) :: eps
 real(KIND=8), external :: DLAMCH
 logical :: Aexists, Bexists, Texists
-integer :: nexp_tmp
+integer :: nexppsf
 integer :: saveA, saveB, saveQL, saveP
 
 npoly = 7     ! Make these user specifiable?
@@ -73,6 +73,12 @@ else
 end if
 
 psfconst = imcom_test_psfconst() ! Set global switch psfconst
+if (psfconst.eq.1) then ! and related nexppsf
+  nexppsf = 1
+else
+  nexppsf = nexp
+end if
+
 ! Read and allocate the PSFs and Gamma PSF
 call imcom_alloc_psfs(n1psf, n2psf)
 ! Make the ux, uy FT arrays
@@ -87,7 +93,7 @@ if ((((Bexists.eqv..FALSE.).or.(Aexists.eqv..FALSE.)) &
     write(*, FMT='(A)') "IMCOM: Rotating and Fourier transforming PSF images"
     eps = DLAMCH('Epsilon')
     call imcom_plan_ft_r2c(n1psf, n2psf, 0, ftplan)
-    do i=1, nexp
+    do i=1, nexppsf
 
       if (abs(rotangdeg(i)).gt.(2.d0 * pi * eps)) then
         call imcom_rotate_image(G_unrot(:, :, i), rotangdeg(i), npoly, 1, &
