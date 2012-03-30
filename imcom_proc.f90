@@ -619,7 +619,7 @@ END SUBROUTINE imcom_destroy_plan
 
 FUNCTION imcom_test_psfconst()
 implicit none
-REAL(KIND=8) :: imcom_test_psfconst
+integer :: imcom_test_psfconst
 integer :: i
 
 imcom_test_psfconst = 1

@@ -273,10 +273,10 @@ END SUBROUTINE imcom_lookup_A
 
 !---
 
-SUBROUTINE imcom_lookup_B(npoly, npad, saveB, psfconst)
+SUBROUTINE imcom_lookup_B(npoly, npad, saveB)
 ! Calculate the B matrix using the lookup table and polynomial interpolation at degree npoly
 implicit none
-integer, intent(IN) :: npoly, npad, saveB, psfconst
+integer, intent(IN) :: npoly, npad, saveB
 real(KIND=8) :: Delx, Dely
 integer :: i, a, alstat, n1bl, n2bl
 
@@ -346,11 +346,11 @@ END SUBROUTINE imcom_lookup_B
 
 !---
 
-SUBROUTINE imcom_build_Alookup(npad, psfconst)
+SUBROUTINE imcom_build_Alookup(npad)
 ! Build the A matrix lookup table using Fourier transforms
 !
 implicit none
-integer, intent(IN) :: npad, psfconst
+integer, intent(IN) :: npad
 complex(KIND=8), dimension(:, :), allocatable ::  A_tmp, ufunc
 integer :: alstat, iexp, jexp, ial, ijmax
 integer :: n1big, n2big, n1min, n2min, n1max, n2max, ntotal
@@ -369,17 +369,10 @@ if (alstat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for A lookup tables"
   stop
 endif
-if (psfconst.eq.0) then
-  allocate(Alookup(n1big, n2big, nexp * (nexp + 1) / 2), STAT=alstat)
-  ijmax = nexp
-else if (psfconst.eq.1) then
+if (psfconst.eq.1) then
   write(*, FMT='(A)') "IMCOM: All input PSFs the same, using this to save memory"
-  allocate(Alookup(n1big, n2big, 1), STAT=alstat)
-  ijmax = 1
-else
-  write(*, FMT='(A)') "IMCOM ERROR: PSFCONST must be 1 or 0!"
-  stop
 end if
+allocate(Alookup(n1big, n2big, nexppsf * (nexppsf + 1) / 2), STAT=alstat)
 if (alstat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for A lookup tables"
   stop
@@ -391,9 +384,9 @@ Alookup = 0.d0
 A_tmp = 0.d0
 !$omp end workshare
 !$omp do private(ufunc, A_tmp, ial) schedule(dynamic, 1)
-do iexp=1, ijmax   ! Note use of ijmax here as defined above depending on psfconst
+do iexp=1, nexppsf   ! Note use of nexppsf here as defined above depending on psfconst
 
-  do jexp=iexp, ijmax
+  do jexp=iexp, nexppsf
 
 ! A matrix lookup tables per exposure stored in a packed upper triangular matrix
     ial = iexp + jexp * (jexp - 1) / 2
@@ -429,11 +422,11 @@ END SUBROUTINE imcom_build_Alookup
 
 !---
 
-SUBROUTINE imcom_build_Blookup(npad, psfconst)
+SUBROUTINE imcom_build_Blookup(npad)
 ! Build the B matrix lookup table using Fourier transforms
 !
 implicit none
-integer, intent(IN) :: npad, psfconst
+integer, intent(IN) :: npad
 complex(KIND=8), dimension(:, :), allocatable ::  B_tmp, ufunc
 integer :: alstat, iexp, ijmax
 integer :: n1min, n2min, n1max, n2max, n1big, n2big
@@ -451,16 +444,7 @@ if (alstat.ne.0) then
   write(*, FMT='(A)')"IMCOM ERROR: Cannot allocate memory for B lookup tables"
   stop
 endif
-if (psfconst.eq.0) then
-  allocate(Blookup(n1big, n2big, nexp), STAT=alstat)
-  ijmax = nexp
-else if (psfconst.eq.1) then
-  allocate(Blookup(n1big, n2big, 1), STAT=alstat)
-  ijmax = 1
-else
-  write(*, FMT='(A)') "IMCOM ERROR: PSFCONST must be 1 or 0!"
-  stop
-end if
+allocate(Blookup(n1big, n2big, nexppsf), STAT=alstat)
 if (alstat.ne.0) then
   write(*, FMT='(A)')"IMCOM ERROR: Cannot allocate memory for B lookup tables"
   stop
@@ -472,7 +456,7 @@ Blookup = 0.d0
 B_tmp = 0.d0
 !$omp end workshare
 !$omp do private(ufunc, B_tmp)
-do iexp=1, ijmax
+do iexp=1, nexppsf ! Ditto as for A, depends on psfconst
 
   ufunc = dcmplx(0.d0, 0.d0)
   ufunc(n1min:n1max, n2min:n2max) = cshift(cshift(dconjg(Gammat(:, :)) &

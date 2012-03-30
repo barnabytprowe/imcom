@@ -319,10 +319,10 @@ do i=1, nexppsf
 
 end do
 Gtemp = 0.d0
-n1min = (n1pad - n1(nexppsf +1)) / 2 + 1
-n2min = (n2pad - n2(nexppsf +1)) / 2 + 1
-n1max = (n1pad + n1(nexppsf +1)) / 2
-n2max = (n2pad + n2(nexppsf +1)) / 2
+n1min = (n1pad - n1(nexppsf + 1)) / 2 + 1
+n2min = (n2pad - n2(nexppsf + 1)) / 2 + 1
+n1max = (n1pad + n1(nexppsf + 1)) / 2
+n2max = (n2pad + n2(nexppsf + 1)) / 2
 write(*, FMT='(A)') "IMCOM: Reading ouput PSF from "//trim(gamfile)
 call imcom_readfits(trim(gamfile), n1(nexppsf + 1), n2(nexppsf + 1), Gtemp)
 Gamma(n1min:n1max, n2min:n2max) = Gtemp / sum(Gtemp)
@@ -966,7 +966,7 @@ END SUBROUTINE imcom_read_outconfig
 SUBROUTINE imcom_welcome
 implicit none
 ! Welcome banner
-write(*, FMT='(A)') "IMCOM: IMage COMbination v0.2.4 (B. Rowe & C. Hirata 2010-2011)"
+write(*, FMT='(A)') "IMCOM: IMage COMbination v0.2.5 (B. Rowe & C. Hirata 2010-2011)"
 END SUBROUTINE
 
 !---
