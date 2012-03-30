@@ -311,9 +311,9 @@ imcom_write_config3v0, CONFIGFILE=configfile+".psfvar",                   $
                        QFILE=qfile,                                       $
                        LFILE=lfile,                                       $
                        PFILE=pfile,                                       $
-                       TFILE=fitsdir+"/T.test.psfvar.fits",             $
-                       SFILE=fitsdir+"/S.test.psfvar.fits",             $
-                       UFILE=fitsdir+"/U.test.psfvar.fits",             $
+                       TFILE=fitsdir+"/T.test.psfvar.fits",               $
+                       SFILE=fitsdir+"/S.test.psfvar.fits",               $
+                       UFILE=fitsdir+"/U.test.psfvar.fits",               $
                        KFILE=fitsdir+"/K.test.psfvar.fits"
 
 imcom_write_config3v0, CONFIGFILE=configfile+".psfconst",                 $
