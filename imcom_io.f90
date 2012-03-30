@@ -248,15 +248,20 @@ implicit none
 integer, intent(OUT) :: n1pad, n2pad
 integer, dimension(:), allocatable :: n1, n2, bitpix
 real(KIND=8), dimension(:, :), allocatable :: Gtemp
-integer :: i, alstat, dealstat
+integer :: i, alstat, dealstat, nexppsf
 integer :: n1min, n2min, n1max, n2max
 
-allocate(n1(nexp + 1), n2(nexp + 1), bitpix(nexp + 1), STAT=alstat)
+if (psfconst.eq.1) then
+  nexppsf = 1
+else
+  nexppsf = nexp
+end if
+allocate(n1(nexppsf + 1), n2(nexppsf + 1), bitpix(nexppsf + 1), STAT=alstat)
 if (alstat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for PSF image property arrays"
   stop
 end if
-do i=1, nexp
+do i=1, nexppsf
 
   call imcom_sizefits(trim(psffile(i)), n1(i), n2(i), bitpix(i))
   if (i.ne.1) then
@@ -267,8 +272,8 @@ do i=1, nexp
   end if
 
 end do
-call imcom_sizefits(trim(gamfile), n1(nexp + 1), n2(nexp + 1), bitpix(nexp + 1))
-if (n1(nexp + 1).ne.(n1(nexp)).or.n2(nexp + 1).ne.(n2(nexp))) then
+call imcom_sizefits(trim(gamfile), n1(nexppsf + 1), n2(nexppsf + 1), bitpix(nexppsf + 1))
+if (n1(nexppsf + 1).ne.(n1(nexppsf)).or.n2(nexppsf + 1).ne.(n2(nexppsf))) then
   write(*, FMT='(A)') "IMCOM ERROR: Variable size PSF images not supported in this version"
   write(*, FMT='(A)') "IMCOM ERROR: Gamma image different size from input PSF images"
   stop
@@ -284,8 +289,8 @@ if (n1pad.lt.(n1(1) * 2).or.(n2pad.lt.(n2(1) * 2))) then
   n2pad = n1pad
 end if
 ! Then allocate the final storage array for the PSF and its transform
-allocate(G_unrot(n1pad, n2pad, nexp), G_rot(n1pad, n2pad, nexp),   &
-         Gt_unrot(n1pad, n2pad, nexp), Gt_rot(n1pad, n2pad, nexp), &
+allocate(G_unrot(n1pad, n2pad, nexppsf), G_rot(n1pad, n2pad, nexppsf),   &
+         Gt_unrot(n1pad, n2pad, nexppsf), Gt_rot(n1pad, n2pad, nexppsf), &
          Gamma(n1pad, n2pad), Gammat(n1pad, n2pad), STAT=alstat)
 if (alstat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for PSF arrays"
@@ -302,7 +307,7 @@ if (alstat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for temporary PSF image array"
   stop
 end if
-do i=1, nexp
+do i=1, nexppsf
 
   Gtemp = 0.d0
   n1min = (n1pad - n1(i)) / 2 + 1
@@ -319,12 +324,12 @@ do i=1, nexp
 
 end do
 Gtemp = 0.d0
-n1min = (n1pad - n1(nexp +1)) / 2 + 1
-n2min = (n2pad - n2(nexp +1)) / 2 + 1
-n1max = (n1pad + n1(nexp +1)) / 2
-n2max = (n2pad + n2(nexp +1)) / 2
+n1min = (n1pad - n1(nexppsf +1)) / 2 + 1
+n2min = (n2pad - n2(nexppsf +1)) / 2 + 1
+n1max = (n1pad + n1(nexppsf +1)) / 2
+n2max = (n2pad + n2(nexppsf +1)) / 2
 write(*, FMT='(A)') "IMCOM: Reading ouput PSF from "//trim(gamfile)
-call imcom_readfits(trim(gamfile), n1(nexp +1), n2(nexp +1), Gtemp)
+call imcom_readfits(trim(gamfile), n1(nexppsf + 1), n2(nexppsf + 1), Gtemp)
 Gamma(n1min:n1max, n2min:n2max) = Gtemp / sum(Gtemp)
 deallocate(Gtemp, n1, n2, bitpix, STAT=dealstat)
 if (dealstat.ne.0) then

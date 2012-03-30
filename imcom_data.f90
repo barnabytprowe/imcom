@@ -48,6 +48,8 @@ character(LEN=256) :: outconfig, Hfile, gamfile
 character(LEN=256) :: outxfile, outyfile
 real(KIND=8) :: outxscale, outyscale ! input/desired image pixel units
 
+! Switch for whether all PSFs are actually the same file
+integer :: psfconst
 
 ! Sizes of PSF, galaxy input and output images, including number of masked image pixels
 integer :: n1psf, n2psf

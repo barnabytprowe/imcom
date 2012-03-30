@@ -617,4 +617,22 @@ END SUBROUTINE imcom_destroy_plan
 
 !---
 
+FUNCTION imcom_test_psfconst()
+implicit none
+REAL(KIND=8) :: imcom_test_psfconst
+integer :: i
+
+imcom_test_psfconst = 1
+do i=2, nexp
+
+  if (psffile(i).ne.psffile(1)) then
+    imcom_test_psfconst = 0
+    exit
+  end if
+
+end do
+END FUNCTION imcom_test_psfconst
+
+!---
+
 END MODULE imcom_proc

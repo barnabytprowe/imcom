@@ -43,6 +43,7 @@ integer(KIND=8) :: ftplan
 real(KIND=8) :: eps
 real(KIND=8), external :: DLAMCH
 logical :: Aexists, Bexists, Texists
+integer :: nexp_tmp
 integer :: saveA, saveB, saveQL, saveP
 
 npoly = 7     ! Make these user specifiable?
@@ -71,6 +72,7 @@ else
   call imcom_build_XaYa
 end if
 
+psfconst = imcom_test_psfconst() ! Set global switch psfconst
 ! Read and allocate the PSFs and Gamma PSF
 call imcom_alloc_psfs(n1psf, n2psf)
 ! Make the ux, uy FT arrays
