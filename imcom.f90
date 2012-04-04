@@ -88,7 +88,7 @@ inquire(FILE=trim(Afile), EXIST=Aexists)
 inquire(FILE=trim(Bfile), EXIST=Bexists)
 inquire(FILE=trim(Tfile), EXIST=Texists)
 if ((((Bexists.eqv..FALSE.).or.(Aexists.eqv..FALSE.)) &
-    .and.(Texists.eqv..FALSE.)).or.(forceSys.eq.1)) then
+    .and.(Texists.eqv..FALSE.)).or.(forceSys.ne.0).or.(forceT.ne.0)) then
 ! Rotate PSFs and calculate the Fourier transform Gt(ux, uy) of each
     write(*, FMT='(A)') "IMCOM: Rotating and Fourier transforming PSF images"
     eps = DLAMCH('Epsilon')
