@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set the version to match the repository tag in Mercurial
-VERSION=0.2.4
+VERSION=$1
 
 # First make all the required directories
 mkdir -p ./releases/imcom_v${VERSION}/
