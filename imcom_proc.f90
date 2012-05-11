@@ -625,7 +625,7 @@ integer :: i
 imcom_test_psfconst = 1
 do i=2, nexp
 
-  if (psffile(i).ne.psffile(1)) then
+  if ((psffile(i).ne.psffile(1)).or.(rotangdeg(i).ne.rotangdeg(1))) then
     imcom_test_psfconst = 0
     exit
   end if
