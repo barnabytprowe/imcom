@@ -1,0 +1,9 @@
+syntax: glob
+*aux
+*.dvi
+*.log
+releases/*/*
+releases/*.tar.gz
+tests/paper_test/configs/*
+tests/paper_test/fits/*
+tests/paper_test/plots/*
