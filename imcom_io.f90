@@ -966,7 +966,7 @@ END SUBROUTINE imcom_read_outconfig
 SUBROUTINE imcom_welcome
 implicit none
 ! Welcome banner
-write(*, FMT='(A)') "IMCOM: IMage COMbination v0.2.5 (B. Rowe & C. Hirata 2010-2011)"
+write(*, FMT='(A)') "IMCOM: IMage COMbination v0.2.6 (B. Rowe & C. Hirata 2010-2011)"
 END SUBROUTINE
 
 !---

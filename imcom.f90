@@ -90,7 +90,11 @@ inquire(FILE=trim(Tfile), EXIST=Texists)
 if ((((Bexists.eqv..FALSE.).or.(Aexists.eqv..FALSE.)) &
     .and.(Texists.eqv..FALSE.)).or.(forceSys.ne.0).or.(forceT.ne.0)) then
 ! Rotate PSFs and calculate the Fourier transform Gt(ux, uy) of each
-    write(*, FMT='(A)') "IMCOM: Rotating and Fourier transforming PSF images"
+    if (psfconst.eq.0) then 
+      write(*, FMT='(A)') "IMCOM: Rotating and Fourier transforming PSF images"
+    else
+      write(*, FMT='(A)') "IMCOM: Fourier transforming PSF images"
+    end if
     eps = DLAMCH('Epsilon')
     call imcom_plan_ft_r2c(n1psf, n2psf, 0, ftplan)
     do i=1, nexppsf

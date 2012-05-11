@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Set the version to match the repository tag in Mercurial
+# Set the version to match the repository tag in Mercurial... OMIT THE "v"!!
 VERSION=$1
 
 # First make all the required directories
