@@ -27,7 +27,7 @@
 \section{Introduction}
 This is some (very) light documentation describing how to use this early, prototype version of the IMCOM image combination software described in Rowe, Hirata \& Rhodes (2011).  For theoretical details and discussion of the precise implementation we follow, please see that paper: the purpose of this documentation is to make it easier for you to get IMCOM running.
 
-\section{Compiling IMCOM v0.2.4}
+\section{Compiling IMCOM}
 IMCOM is written in Fortran 95, and is well-tested using GNU Fortran (\texttt{gfortran}) which is available as part of the GNU Compiler Collection (GCC) at \newline
 \texttt{http://gcc.gnu.org/} \newline
 Version 4.3 or later of GCC allows the use of OpenMP-based multi-threading to speed up many of the IMCOM calculations on multi-cored systems.  The OpenMP directives can be ignored for earlier versions of GCC by omitting the OpenMP compiler flag \texttt{-fopenmp} in the \texttt{Makefile}.  This \texttt{Makefile} for the IMCOM package can be found in the directory \texttt{./src/} (all paths given as navigated from the directory containing this document).
@@ -52,7 +52,7 @@ These libraries should be installed on your system and the paths to these librar
 
 Once this is done, typing \texttt{make} from the terminal in this \texttt{./src/} directory should compile the code.  This will not take long as IMCOM is not a large piece of software.
 
-\section{Running IMCOM v0.2.4 from the command line}
+\section{Running IMCOM from the command line}
 The IMCOM package is called using the minimum-possible set of command line arguments as follows:
 \newline
 \newline
@@ -81,7 +81,7 @@ This is an exercise you yourself can try using the images and \texttt{config\_ex
 \subsection{Optional parameters}
 If you call IMCOM with too few (or far too many) command line arguments, something like the following message should be printed:
 \newline \newline
-\texttt{IMCOM: IMage COMbination v0.2.4 (B. Rowe \& C. Hirata 2010-2011) \\
+\texttt{IMCOM: IMage COMbination v0.2.6 (B. Rowe \& C. Hirata 2010-2011) \\
 IMCOM: [usage] \\
  ./imcom <config\_file> <U/S> <U/S\_max> <U/S\_tol> [...<forceT> <forceSys> \\ <saturation>] \\
  \newline
@@ -108,7 +108,7 @@ One further point worth mentioning is that if the $T_{\alpha i}$ matrix specifie
 %\\ \newline
 %This concludes our simple description of IMCOM calling procedures.
 
-\section{The IMCOM v0.2.4 config files}\label{sect:config}
+\section{The IMCOM config files}\label{sect:config}
 The IMCOM config file contains filenames and paths to all the input images and essential information about what these contain, as well as defining filenames for the outputs of the IMCOM algorithm. 
 The best way to elucidate the configuration file is using the example given in the \texttt{./example/userxy1/} directory:
 
@@ -225,7 +225,7 @@ The first six parameters are those described in Section \ref{sect:userxy0}. The 
 \item \texttt{NOUT} supplies as two arguments the overall $x$ and $y$ dimensions of the output $H_{\alpha}$ in numbers of pixels, $81$ pixels $\times$ 81 pixels in the example above.
 \end{itemize}
 
-This concludes the description of the somewhat lengthy configuration file interface for IMCOM v0.2.4.  
+This concludes the description of the somewhat lengthy configuration file interface for IMCOM.  
 
 \subsection{The IDL \texttt{imcom\_write\_config.pro} script}\label{sect:idl}
 To help alleviate the process of creating these long configuration files, I have created simple IDL scripts to generate them automatically with correct spacing.  These scripts can be found in the \texttt{./idl/} directory. 
