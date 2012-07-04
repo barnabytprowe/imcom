@@ -137,7 +137,7 @@ if (Bfile.eq."None") then
 else
   saveB = 1
 end if
-if ((Qfile.eq."None").and.(Lfile.eq."None")) then
+if ((Qfile.eq."None").or.(Lfile.eq."None")) then
   saveQL = 0
 else
   saveQL = 1
