@@ -33,15 +33,15 @@ PRO example_write_config, USERXY=userxy
 estring = "example"
 if not keyword_set(userxy) then begin
   dithers = [[0.d0, 0.5d0, 0.d0, 0.5d0], [0.d0, 0.d0, 0.5d0, 0.5d0]] ; 2x2 dither pattern
-  imcom_write_config, CONFIGFILE="config_"+estring,                                     $
+  imcom_write_config, CONFIGFILE="./userxy0/config_"+estring,                           $
                       NEXP=4,                                                           $
                       USERXY=userxy,                                                    $
                       GIMFILE=["test1.", "test2.", "test3.", "test4."]+estring+".fits", $
                       GIMXSCALE=[1.0d0, 1.0d0, 1.0d0, 1.0d0],                           $
                       GIMYSCALE=[1.0d0, 1.0d0, 1.0d0, 1.0d0],                           $
                       PSFFILE=replicate("psf."+estring+".fits", 4),                     $
-                      PSFXSCALE=0.25d0,                                                 $
-                      PSFYSCALE=0.25d0,                                                 $
+                      PSFXSCALE=0.10d0,                                                 $
+                      PSFYSCALE=0.10d0,                                                 $
                       ROTANGDEG=[0.d0, 0.d0, 0.d0, 0.d0],                               $
                       NOISE=[1.d0, 1.d0, 1.d0, 1.d0],                                   $
                       DITHERS=dithers,                                                  $
@@ -61,15 +61,15 @@ if not keyword_set(userxy) then begin
                       OUTPOS=[0.d0, 0.d0],                                              $
                       NOUT=[65L, 65L]
 endif else begin
-  imcom_write_config, CONFIGFILE="config_"+estring,                                     $
+  imcom_write_config, CONFIGFILE="./userxy1/config_"+estring,                           $
                       NEXP=4,                                                           $
                       USERXY=userxy,                                                    $
                       GIMFILE=["test1.", "test2.", "test3.", "test4."]+estring+".fits", $
                       GIMXFILE=["x1.", "x2.", "x3.", "x4."]+estring+".fits",            $
                       GIMYFILE=["y1.", "y2.", "y3.", "y4."]+estring+".fits",            $
                       PSFFILE=replicate("psf."+estring+".fits", 4),                     $
-                      PSFXSCALE=0.25d0,                                                 $
-                      PSFYSCALE=0.25d0,                                                 $
+                      PSFXSCALE=0.10d0,                                                 $
+                      PSFYSCALE=0.10d0,                                                 $
                       ROTANGDEG=[0.d0, 0.d0, 0.d0, 0.d0],                               $
                       NOISE=[1.d0, 1.d0, 1.d0, 1.d0],                                   $
                       OUTFILE="H."+estring+".fits",                                     $
