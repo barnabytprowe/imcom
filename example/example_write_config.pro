@@ -1,4 +1,4 @@
-PRO example_write_config
+PRO example_write_config, USERXY=userxy
 
 ;
 ;    EXAMPLE_WRITE_CONFIG.PRO - writes a set of example config files for the
@@ -31,37 +31,61 @@ PRO example_write_config
 !PATH="../idl:"+!PATH
 
 estring = "example"
-
-imcom_write_config, CONFIGFILE="config_"+estring,                  $
- NEXP=4,                                                           $
- USERXY=1B,                                                        $
- GIMFILE=["test1.", "test2.", "test3.", "test4."]+estring+".fits", $
- GIMXFILE=["x1.", "x2.", "x3.", "x4."]+estring+".fits",            $
- GIMYFILE=["y1.", "y2.", "y3.", "y4."]+estring+".fits",            $
- ;GIMXSCALE=[0.4d0, 0.4d0, 0.4d0, 0.4d0],                           $
- ;GIMYSCALE=[0.4d0, 0.4d0, 0.4d0, 0.4d0],                           $
- PSFFILE=replicate("psf."+estring+".fits", 4),                     $
- PSFXSCALE=0.1d0,                                                  $
- PSFYSCALE=0.1d0,                                                  $
- ROTANGDEG=[0.d0, 0.d0, 0.d0, 0.d0],                               $
- NOISE=[1.d0, 1.d0, 1.d0, 1.d0],                                   $
- ;DITHERS=dithers,   (...this should be an array of size [NEXP, 2]) $
- OUTFILE="H."+estring+".fits",                                     $
- AFILE="A."+estring+".fits",                                       $
- BFILE="B."+estring+".fits",                                       $
- QFILE="Q."+estring+".fits",                                       $
- LFILE="L."+estring+".fits",                                       $
- PFILE="P."+estring+".fits",                                       $
- KFILE="K."+estring+".fits",                                       $
- TFILE="T."+estring+".fits",                                       $
- SFILE="S."+estring+".fits",                                       $
- UFILE="U."+estring+".fits",                                       $
- GAMFILE="psf."+estring+".fits",                                   $
- OUTXFILE="xout."+estring+".fits",                                 $
- OUTYFILE="yout."+estring+".fits"
- ;OUTXSCALE=0.2d0,                                                  $
- ;OUTYSCALE=0.2d0,                                                  $
- ;OUTPOS=[0.d0, 0.d0],                                              $
- ;NOUT=[81, 81]
+if not keyword_set(userxy) then begin
+  dithers = [[[0.d0, 0.5d0, 0.d0, 0.5d0]], [[0.d0, 0.d0, 0.5d0, 0.5d0]]] ; 2x2 dither pattern
+  print, dithers
+  imcom_write_config, CONFIGFILE="config_"+estring,                                     $
+                      NEXP=4,                                                           $
+                      USERXY=userxy,                                                    $
+                      GIMFILE=["test1.", "test2.", "test3.", "test4."]+estring+".fits", $
+                      GIMXSCALE=[1.0d0, 1.0d0, 1.0d0, 1.0d0],                           $
+                      GIMYSCALE=[1.0d0, 1.0d0, 1.0d0, 1.0d0],                           $
+                      PSFFILE=replicate("psf."+estring+".fits", 4),                     $
+                      PSFXSCALE=0.25d0,                                                 $
+                      PSFYSCALE=0.25d0,                                                 $
+                      ROTANGDEG=[0.d0, 0.d0, 0.d0, 0.d0],                               $
+                      NOISE=[1.d0, 1.d0, 1.d0, 1.d0],                                   $
+                      DITHERS=dithers,                                                  $
+                      OUTFILE="H."+estring+".fits",                                     $
+                      AFILE="A."+estring+".fits",                                       $
+                      BFILE="B."+estring+".fits",                                       $
+                      QFILE="Q."+estring+".fits",                                       $
+                      LFILE="L."+estring+".fits",                                       $
+                      PFILE="P."+estring+".fits",                                       $
+                      KFILE="K."+estring+".fits",                                       $
+                      TFILE="T."+estring+".fits",                                       $
+                      SFILE="S."+estring+".fits",                                       $
+                      UFILE="U."+estring+".fits",                                       $
+                      GAMFILE="psf."+estring+".fits",                                   $
+                      OUTXSCALE=0.5d0,                                                  $
+                      OUTYSCALE=0.5d0,                                                  $
+                      OUTPOS=[0.d0, 0.d0],                                              $
+                      NOUT=[81, 81]
+endif else begin
+  imcom_write_config, CONFIGFILE="config_"+estring,                                     $
+                      NEXP=4,                                                           $
+                      USERXY=userxy,                                                    $
+                      GIMFILE=["test1.", "test2.", "test3.", "test4."]+estring+".fits", $
+                      GIMXFILE=["x1.", "x2.", "x3.", "x4."]+estring+".fits",            $
+                      GIMYFILE=["y1.", "y2.", "y3.", "y4."]+estring+".fits",            $
+                      PSFFILE=replicate("psf."+estring+".fits", 4),                     $
+                      PSFXSCALE=0.25d0,                                                 $
+                      PSFYSCALE=0.25d0,                                                 $
+                      ROTANGDEG=[0.d0, 0.d0, 0.d0, 0.d0],                               $
+                      NOISE=[1.d0, 1.d0, 1.d0, 1.d0],                                   $
+                      OUTFILE="H."+estring+".fits",                                     $
+                      AFILE="A."+estring+".fits",                                       $
+                      BFILE="B."+estring+".fits",                                       $
+                      QFILE="Q."+estring+".fits",                                       $
+                      LFILE="L."+estring+".fits",                                       $
+                      PFILE="P."+estring+".fits",                                       $
+                      KFILE="K."+estring+".fits",                                       $
+                      TFILE="T."+estring+".fits",                                       $
+                      SFILE="S."+estring+".fits",                                       $
+                      UFILE="U."+estring+".fits",                                       $
+                      GAMFILE="psf."+estring+".fits",                                   $
+                      OUTXFILE="xout."+estring+".fits",                                 $
+                      OUTYFILE="yout."+estring+".fits"
+endelse
 
 END
