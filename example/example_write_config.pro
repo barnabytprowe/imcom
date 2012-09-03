@@ -32,8 +32,7 @@ PRO example_write_config, USERXY=userxy
 
 estring = "example"
 if not keyword_set(userxy) then begin
-  dithers = [[[0.d0, 0.5d0, 0.d0, 0.5d0]], [[0.d0, 0.d0, 0.5d0, 0.5d0]]] ; 2x2 dither pattern
-  print, dithers
+  dithers = [[0.d0, 0.5d0, 0.d0, 0.5d0], [0.d0, 0.d0, 0.5d0, 0.5d0]] ; 2x2 dither pattern
   imcom_write_config, CONFIGFILE="config_"+estring,                                     $
                       NEXP=4,                                                           $
                       USERXY=userxy,                                                    $
@@ -60,7 +59,7 @@ if not keyword_set(userxy) then begin
                       OUTXSCALE=0.5d0,                                                  $
                       OUTYSCALE=0.5d0,                                                  $
                       OUTPOS=[0.d0, 0.d0],                                              $
-                      NOUT=[81, 81]
+                      NOUT=[65L, 65L]
 endif else begin
   imcom_write_config, CONFIGFILE="config_"+estring,                                     $
                       NEXP=4,                                                           $
