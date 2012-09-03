@@ -33,7 +33,7 @@ PRO example_write_config, USERXY=userxy
 estring = "example"
 if not keyword_set(userxy) then begin
   dithers = [[0.d0, 0.5d0, 0.d0, 0.5d0], [0.d0, 0.d0, 0.5d0, 0.5d0]] ; 2x2 dither pattern
-  imcom_write_config, CONFIGFILE="./userxy0/config_"+estring,                           $
+  imcom_write_config, CONFIGFILE="config_"+estring,                                     $
                       NEXP=4,                                                           $
                       USERXY=userxy,                                                    $
                       GIMFILE=["test1.", "test2.", "test3.", "test4."]+estring+".fits", $
@@ -61,7 +61,7 @@ if not keyword_set(userxy) then begin
                       OUTPOS=[0.d0, 0.d0],                                              $
                       NOUT=[65L, 65L]
 endif else begin
-  imcom_write_config, CONFIGFILE="./userxy1/config_"+estring,                           $
+  imcom_write_config, CONFIGFILE="config_"+estring,                                     $
                       NEXP=4,                                                           $
                       USERXY=userxy,                                                    $
                       GIMFILE=["test1.", "test2.", "test3.", "test4."]+estring+".fits", $
