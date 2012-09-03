@@ -1,5 +1,4 @@
 PRO example_write_config, USERXY=userxy
-
 ;
 ;    EXAMPLE_WRITE_CONFIG.PRO - writes a set of example config files for the
 ;                               prototype IMCOM package
