@@ -18,7 +18,7 @@ cp -r ./example/* ./releases/imcom_v${VERSION}/example/
 cp -r ./idl/* ./releases/imcom_v${VERSION}/idl/
 
 # Then copy the README
-cp ./README ./releases/imcom_v${VERSION}/
+cp ./releases/README ./releases/imcom_v${VERSION}/
 
 # Then make a copy of the documentation
 cp ./imcom_documentation.pdf ./releases/imcom_v${VERSION}/
