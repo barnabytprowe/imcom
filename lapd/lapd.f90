@@ -1,5 +1,5 @@
 !    LAPD.F90  - Fortran 95 prototype package for the implementation of
-!                the Linear Algebra Power spectrum Deconvolution
+!                the Linear Algebra Power Deconvolution
 !
 !    Version 0.1 (alpha)
 !    Copyright (C) 2013 Barnaby Rowe

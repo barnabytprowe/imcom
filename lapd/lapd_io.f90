@@ -15,7 +15,7 @@
 !    You should have received a copy of the GNU General Public License
 !    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 !
-!    DEPENDENCIES - IMCOM_DATA.F90
+!    DEPENDENCIES - LAPD_DATA.F90
 !                   IMCOM_PROC.F90
 !                   FITSIO/CFITSIO LIBRARIES
 !
@@ -26,19 +26,18 @@
 !
 MODULE lapd_io
 
-USE imcom_data
+USE lapd_data
 USE imcom_proc
 
 CONTAINS
 
 !---
 
-SUBROUTINE imcom_alloc_gims
-! Explore & read in the galaxy images, then allocate the Im arrays in which
-! to store them
+SUBROUTINE lapd_read_alloc_ps
+! Read in the ell, C_ell and diagonal error estimate err(C_ell) from the input ASCII catalogue
+! specified in the config file
 implicit none
-integer, dimension(:), allocatable :: n1, n2, bitpix
-integer :: i, imask, alstat, dealstat
+integer :: n, i, alstat, dealstat
 
 allocate(n1(nexp), n2(nexp), bitpix(nexp), STAT=alstat)
 if (alstat.ne.0) then
@@ -876,7 +875,8 @@ write(*, '(A)') "  <U/S_max> [dbl]         : Required maximum U or S"
 !write(*, '(A)') " "
 write(*, '(A)') "  <U/S_tol> [dbl]         : Absolute tolerance on U or S for interval bisection"
 !write(*, '(A)') " "
-write(*, '(A)') "  [ ...<forceT> [int]     : 1 = force build T matrix , 0 = not (default)                 ]"
+write(*, '(A)') "  [ ...<forceT> [int]     : 1 = force build T matrix , 0 = not (default) ]"
+write(*, '(A)') "  [ ...<forceSys> [int]   : 1 = force build System matrices , 0 = not (default) ]"
 write(*, '(A)') " "
 END SUBROUTINE lapd_usage_message
 
@@ -908,11 +908,13 @@ if (nargs.ge.4) then
   ! Then set defaults for optional params
   forceT = 0
   forceSys = 0
-  saturation = DLAMCH('O')   ! Largest number available to double 
-                             ! precision...
-  if (nargs.eq.5) then
+  if (nargs.ge.5) then
     call getarg(5, buffer)
     read(buffer, FMT=*) forceT
+    if (nargs.eq.6) then
+      call getarg(6, buffer)
+      read(buffer, FMT=*) forceSys
+    end if
   end if
 else
   call lapd_usage_message
