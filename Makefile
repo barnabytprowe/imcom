@@ -1,6 +1,8 @@
 FC = gfortran -t -v
 RM = rm
 RMFLAGS = -f
+AR = ar
+ARFLAGS = -crs
 MAKE = make
 MAKEFLAGS = b
 ERRTRACE=#-fbacktrace
@@ -15,7 +17,7 @@ LIBFFTW3= -lfftw3
 LIBVEC= -Wl,-framework -Wl,Accelerate
 #LIBVEC= -lblas -llapack_ref
 
-all: imcom
+all: imcom libimcom.a
 
 imcom: imcom.f90 imcom_data.o imcom_proc.o imcom_io.o imcom_matrix.o imcom_bisect.o
 	$(FC) $(WARN) $(ERRTRACE) $(OPTIMIZE) $(OPENMP) $^ -o $@ $(LIBDIR) $(INCLUDE) $(LIBVEC) $(LIBFITSIO) $(LIBFFTW3)
@@ -38,5 +40,10 @@ imcom_proc.o : imcom_proc.f90 imcom_data.o
 imcom_data.o : imcom_data.f90
 	$(FC) $(WARN) $(ERRTRACE) $(OPTIMIZE) $(OPENMP) -c $< -o $@
 
+libimcom.a : imcom_data.o imcom_proc.o imcom_io.o imcom_matrix.o imcom_bisect.o
+	$(AR) $(ARFLAGS) $@ $^
+	cp ./libimcom.a ../lib/
+	cp ./libimcom.a ~/fortran/lib/
+
 clean :
-	$(RM) $(RMFLAGS) *.o *.mod imcom
+	$(RM) $(RMFLAGS) *.o *.mod imcom libimcom.a

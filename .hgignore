@@ -10,3 +10,4 @@ tests/paper_test/plots/*
 *.o
 *.mod
 imcom
+libimcom.a
