@@ -4,7 +4,7 @@ import argparse # Requires Python 2.7+
 import numpy as np
 
 # Parse command line arguments
-description = """Strip headers and unwanted columns from WMAP TT Power Spectrum data ready for LAPD.
+description = """Strip headers and unwanted columns from WMAP TT Power Spectrum data ready for LAPD
 """
 
 parser = argparse.ArgumentParser(description=description)
