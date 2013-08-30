@@ -17,26 +17,26 @@ LIBVEC= -Wl,-framework -Wl,Accelerate
 
 all: imcom
 
-imcom: imcom_data.o imcom_proc.o imcom_io.o imcom_matrix.o imcom_bisect.o imcom.f90
-	$(FC) $(WARN) $(ERRTRACE) $(OPTIMIZE) $(OPENMP) imcom_data.o imcom_proc.o imcom_io.o imcom_matrix.o imcom_bisect.o imcom.f90 -o $@ $(LIBDIR) $(INCLUDE) $(LIBVEC) $(LIBFITSIO) $(LIBFFTW3)
+imcom: imcom.f90 imcom_data.o imcom_proc.o imcom_io.o imcom_matrix.o imcom_bisect.o
+	$(FC) $(WARN) $(ERRTRACE) $(OPTIMIZE) $(OPENMP) $^ -o $@ $(LIBDIR) $(INCLUDE) $(LIBVEC) $(LIBFITSIO) $(LIBFFTW3)
 	cp ./imcom ../bin/
 	cp ./imcom ../jdem/
 	cp ./imcom ~/fortran/bin/
 
-imcom_bisect.o: imcom_data.o imcom_proc.o imcom_io.o imcom_matrix.o imcom_bisect.f90
-	$(FC) $(WARN) $(ERRTRACE) $(OPTIMIZE) $(OPENMP) -c imcom_bisect.f90 -o $@
+imcom_bisect.o: imcom_bisect.f90 imcom_data.o imcom_proc.o imcom_io.o imcom_matrix.o
+	$(FC) $(WARN) $(ERRTRACE) $(OPTIMIZE) $(OPENMP) -c $< -o $@
 
-imcom_matrix.o: imcom_data.o imcom_proc.o imcom_io.o imcom_matrix.f90
-	$(FC) $(WARN) $(ERRTRACE) $(OPTIMIZE) $(OPENMP) -c imcom_matrix.f90 -o $@
+imcom_matrix.o: imcom_matrix.f90 imcom_data.o imcom_proc.o imcom_io.o
+	$(FC) $(WARN) $(ERRTRACE) $(OPTIMIZE) $(OPENMP) -c $< -o $@
 
-imcom_io.o : imcom_data.o imcom_proc.o imcom_io.f90
-	$(FC) $(WARN) $(ERRTRACE) $(OPTIMIZE) $(OPENMP) -c imcom_io.f90 -o $@
+imcom_io.o : imcom_io.f90 imcom_data.o imcom_proc.o
+	$(FC) $(WARN) $(ERRTRACE) $(OPTIMIZE) $(OPENMP) -c $< -o $@
 
-imcom_proc.o : imcom_data.o imcom_proc.f90
-	$(FC) $(WARN) $(ERRTRACE) $(OPTIMIZE) $(OPENMP) -c imcom_proc.f90 -o $@
+imcom_proc.o : imcom_proc.f90 imcom_data.o
+	$(FC) $(WARN) $(ERRTRACE) $(OPTIMIZE) $(OPENMP) -c $< -o $@
 
 imcom_data.o : imcom_data.f90
-	$(FC) $(WARN) $(ERRTRACE) $(OPTIMIZE) $(OPENMP) -c imcom_data.f90 -o $@
+	$(FC) $(WARN) $(ERRTRACE) $(OPTIMIZE) $(OPENMP) -c $< -o $@
 
 clean :
 	$(RM) $(RMFLAGS) *.o *.mod imcom
