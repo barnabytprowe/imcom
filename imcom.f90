@@ -1,8 +1,8 @@
 !    IMCOM.F90 - Fortran 95 prototype package for the implementation of
 !                the Optimal Linear IMage COMbination algorithm described
 !                by Rowe, Hirata & Rhodes (2011)
-!    Version 0.2 (alpha)
-!    Copyright (C) 2011 Barnaby Rowe
+!    Version 0.2.7 (beta)
+!    Copyright (C) 2011-2013 Barnaby Rowe
 !
 !    This program is free software: you can redistribute it and/or modify
 !    it under the terms of the GNU General Public License as published by

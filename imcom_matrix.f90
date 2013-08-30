@@ -1,6 +1,6 @@
 !    IMCOM_MATRIX.F90 - Fortran 95 module that handles matrix/vector 
 !                       operations for the prototype IMCOM package
-!    Copyright (C) 2011 Barnaby Rowe
+!    Copyright (C) 2011-2013 Barnaby Rowe
 !
 !    This program is free software: you can redistribute it and/or modify
 !    it under the terms of the GNU General Public License as published by
@@ -42,8 +42,7 @@ SUBROUTINE imcom_get_A(npoly, npad, saveA, forcebuild)
 implicit none
 integer, intent(IN) :: npoly, npad, saveA, forcebuild
 logical :: Aexists
-integer :: n1_tmp, n2_tmp, bit_tmp
-integer :: alstat, i
+integer :: n1_tmp, n2_tmp, bit_tmp, alstat
 
 inquire(FILE=trim(Afile), EXIST=Aexists)
 if (Aexists.and.(forcebuild.eq.0)) then
@@ -75,8 +74,7 @@ SUBROUTINE imcom_get_B(npoly, npad, saveB, forcebuild)
 implicit none
 integer, intent(IN) :: npoly, npad, saveB, forcebuild
 logical :: Bexists
-integer :: n1_tmp, n2_tmp, bit_tmp
-integer :: alstat, i
+integer :: n1_tmp, n2_tmp, bit_tmp, alstat
 
 inquire(FILE=trim(Bfile), EXIST=Bexists)
 if (Bexists.and.(forcebuild.eq.0)) then
@@ -352,7 +350,7 @@ SUBROUTINE imcom_build_Alookup(npad)
 implicit none
 integer, intent(IN) :: npad
 complex(KIND=8), dimension(:, :), allocatable ::  A_tmp, ufunc
-integer :: alstat, iexp, jexp, ial, ijmax
+integer :: alstat, iexp, jexp, ial
 integer :: n1big, n2big, n1min, n2min, n1max, n2max, ntotal
 integer(KIND=8) :: ftplan
 
@@ -425,7 +423,7 @@ SUBROUTINE imcom_build_Blookup(npad)
 implicit none
 integer, intent(IN) :: npad
 complex(KIND=8), dimension(:, :), allocatable ::  B_tmp, ufunc
-integer :: alstat, iexp, ijmax
+integer :: alstat, iexp
 integer :: n1min, n2min, n1max, n2max, n1big, n2big
 integer(KIND=8) :: ftplan
 

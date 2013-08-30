@@ -1,6 +1,6 @@
 !    IMCOM_DATA.F90 - Fortran 95 module that acts as a shared-data / COMMON 
 !                     block for the prototype IMCOM package
-!    Copyright (C) 2011 Barnaby Rowe
+!    Copyright (C) 2011-2013 Barnaby Rowe
 !
 !    This program is free software: you can redistribute it and/or modify
 !    it under the terms of the GNU General Public License as published by
