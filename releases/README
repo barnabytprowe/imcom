@@ -1,11 +1,19 @@
----IMCOM v0.2.X --- Copyright Barnaby Rowe & Christopher Hirata (2010-12) ---
+IMCOM v0.2.7   Copyright 2010-13 Barnaby Rowe
+=============================================
 
-Within this package please see imcom_documentation.pdf for some (very) light 
-documentation describing how to use this early, prototype version (v0.2.X) of 
-the IMCOM IMage COMbination software described in Rowe, Hirata \& Rhodes 
-(2011). 
+Within this package please see imcom_documentation.pdf for light documentation
+describing how to use this prototype v0.2.7 of the IMCOM (IMage COMbination)
+software, described in Rowe, Hirata & Rhodes (2011;
+http://adsabs.harvard.edu/abs/2011ApJ...741...46R).
 
-For theoretical details and discussion of the precise implementation that 
-we follow, please see the IMCOM paper.
+For all theoretical details and a precise description of what the IMCOM software
+does, please see that paper.
 
-General queries may be directed towards browe@star.ucl.ac.uk.
+Other papers that make use of IMCOM to explore image reconstruction from
+undersampled data:
+
+http://adsabs.harvard.edu/abs/2013MNRAS.431.3103C
+http://adsabs.harvard.edu/abs/2013arXiv1310.3339S
+
+General queries may be directed towards barnaby.t.p.rowe@gmail.com, although
+Barney offers no guarantees about being able to provide useful responses!
