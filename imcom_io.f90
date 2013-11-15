@@ -1,6 +1,6 @@
 !    IMCOM_IO.F90 - Fortran 95 module that handles basic I/O for the
 !                   prototype IMCOM package
-!    Copyright (C) 2011-2013 Barnaby Rowe
+!    Copyright (C) 2011-2013  Barnaby Rowe
 !
 !    This program is free software: you can redistribute it and/or modify
 !    it under the terms of the GNU General Public License as published by
@@ -337,7 +337,6 @@ END SUBROUTINE imcom_alloc_psfs
 
 SUBROUTINE imcom_sizefits(filename, naxis1, naxis2, bitpix)
 ! Gets important information from a fits file without reading it
-!
 implicit none
 character(LEN=*), intent(IN) :: filename
 integer, intent(OUT) :: naxis1, naxis2, bitpix
@@ -346,10 +345,10 @@ integer, parameter :: rwmode = 0    ! Read only for this subroutine
 integer, parameter :: maxdim = 2    ! Maximum dimension for images, 2D only
 integer, dimension(maxdim) :: naxes
 
-stat = 0                                             ! Initialize the status
-call FTGIOU(unit, stat)                              ! Get a unit...
-call FTIOPN(unit, trim(filename), rwmode, stat)      ! Open the .fits file 
-                                                     ! (image specific call) 
+stat = 0                                              ! Initialize the status
+call FTGIOU(unit, stat)                               ! Get a unit...
+call FTIOPN(unit, trim(filename), rwmode, stat)       ! Open the .fits file 
+                                                      ! (image specific call) 
 call FTGIPR(unit, maxdim, bitpix, naxis, naxes, stat) ! Get image size etc.
 naxis1 = naxes(1)
 naxis2 = naxes(2)
@@ -382,14 +381,17 @@ call FTIOPN(unit, trim(filename), rwmode, stat)  ! Open the .fits file
                                                  ! (image specific call) 
 call FTGIPR(unit, maxdim, bitpix, naxis, naxes, stat) ! Get image size etc.
 if ((bitpix.ne.-64)) then
-  write(*, '(A)') "IMCOM WARNING: Input fits file not 64-bit floating point data... will probably end badly!"
+  write(*, '(A)') &
+      "IMCOM WARNING: Input fits file not 64-bit floating point data... will probably end badly!"
 end if
 if (naxis1.ne.naxes(1)) then
-  write(*, FMT='(A)') "IMCOM ERROR: Specified NAXIS1 does not match up to image in "//trim(filename) 
+  write(*, FMT='(A)') &
+      "IMCOM ERROR: Specified NAXIS1 does not match up to image in "//trim(filename) 
   stop
 endif
 if (naxis2.ne.naxes(2)) then
-  write(*, FMT='(A)') "IMCOM ERROR: Specified NAXIS2 does not match up to image in "//trim(filename) 
+  write(*, FMT='(A)') &
+      "IMCOM ERROR: Specified NAXIS2 does not match up to image in "//trim(filename) 
   stop
 endif
 group = 1
@@ -407,8 +409,7 @@ END SUBROUTINE imcom_readfits
 !---
 
 SUBROUTINE imcom_writefits(filename, naxis1, naxis2, image)
-! Wrapper for writing fits files
-!
+! Wrapper for writing 2D FITS formate file based on input 2D image files
 implicit none
 character(LEN=*), intent(IN) :: filename
 integer, intent(IN) :: naxis1, naxis2
@@ -457,7 +458,6 @@ END SUBROUTINE imcom_writefits
 
 SUBROUTINE imcom_writefitscube(filename, naxis1, naxis2, naxis3, dcube)
 ! Wrapper for writing fits files
-!
 implicit none
 character(LEN=*), intent(IN) :: filename
 integer, intent(IN) :: naxis1, naxis2, naxis3
@@ -471,8 +471,8 @@ integer, parameter :: bitpix = -64  ! DOUBLE precision
 integer, dimension(maxdim) :: naxes
 integer :: group, firstpix, exists
 
-stat = 0                                         ! Initialize the status
-naxes = (/ naxis1, naxis2, naxis3 /)                     ! Define naxes vector
+stat = 0                                           ! Initialize the status
+naxes = (/ naxis1, naxis2, naxis3 /)               ! Define naxes vector
 call FTEXIST(trim(filename), exists, stat)
 if (exists.eq.1) then
   call FTGIOU(unit, stat)                          ! Get a unit...
@@ -694,13 +694,15 @@ end if
 if (userxy.eq.1) then
   allocate(gimxfile(nexp), gimyfile(nexp), STAT=alstat)
   if (alstat.ne.0) then
-    write(*, FMT='(A)') "IMCOM ERROR: Unable to allocate space for image X & Y coord filename arrays"
+    write(*, FMT='(A)') &
+        "IMCOM ERROR: Unable to allocate space for image X & Y coord filename arrays"
     stop
   endif
 else
   allocate(gimxscale(nexp), gimyscale(nexp), dither(nexp, 2), STAT=alstat)
   if (alstat.ne.0) then
-    write(*, FMT='(A)') "IMCOM ERROR: Unable to allocate space for image X & Y coord filename arrays"
+    write(*, FMT='(A)') &
+        "IMCOM ERROR: Unable to allocate space for image X & Y coord filename arrays"
     stop
   endif
 end if
@@ -754,26 +756,27 @@ do i=1, nexp
 !
 ! Then read in galaxy image exposure information: format depends on setting 
 ! of USERXY = 0/1 in main config file
-!
   if (userxy.eq.1) then
     read(UNIT=20, FMT='(A12, A)', IOSTAT=iostat) scratch, gimxfile(i)
     if (iostat.ne.0) then
       write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(inconfig(i))
-      write(*, FMT='(A)') "IMCOM: Expecting: GIMXFILE  <filename>"
-      write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-      write(*, FMT='(A)') "IMCOM: Check EOF (if IOSTAT negative)"
-      write(*, FMT='(A)') "IMCOM: Check USERXY: must be zero if not supplying X & Y coordinate arrays"
+      write(*, FMT='(A)') "IMCOM ERROR: Expecting: GIMXFILE  <filename>"
+      write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+      write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
+      write(*, FMT='(A)') &
+          "IMCOM: Check USERXY: must be zero if not supplying X & Y coordinate arrays"
       write(*, FMT='(A)') "IMCOM: Check <filename>: must be 256 characters or less"
       stop
     end if
     read(UNIT=20, FMT='(A12, A)', IOSTAT=iostat) scratch, gimyfile(i)
     if (iostat.ne.0) then
       write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(inconfig(i))
-      write(*, FMT='(A)') "IMCOM: Expecting: GIMYFILE  <filename>"
-      write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-      write(*, FMT='(A)') "IMCOM: Check EOF (if IOSTAT negative)"
-      write(*, FMT='(A)') "IMCOM: Check USERXY: must be zero if not supplying X & Y coordinate arrays"
-      write(*, FMT='(A)') "IMCOM: Check <filename>: must be 256 characters or less"
+      write(*, FMT='(A)') "IMCOM ERROR: Expecting: GIMYFILE  <filename>"
+      write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+      write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
+      write(*, FMT='(A)') &
+          "IMCOM: Check USERXY: must be zero if not supplying X & Y coordinate arrays"
+      write(*, FMT='(A)') "IMCOM ERROR: Check <filename>: must be 256 characters or less"
       stop
     end if
   else  ! Otherwise just read in xscale, yscale & dithers
@@ -781,10 +784,11 @@ do i=1, nexp
     if (iostat.ne.0) then
       write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(inconfig(i))
       write(*, FMT='(A)') "IMCOM: Expecting: GIMXSCALE  <gimxscale>"
-      write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-      write(*, FMT='(A)') "IMCOM: Check EOF (if IOSTAT negative)"
-      write(*, FMT='(A)') "IMCOM: Check USERXY: must be 1 if supplying X & Y coordinate arrays"
-      write(*, FMT='(A)') "IMCOM: Check <gimscale> floating point"
+      write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+      write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
+      write(*, FMT='(A)') &
+          "IMCOM ERROR: Check USERXY: must be 1 if supplying X & Y coordinate arrays"
+      write(*, FMT='(A)') "IMCOM ERROR: Check <gimscale> floating point"
       stop
     end if  
     read(UNIT=20, FMT=*, IOSTAT=iostat) scratch, gimyscale(i)
@@ -897,7 +901,8 @@ if (userxy.eq.1) then
     write(*, FMT='(A)') "IMCOM: Expecting: OUTXFILE  <filename>"
     write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
     write(*, FMT='(A)') "IMCOM: Check EOF (if IOSTAT negative)"
-    write(*, FMT='(A)') "IMCOM: Check USERXY: must be zero if not supplying X & Y coordinate arrays"
+    write(*, FMT='(A)') "IMCOM: Check USERXY: must be zero if not supplying X & Y coordinate "+\
+        "arrays"
     write(*, FMT='(A)') "IMCOM: Check <filename>: must be 256 characters or less"
     stop
   end if
@@ -966,7 +971,7 @@ END SUBROUTINE imcom_read_outconfig
 SUBROUTINE imcom_welcome
 implicit none
 ! Welcome banner
-write(*, FMT='(A)') "IMCOM: IMage COMbination v0.2.6 (B. Rowe & C. Hirata 2010-2012)"
+write(*, FMT='(A)') "IMCOM: IMage COMbination v0.2.8 (B. Rowe & C. Hirata 2010-2012)"
 END SUBROUTINE
 
 !---
