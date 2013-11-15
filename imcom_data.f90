@@ -1,6 +1,6 @@
 !    IMCOM_DATA.F90 - Fortran 95 module that acts as a shared-data / COMMON 
 !                     block for the prototype IMCOM package
-!    Copyright (C) 2011-2013 Barnaby Rowe
+!    Copyright (C) 2011-2013  Barnaby Rowe
 !
 !    This program is free software: you can redistribute it and/or modify
 !    it under the terms of the GNU General Public License as published by
@@ -133,21 +133,11 @@ real(KIND=8), dimension(:, :), allocatable :: P_ia, P2_ia
 ! A matrix condition number
 real(KIND=8) :: condition
 
-
-! Temporary/test variables
-!real(KIND=8), dimension(:, :), allocatable :: Aold_aij
-!real(KIND=8), dimension(:, :), allocatable :: Qold_ij
-!real(KIND=8), dimension(:), allocatable :: Lold_i
-
-
-! Work matrices
-!real(KIND=8), dimension(:), allocatable :: scaling
-
 ! Constants
 real(KIND=8), parameter :: pi = 3.141592653589793d0
 
-
-!  FFTW3 planning constants required by DFT calls (from fftw3.f in directory containing fftw3.h)
+! FFTW3 planning constants required by DFT calls (directly lifted from fftw3.f in directory
+! containing fftw3.h)
 !
       INTEGER FFTW_R2HC
       PARAMETER (FFTW_R2HC=0)
@@ -221,6 +211,5 @@ real(KIND=8), parameter :: pi = 3.141592653589793d0
       PARAMETER (FFTW_ALLOW_PRUNING=1048576)
       INTEGER FFTW_WISDOM_ONLY
       PARAMETER (FFTW_WISDOM_ONLY=2097152)
-
 
 END MODULE imcom_data
