@@ -1,6 +1,6 @@
 !    IMCOM_PROC.F90 - Fortran 95 module that contains basic procedures for
 !                     the prototype IMCOM package
-!    Copyright (C) 2011-2013 Barnaby Rowe
+!    Copyright (C) 2011-2013  Barnaby Rowe
 !
 !    This program is free software: you can redistribute it and/or modify
 !    it under the terms of the GNU General Public License as published by
@@ -91,7 +91,7 @@ END SUBROUTINE imcom_build_xy
 !---
 
 SUBROUTINE imcom_build_XaYa
-! Make the x, y arrays for the galaxy images
+! Make the Xa, Ya, X_a, Y_a arrays for the output galaxy images
 implicit none
 integer :: alstat, dealstat
 
@@ -160,7 +160,6 @@ END SUBROUTINE imcom_build_uxuy
 
 SUBROUTINE imcom_rotate_xy(x_dum, y_dum, theta_deg, xp_dum, yp_dum)
 ! Linearly rotate arrays of x and y to give a new x' and y'
-!
 implicit none
 real(KIND=8), dimension(:, :), intent(IN) :: x_dum, y_dum
 real(KIND=8), intent(IN) :: theta_deg
@@ -184,7 +183,6 @@ END SUBROUTINE imcom_rotate_xy
 
 SUBROUTINE imcom_rotate_image(im_in, theta_deg, npoly_in, conserve_flux, im_out)
 ! Linearly rotate an image about its centre using polynomial interpolation
-!
 implicit none
 real(KIND=8), dimension(:, :), intent(IN) :: im_in
 real(KIND=8), intent(IN) :: theta_deg
@@ -253,34 +251,6 @@ END SUBROUTINE imcom_rotate_image
 
 !---
 
-SUBROUTINE imcom_rotate_cimage(im_in, theta_deg, npoly, conserve_flux, im_out)
-! Linearly rotate a complex image about its centre using blinear interpolation 
-! (...code up bicubic?) 
-!
-implicit none
-complex(KIND=8), dimension(:, :), intent(IN) :: im_in
-real(KIND=8), intent(IN) :: theta_deg
-integer, intent(IN) :: npoly, conserve_flux
-complex(KIND=8), dimension(size(im_in, 1), size(im_in, 2)), intent(OUT) :: im_out
-real(KIND=8), dimension(size(im_in, 1), size(im_in, 2)) :: rin, rout
-real(KIND=8), dimension(size(im_in, 1), size(im_in, 2)) :: iin, iout
-real(KIND=8) :: flux_in, flux_out
-
-im_out = dcmplx(0.d0, 0.d0)
-rin = real(im_in, 8)
-iin = dimag(im_in)
-call imcom_rotate_image(rin, theta_deg, npoly, 0, rout)
-call imcom_rotate_image(iin, theta_deg, npoly, 0, iout)
-im_out = dcmplx(rout, iout)
-if (conserve_flux.ne.0) then
-  flux_in = sum(abs(im_in))
-  flux_out = sum(abs(im_out))
-  im_out = dcmplx(flux_in, 0.d0) * im_out / dcmplx(flux_out, 0.d0)
-endif
-END SUBROUTINE imcom_rotate_cimage
-
-!---
-
 FUNCTION imcom_upsilon(ux_dum, uy_dum, option)
 ! Real symmetric positive definite kernel (p2, combo.pdf)
 !
@@ -300,32 +270,6 @@ else
   stop
 end if
 END FUNCTION imcom_upsilon
-
-!---
-
-FUNCTION imcom_upsilon1D(ux_dum, uy_dum, option)
-! Real symmetric positive definite kernel (p2, combo.pdf)
-implicit none
-real(KIND=8), dimension(:), intent(IN) :: ux_dum
-real(KIND=8), dimension(:), intent(IN) :: uy_dum
-integer, intent(IN) :: option
-complex(KIND=8), dimension(size(ux_dum)) :: imcom_upsilon1D 
-! output var
-
-if (size(ux_dum).ne.size(uy_dum)) then
-  write(*, FMT='(A)') "IMCOM ERROR: UX and UY arguments to UPSILON must be equal shape"
-  stop
-endif
-if (option.eq.1) then
-  imcom_upsilon1D = dcmplx(1.d0, 0.d0)
-else if (option.eq.2) then
-  imcom_upsilon1D = zexp(-dcmplx((ux_dum * ux_dum + uy_dum * uy_dum), 0.d0))
-else
-  imcom_upsilon1D = dcmplx(0.d0, 0.d0)
-  write(*, FMT='(A)') "IMCOM ERROR: Upsilon2D function must take OPTION = 1 or 2"
-  stop
-end if
-END FUNCTION imcom_upsilon1D
 
 !---
 
@@ -356,6 +300,7 @@ END FUNCTION imcom_upsilon2D
 !---
 
 PURE FUNCTION imcom_dsinc(x)
+! Double precision sinc(x) = sin(pi * x) / (pi * x) function
 implicit none
 real(KIND=8), intent(IN) :: x
 real(KIND=8) :: imcom_dsinc     ! Output variable
@@ -372,23 +317,27 @@ END FUNCTION imcom_dsinc
 !---
 
 PURE FUNCTION imcom_dsinc2(x)
+! Double precision sinc^2(x) using same formula as imcom_dsinc
 implicit none
 real(KIND=8), intent(IN) :: x
 real(KIND=8) :: imcom_dsinc2    ! Output variable
-real(KIND=8) :: xx, sintmp
+real(KIND=8) :: xx, sintmp, invpi2
 
 xx = dabs(x)
 if (xx.lt.1.d-15) then
   imcom_dsinc2 = 1.d0
 else
+  invpi2 = 1.d0 / (pi * pi)
   sintmp = dsin(pi * x)
-  imcom_dsinc2 = sintmp * sintmp / x / x / pi / pi
+  imcom_dsinc2 = invpi2 * sintmp * sintmp / (x * x)
 end if
 END FUNCTION imcom_dsinc2
 
 !---
 
 FUNCTION imcom_iminloc(arr)
+! Return as a single integer the index location of the minima in some double
+! precision array
 implicit none
 REAL(KIND=8), DIMENSION(:), INTENT(IN) :: arr
 INTEGER, DIMENSION(1) :: imin
@@ -400,7 +349,11 @@ END FUNCTION imcom_iminloc
 !---
 
 SUBROUTINE imcom_polint(xa, ya, x, y, dy, eps)
-! Adapted from Numerical recipes polint.f90
+! Modified but using the overall algorithm found in Numerical Recipes for
+! polynomial interpolation
+! TODO: Make use of the known, fixed spacing of the context in which this is
+! used in IMCOM for interpolatively estimating A and B matrix values from lookup
+! tables, and make an O(N) factor efficiency improvement
 implicit none
 REAL(KIND=8), DIMENSION(:), INTENT(IN) :: xa, ya
 REAL(KIND=8), INTENT(IN) :: x, eps
@@ -443,7 +396,7 @@ END SUBROUTINE imcom_polint
 !---
 
 SUBROUTINE imcom_polin2(x1a, x2a, ya, x1, x2, y, dy)
-! Adapted from Numerical Recipes polin2.f90
+! 2D extension of imcom_polin
 implicit none
 REAL(KIND=8), DIMENSION(:), INTENT(IN) :: x1a, x2a
 REAL(KIND=8), DIMENSION(:, :), INTENT(IN) :: ya
