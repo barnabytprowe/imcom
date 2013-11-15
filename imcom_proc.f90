@@ -447,7 +447,11 @@ integer :: i
 F_tmp = real(F_dum, 8)     ! Fill working array with data before FFT
 call DFFTW_EXECUTE_DFT_R2C(plan, F_tmp, Ft_tmp)
 ! From FFTW3 documentation:
-!In many practical applications, the input data in[i] are purely real numbers, in which case the DFT output satisfies the Hermitian redundancy: out[i] is the conjugate of out[n-i]. It is possible to take advantage of these circumstances in order to achieve roughly a factor of two improvement in both speed and memory usage.
+! In many practical applications, the input data in[i] are purely real numbers,
+! in which case the DFT output satisfies the Hermitian redundancy: out[i] is
+! the conjugate of out[n-i].  It is possible to take advantage of these
+! circumstances in order to achieve roughly a factor of two improvement in both
+! speed and memory usage.
 !
 ! Fix this...
 !$omp parallel
@@ -511,6 +515,7 @@ END SUBROUTINE imcom_invft_c2c
 !---
 
 SUBROUTINE imcom_plan_ft_r2c(n1, n2, info, plan)
+! Plan an FFTW3 real-to-complex FFT of the given dimensions, saving it to plan
 implicit none
 integer, intent(IN) :: n1, n2, info
 integer(KIND=8), intent(OUT) :: plan
@@ -528,6 +533,7 @@ END SUBROUTINE imcom_plan_ft_r2c
 !---
 
 SUBROUTINE imcom_plan_ft_c2c(n1, n2, info, plan)
+! Plan an FFTW3 complex-to-complex FFT of the given dimensions, saving it to plan
 implicit none
 integer, intent(IN) :: n1, n2, info
 integer(KIND=8), intent(OUT) :: plan
@@ -545,6 +551,8 @@ END SUBROUTINE imcom_plan_ft_c2c
 !---
 
 SUBROUTINE imcom_plan_invft_c2c(n1, n2, info, plan)
+! Plan an FFTW3 inverse complex-to-complex FFT of the given dimensions, saving
+! it to plan
 implicit none
 integer, intent(IN) :: n1, n2, info
 integer(KIND=8), intent(OUT) :: plan
@@ -562,6 +570,7 @@ END SUBROUTINE imcom_plan_invft_c2c
 !---
 
 SUBROUTINE imcom_destroy_plan(plan)
+! Destory a previously saved FFTW3 plan
 implicit none
 integer(KIND=8), intent(IN) :: plan
 
@@ -571,6 +580,9 @@ END SUBROUTINE imcom_destroy_plan
 !---
 
 FUNCTION imcom_test_psfconst()
+! Test whether an input PSF changes from input expoxure to input exposure based
+! on either the filename or the rotation angle (N.B. Does not do a
+! pixel-by-pixel comparison of the psfs)
 implicit none
 integer :: imcom_test_psfconst
 integer :: i
@@ -578,7 +590,7 @@ integer :: i
 imcom_test_psfconst = 1
 do i=2, nexp
 
-  if ((psffile(i).ne.psffile(1)).or.(rotangdeg(i).ne.rotangdeg(1))) then
+  if ((psffile(i).ne.psffile(1)).or.(abs(rotangdeg(i) - rotangdeg(1)).le.1.d-15)) then
     imcom_test_psfconst = 0
     exit
   end if
