@@ -779,8 +779,8 @@ END SUBROUTINE imcom_build_image
 
 
 SUBROUTINE imcom_build_U
-! Uses the T matrices and the input images (stored in Im) to get the output
-! Sigma_a noise image
+! Uses the T matrices and the input images (stored in Im) to get the output U_a leakage objective
+! image
 implicit none
 !real(KIND=8), dimension(m) :: ATTplusBT
 integer :: a !i, a_i, a_f, nthreads
