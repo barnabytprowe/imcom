@@ -1,8 +1,4 @@
 FC = gfortran -t -v
-RM = rm
-RMFLAGS = -f
-MAKE = make
-MAKEFLAGS = b
 WARN= -Wall -Wextra -Wconversion -pedantic -fbounds-check
 DEBUG= -g
 OPENMP= -fopenmp
@@ -12,6 +8,13 @@ LIBDIR= -L/sw/lib        # directory(s) to search for library archives
 LIBFITSIO= -lcfitsio     # link to cfitsio library
 LIBFFTW3= -lfftw3        # link to FFTW3 library
 LIBVEC= -lblas -llapack  # link to BLAS and LAPACK libraries
+RM = rm
+RMFLAGS = -f
+MAKE = make
+MAKEFLAGS = b
+AR = ar
+ARFLAGS = -crs
+
 
 all: imcom
 
@@ -33,6 +36,13 @@ imcom_proc.o : imcom_proc.f90 imcom_data.o
 
 imcom_data.o : imcom_data.f90
 	$(FC) $(WARN) $(OPTIMIZE) $(OPENMP) -c $< -o $@
+
+# Run 'make libimcom.a' if you want to link to precompiled IMCOM object files from another project,
+# although note you will probably also need to add soft links to the .mod files that you will find
+# in this directory after compiling IMCOM...
+libimcom.a : imcom_data.o imcom_proc.o imcom_io.o imcom_matrix.o imcom_bisect.o
+	$(AR) $(ARFLAGS) $@ $^
+	cp ./libimcom.a /usr/local/lib/
 
 clean :
 	$(RM) $(RMFLAGS) *.o *.mod imcom
