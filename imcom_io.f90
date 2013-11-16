@@ -216,7 +216,7 @@ n2out = n2x
 ! Then allocate the 2D storage arrays
 allocate(Xa(n1out, n2out), Ya(n1out, n2out), STAT=alstat)
 if (alstat.ne.0) then
-  write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for image X & Y arrays"
+  write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for image Xa & Ya arrays"
   stop
 end if
 write(*, FMT='(A)') "IMCOM: Reading X coordinates from "//trim(outxfile)
@@ -227,14 +227,14 @@ call imcom_readfits(trim(outyfile), n1out, n2out, Ya(:, :))
 m = n1out * n2out
 allocate(X_a(m), Y_a(m), STAT=alstat)
 if (alstat.ne.0) then
-  write(*, FMT='(A)')"IMCOM ERROR: Cannot allocate memory for X_a & Y_a"
+  write(*, FMT='(A)')"IMCOM ERROR: Cannot allocate memory for X_a & Y_a arrays"
   stop
 endif
 X_a = reshape(Xa, (/ m /))
 Y_a = reshape(Ya, (/ m /))
 deallocate(Xa, Ya, STAT=dealstat)
 if (alstat.ne.0) then
-  write(*, FMT='(A)')"IMCOM ERROR: Cannot deallocate memory for Xa, Ya"
+  write(*, FMT='(A)')"IMCOM ERROR: Cannot deallocate memory image for Xa, Ya arrays"
   stop
 endif
 END SUBROUTINE imcom_alloc_XaYa
@@ -409,7 +409,7 @@ END SUBROUTINE imcom_readfits
 !---
 
 SUBROUTINE imcom_writefits(filename, naxis1, naxis2, image)
-! Wrapper for writing 2D FITS formate file based on input 2D image files
+! Wrapper for writing 2D FITS format file based on input 2D image files
 implicit none
 character(LEN=*), intent(IN) :: filename
 integer, intent(IN) :: naxis1, naxis2
@@ -457,7 +457,7 @@ END SUBROUTINE imcom_writefits
 !---
 
 SUBROUTINE imcom_writefitscube(filename, naxis1, naxis2, naxis3, dcube)
-! Wrapper for writing fits files
+! Wrapper for writing FITS files in a 3D datactube format
 implicit none
 character(LEN=*), intent(IN) :: filename
 integer, intent(IN) :: naxis1, naxis2, naxis3
@@ -507,25 +507,25 @@ open(UNIT=10, FILE=trim(filename), STATUS="OLD", FORM="FORMATTED", &
      ACTION="READ", IOSTAT=iostat)
 if (iostat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Cannot open "//trim(filename)
-  write(*, FMT='(A)') "IMCOM: Check filename and path"
+  write(*, FMT='(A)') "IMCOM ERROR: Check filename and path"
   stop
 end if
 read(UNIT=10, FMT=*, IOSTAT=iostat) scratch, psfxscale
 if (iostat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(filename)
-  write(*, FMT='(A)') "IMCOM: Expecting: PSFXSCALE  <psfxscale>"
-  write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-  write(*, FMT='(A)') "IMCOM: Check EOF (if IOSTAT negative)"
-  write(*, FMT='(A)') "IMCOM: Check <psfxscale> floating point"
+  write(*, FMT='(A)') "IMCOM ERROR: Expecting: PSFXSCALE  <psfxscale>"
+  write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+  write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
+  write(*, FMT='(A)') "IMCOM ERROR: Check <psfxscale> floating point"
   stop
 end if
 read(UNIT=10, FMT=*, IOSTAT=iostat) scratch, psfyscale
 if (iostat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(filename)
-  write(*, FMT='(A)') "IMCOM: Expecting: PSFYSCALE  <psfyscale>"
-  write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-  write(*, FMT='(A)') "IMCOM: Check EOF (if IOSTAT negative)"
-  write(*, FMT='(A)') "IMCOM: Check <psfyscale> floating point"
+  write(*, FMT='(A)') "IMCOM ERROR: Expecting: PSFYSCALE  <psfyscale>"
+  write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+  write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
+  write(*, FMT='(A)') "IMCOM ERROR: Check <psfyscale> floating point"
   stop
 end if
 read(UNIT=10, FMT=*, IOSTAT=iostat) scratch, nexp
@@ -538,8 +538,8 @@ end if
 read(UNIT=10, FMT=*, IOSTAT=iostat) scratch, userxy
 if (iostat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Incorrect second-line format for "//trim(filename)
-  write(*, FMT='(A)') "IMCOM: Expecting: USERXY    <integer>"
-  write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
+  write(*, FMT='(A)') "IMCOM ERROR: Expecting: USERXY    <integer>"
+  write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
   stop
 end if
 allocate(inconfig(nexp), STAT=alstat)
@@ -552,10 +552,10 @@ do i=1, nexp
   read(UNIT=10, FMT='(A12, A)', IOSTAT=iostat) scratch, inconfig(i)
   if (iostat.ne.0) then
     write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(filename)
-    write(*, FMT='(A)') "IMCOM: Expecting: INCONFIG  <filename>"
-    write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-    write(*, FMT='(A)') "IMCOM: Check EOF (if IOSTAT negative)"
-    write(*, FMT='(A)') "IMCOM: Check <filename>: must be 256 characters or less"
+    write(*, FMT='(A)') "IMCOM ERROR: Expecting: INCONFIG  <filename>"
+    write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+    write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
+    write(*, FMT='(A)') "IMCOM ERROR: Check <filename>: must be 256 characters or less"
     stop
   end if  
 
@@ -567,10 +567,10 @@ call imcom_read_inconfigs(userxy)
 read(UNIT=10, FMT='(A12, A)', IOSTAT=iostat) scratch, outconfig
 if (iostat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(filename)
-  write(*, FMT='(A)') "IMCOM: Expecting: OUTCONFIG <filename>"
-  write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-  write(*, FMT='(A)') "IMCOM: Check EOF (if IOSTAT negative)"
-  write(*, FMT='(A)') "IMCOM: Check <filename>: must be 256 characters or less"
+  write(*, FMT='(A)') "IMCOM ERROR: Expecting: OUTCONFIG <filename>"
+  write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+  write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
+  write(*, FMT='(A)') "IMCOM ERROR: Check <filename>: must be 256 characters or less"
   stop
 end if
 
@@ -593,9 +593,9 @@ if (iostat.lt.0) then
   return
 else if (iostat.gt.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(filename)
-  write(*, FMT='(A)') "IMCOM: Expecting: AFILE     <filename>"
-  write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-  write(*, FMT='(A)') "IMCOM: Check <filename>: must be 256 characters or less"
+  write(*, FMT='(A)') "IMCOM ERROR: Expecting: AFILE     <filename>"
+  write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+  write(*, FMT='(A)') "IMCOM ERROR: Check <filename>: must be 256 characters or less"
   stop
 end if
 
@@ -613,9 +613,9 @@ if (iostat.lt.0) then
   return
 else if (iostat.gt.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(filename)
-  write(*, FMT='(A)') "IMCOM: Expecting: BFILE     <filename>"
-  write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-  write(*, FMT='(A)') "IMCOM: Check <filename>: must be 256 characters or less"
+  write(*, FMT='(A)') "IMCOM ERROR: Expecting: BFILE     <filename>"
+  write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+  write(*, FMT='(A)') "IMCOM ERROR: Check <filename>: must be 256 characters or less"
   stop
 end if
 
@@ -632,9 +632,9 @@ if (iostat.lt.0) then
   return
 else if (iostat.gt.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(filename)
-  write(*, FMT='(A)') "IMCOM: Expecting: QFILE     <filename>"
-  write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-  write(*, FMT='(A)') "IMCOM: Check <filename>: must be 256 characters or less"
+  write(*, FMT='(A)') "IMCOM ERROR: Expecting: QFILE     <filename>"
+  write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+  write(*, FMT='(A)') "IMCOM ERROR: Check <filename>: must be 256 characters or less"
   stop
 end if
 
@@ -650,9 +650,9 @@ if (iostat.lt.0) then
   return
 else if (iostat.gt.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(filename)
-  write(*, FMT='(A)') "IMCOM: Expecting: LFILE     <filename>"
-  write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-  write(*, FMT='(A)') "IMCOM: Check <filename>: must be 256 characters or less"
+  write(*, FMT='(A)') "IMCOM ERROR: Expecting: LFILE     <filename>"
+  write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+  write(*, FMT='(A)') "IMCOM ERROR: Check <filename>: must be 256 characters or less"
   stop
 end if
 
@@ -667,9 +667,9 @@ if (iostat.lt.0) then
   return
 else if (iostat.gt.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(filename)
-  write(*, FMT='(A)') "IMCOM: Expecting: PFILE     <filename>"
-  write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-  write(*, FMT='(A)') "IMCOM: Check <filename>: must be 256 characters or less"
+  write(*, FMT='(A)') "IMCOM ERROR: Expecting: PFILE     <filename>"
+  write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+  write(*, FMT='(A)') "IMCOM ERROR: Check <filename>: must be 256 characters or less"
   stop
 end if
 
