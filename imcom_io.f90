@@ -175,7 +175,7 @@ do i=1, nexp
 end do
 deallocate(n1x, n2x, n1y, n2y, bitpix, STAT=dealstat)
 if (dealstat.ne.0) then
-  write(*, FMT='(A)') "IMCOM ERROR: Cannot de allocate memory for image x_i & y_i property arrays"
+  write(*, FMT='(A)') "IMCOM ERROR: Cannot deallocate memory for image x_i & y_i property arrays"
   stop
 end if
 allocate(x_unmasked_i(n_unmasked), y_unmasked_i(n_unmasked), &
@@ -714,43 +714,43 @@ do i=1, nexp
        FORM="FORMATTED", ACTION="READ", IOSTAT=iostat)
   if (iostat.ne.0) then
     write(*, FMT='(A)') "IMCOM ERROR: Cannot open "//trim(inconfig(i))
-    write(*, FMT='(A)') "IMCOM: Check filename and path"
+    write(*, FMT='(A)') "IMCOM ERROR: Check filename and path"
     stop
   end if
   read(UNIT=20, FMT='(A12, A)', IOSTAT=iostat) scratch, psffile(i)
   if (iostat.ne.0) then
     write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(inconfig(i))
-    write(*, FMT='(A)') "IMCOM: Expecting: PSFFILE   <filename>"
-    write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-    write(*, FMT='(A)') "IMCOM: Check EOF (if IOSTAT negative)"
+    write(*, FMT='(A)') "IMCOM ERROR: Expecting: PSFFILE   <filename>"
+    write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+    write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
     write(*, FMT='(A)') "IMCOM: Check <filename>: must be 256 characters or less"
     stop
   end if    
   read(UNIT=20, FMT='(A12, A)', IOSTAT=iostat) scratch, gimfile(i)
   if (iostat.ne.0) then
     write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(inconfig(i))
-    write(*, FMT='(A)') "IMCOM: Expecting: GIMFILE   <filename>"
-    write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-    write(*, FMT='(A)') "IMCOM: Check EOF (if IOSTAT negative)"
-    write(*, FMT='(A)') "IMCOM: Check <filename>: must be 256 characters or less"
+    write(*, FMT='(A)') "IMCOM ERROR: Expecting: GIMFILE   <filename>"
+    write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+    write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
+    write(*, FMT='(A)') "IMCOM ERROR: Check <filename>: must be 256 characters or less"
     stop
   end if
   read(UNIT=20, FMT=*, IOSTAT=iostat) scratch, rotangdeg(i)
   if (iostat.ne.0) then
     write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(inconfig(i))
-    write(*, FMT='(A)') "IMCOM: Expecting: ROTANGDEG <psfrotdeg>"
-    write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-    write(*, FMT='(A)') "IMCOM: Check EOF (if IOSTAT negative)"
-    write(*, FMT='(A)') "IMCOM: Check <rotangdeg> floating point"
+    write(*, FMT='(A)') "IMCOM ERROR: Expecting: ROTANGDEG <psfrotdeg>"
+    write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+    write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
+    write(*, FMT='(A)') "IMCOM ERROR: Check <rotangdeg> floating point"
     stop
   end if
   read(UNIT=20, FMT=*, IOSTAT=iostat) scratch, noise(i)
   if (iostat.ne.0) then
     write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(inconfig(i))
-    write(*, FMT='(A)') "IMCOM: Expecting: NOISE   <noise>"
-    write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-    write(*, FMT='(A)') "IMCOM: Check EOF (if IOSTAT negative)"
-    write(*, FMT='(A)') "IMCOM: Check <noise> floating point"
+    write(*, FMT='(A)') "IMCOM ERROR: Expecting: NOISE   <noise>"
+    write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+    write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
+    write(*, FMT='(A)') "IMCOM ERROR: Check <noise> floating point"
     stop
   end if  
 !
@@ -764,7 +764,7 @@ do i=1, nexp
       write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
       write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
       write(*, FMT='(A)') &
-          "IMCOM: Check USERXY: must be zero if not supplying X & Y coordinate arrays"
+          "IMCOM ERROR: Check USERXY: must be zero if not supplying X & Y coordinate arrays"
       write(*, FMT='(A)') "IMCOM: Check <filename>: must be 256 characters or less"
       stop
     end if
@@ -775,7 +775,7 @@ do i=1, nexp
       write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
       write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
       write(*, FMT='(A)') &
-          "IMCOM: Check USERXY: must be zero if not supplying X & Y coordinate arrays"
+          "IMCOM ERROR: Check USERXY, must be zero if not supplying X & Y coordinate arrays"
       write(*, FMT='(A)') "IMCOM ERROR: Check <filename>: must be 256 characters or less"
       stop
     end if
@@ -783,7 +783,7 @@ do i=1, nexp
     read(UNIT=20, FMT=*, IOSTAT=iostat) scratch, gimxscale(i)
     if (iostat.ne.0) then
       write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(inconfig(i))
-      write(*, FMT='(A)') "IMCOM: Expecting: GIMXSCALE  <gimxscale>"
+      write(*, FMT='(A)') "IMCOM ERROR: Expecting: GIMXSCALE  <gimxscale>"
       write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
       write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
       write(*, FMT='(A)') &
@@ -794,21 +794,23 @@ do i=1, nexp
     read(UNIT=20, FMT=*, IOSTAT=iostat) scratch, gimyscale(i)
     if (iostat.ne.0) then
       write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(inconfig(i))
-      write(*, FMT='(A)') "IMCOM: Expecting: GIMYSCALE  <gimyscale>"
-      write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-      write(*, FMT='(A)') "IMCOM: Check EOF (if IOSTAT negative)"
-      write(*, FMT='(A)') "IMCOM: Check USERXY: must be 1 if supplying X & Y coordinate arrays"
+      write(*, FMT='(A)') "IMCOM ERROR: Expecting: GIMYSCALE  <gimyscale>"
+      write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+      write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
+      write(*, FMT='(A)') &
+          "IMCOM ERROR: Check USERXY: must be 1 if supplying X & Y coordinate arrays"
       write(*, FMT='(A)') "IMCOM: Check <gimyscale> floating point"
       stop
     end if  
     read(UNIT=20, FMT=*, IOSTAT=iostat) scratch, dither(i, 1), dither(i, 2)
     if (iostat.ne.0) then
       write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(inconfig(i))
-      write(*, FMT='(A)') "IMCOM: Expecting: DITHER   <dither_x> <dither_y>"
-      write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-      write(*, FMT='(A)') "IMCOM: Check EOF (if IOSTAT negative)"
-      write(*, FMT='(A)') "IMCOM: Check USERXY: must be 1 if supplying X & Y coordinate arrays"
-      write(*, FMT='(A)') "IMCOM: Check <dither_x>, <dither_y> floating point"
+      write(*, FMT='(A)') "IMCOM ERROR: Expecting: DITHER   <dither_x> <dither_y>"
+      write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+      write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
+      write(*, FMT='(A)') &
+          "IMCOM ERROR: Check USERXY: must be 1 if supplying X & Y coordinate arrays"
+      write(*, FMT='(A)') "IMCOM ERROR: Check <dither_x>, <dither_y> floating point"
       stop
     end if
   end if
