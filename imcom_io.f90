@@ -836,61 +836,61 @@ open(UNIT=30, FILE=trim(outconfig), STATUS="OLD", FORM="FORMATTED", &
      ACTION="READ", IOSTAT=iostat)
 if (iostat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Cannot open "//trim(outconfig)
-  write(*, FMT='(A)') "IMCOM: Check filename and path"
+  write(*, FMT='(A)') "IMCOM ERROR: Check filename and path"
   stop
 end if
 read(UNIT=30, FMT='(A12, A)', IOSTAT=iostat) scratch, gamfile
 if (iostat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(outconfig)
-  write(*, FMT='(A)') "IMCOM: Expecting: GAMFILE   <filename>"
-  write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-  write(*, FMT='(A)') "IMCOM: Check EOF (if IOSTAT negative)"
-  write(*, FMT='(A)') "IMCOM: Check <filename>: must be 256 characters or less"
+  write(*, FMT='(A)') "IMCOM ERROR: Expecting: GAMFILE   <filename>"
+  write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+  write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
+  write(*, FMT='(A)') "IMCOM ERROR: Check <filename>: must be 256 characters or less"
   stop
 end if
 read(UNIT=30, FMT='(A12, A)', IOSTAT=iostat) scratch, Hfile
 if (iostat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(outconfig)
-  write(*, FMT='(A)') "IMCOM: Expecting: HFILE     <filename>"
-  write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-  write(*, FMT='(A)') "IMCOM: Check EOF (if IOSTAT negative)"
-  write(*, FMT='(A)') "IMCOM: Check <filename>: must be 256 characters or less"
+  write(*, FMT='(A)') "IMCOM ERROR: Expecting: HFILE     <filename>"
+  write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+  write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
+  write(*, FMT='(A)') "IMCOM ERROR: Check <filename>: must be 256 characters or less"
   stop
 end if
 read(UNIT=30, FMT='(A12, A)', IOSTAT=iostat) scratch, Kfile
 if (iostat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(outconfig)
-  write(*, FMT='(A)') "IMCOM: Expecting: KFILE     <filename>"
-  write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-  write(*, FMT='(A)') "IMCOM: Check EOF (if IOSTAT negative)"
-  write(*, FMT='(A)') "IMCOM: Check <filename>: must be 256 characters or less"
+  write(*, FMT='(A)') "IMCOM ERROR: Expecting: KFILE     <filename>"
+  write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+  write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
+  write(*, FMT='(A)') "IMCOM ERROR: Check <filename>: must be 256 characters or less"
   stop
 end if
 read(UNIT=30, FMT='(A12, A)', IOSTAT=iostat) scratch, Tfile
 if (iostat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(outconfig)
-  write(*, FMT='(A)') "IMCOM: Expecting: TFILE     <filename>"
-  write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-  write(*, FMT='(A)') "IMCOM: Check EOF (if IOSTAT negative)"
-  write(*, FMT='(A)') "IMCOM: Check <filename>: must be 256 characters or less"
+  write(*, FMT='(A)') "IMCOM ERROR: Expecting: TFILE     <filename>"
+  write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+  write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
+  write(*, FMT='(A)') "IMCOM ERROR: Check <filename>: must be 256 characters or less"
   stop
 end if
 read(UNIT=30, FMT='(A12, A)', IOSTAT=iostat) scratch, Sfile
 if (iostat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(outconfig)
-  write(*, FMT='(A)') "IMCOM: Expecting: SFILE     <filename>"
-  write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-  write(*, FMT='(A)') "IMCOM: Check EOF (if IOSTAT negative)"
-  write(*, FMT='(A)') "IMCOM: Check <filename>: must be 256 characters or less"
+  write(*, FMT='(A)') "IMCOM ERROR: Expecting: SFILE     <filename>"
+  write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+  write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
+  write(*, FMT='(A)') "IMCOM ERROR: Check <filename>: must be 256 characters or less"
   stop
 end if
 read(UNIT=30, FMT='(A12, A)', IOSTAT=iostat) scratch, Ufile
 if (iostat.ne.0) then
   write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(outconfig)
-  write(*, FMT='(A)') "IMCOM: Expecting: UFILE     <filename>"
-  write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-  write(*, FMT='(A)') "IMCOM: Check EOF (if IOSTAT negative)"
-  write(*, FMT='(A)') "IMCOM: Check <filename>: must be 256 characters or less"
+  write(*, FMT='(A)') "IMCOM ERROR: Expecting: UFILE     <filename>"
+  write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+  write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
+  write(*, FMT='(A)') "IMCOM ERROR: Check <filename>: must be 256 characters or less"
   stop
 end if
 !
@@ -900,52 +900,53 @@ if (userxy.eq.1) then
   read(UNIT=30, FMT='(A12, A)', IOSTAT=iostat) scratch, outxfile
   if (iostat.ne.0) then
     write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(outconfig)
-    write(*, FMT='(A)') "IMCOM: Expecting: OUTXFILE  <filename>"
-    write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-    write(*, FMT='(A)') "IMCOM: Check EOF (if IOSTAT negative)"
-    write(*, FMT='(A)') "IMCOM: Check USERXY: must be zero if not supplying X & Y coordinate "+\
-        "arrays"
-    write(*, FMT='(A)') "IMCOM: Check <filename>: must be 256 characters or less"
+    write(*, FMT='(A)') "IMCOM ERROR: Expecting: OUTXFILE  <filename>"
+    write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+    write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
+    write(*, FMT='(A)') &
+        "IMCOM ERROR: Check USERXY: must be zero if not supplying X & Y coordinate arrays"
+    write(*, FMT='(A)') "IMCOM ERROR: Check <filename>: must be 256 characters or less"
     stop
   end if
   read(UNIT=30, FMT='(A12, A)', IOSTAT=iostat) scratch, outyfile
   if (iostat.ne.0) then
     write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(outconfig)
-    write(*, FMT='(A)') "IMCOM: Expecting: OUTYFILE  <filename>"
-    write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-    write(*, FMT='(A)') "IMCOM: Check EOF (if IOSTAT negative)"
-    write(*, FMT='(A)') "IMCOM: Check USERXY: must be zero if not supplying X & Y coordinate arrays"
-    write(*, FMT='(A)') "IMCOM: Check <filename>: must be 256 characters or less"
+    write(*, FMT='(A)') "IMCOM ERROR: Expecting: OUTYFILE  <filename>"
+    write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+    write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
+    write(*, FMT='(A)') &
+        "IMCOM ERROR: Check USERXY: must be zero if not supplying X & Y coordinate arrays"
+    write(*, FMT='(A)') "IMCOM ERROR: Check <filename>: must be 256 characters or less"
     stop
   end if
 else
   read(UNIT=30, FMT=*, IOSTAT=iostat) scratch, outxscale
   if (iostat.ne.0) then
     write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(outconfig)
-    write(*, FMT='(A)') "IMCOM: Expecting: OUTXSCALE  <outxscale>"
-    write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-    write(*, FMT='(A)') "IMCOM: Check EOF (if IOSTAT negative)"
-    write(*, FMT='(A)') "IMCOM: Check USERXY: must be 1 if supplying X & Y coordinate arrays"
-    write(*, FMT='(A)') "IMCOM: Check <gimscale> floating point"
+    write(*, FMT='(A)') "IMCOM ERROR: Expecting: OUTXSCALE  <outxscale>"
+    write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+    write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
+    write(*, FMT='(A)') "IMCOM ERROR: Check USERXY: must be 1 if supplying X & Y coordinate arrays"
+    write(*, FMT='(A)') "IMCOM ERROR: Check <gimscale> floating point"
     stop
   end if  
   read(UNIT=30, FMT=*, IOSTAT=iostat) scratch, outyscale
   if (iostat.ne.0) then
     write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(outconfig)
-    write(*, FMT='(A)') "IMCOM: Expecting: OUTYSCALE  <outyscale>"
-    write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-    write(*, FMT='(A)') "IMCOM: Check EOF (if IOSTAT negative)"
-    write(*, FMT='(A)') "IMCOM: Check USERXY: must be 1 if supplying X & Y coordinate arrays"
-    write(*, FMT='(A)') "IMCOM: Check <gimscale> floating point"
+    write(*, FMT='(A)') "IMCOM ERROR: Expecting: OUTYSCALE  <outyscale>"
+    write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+    write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
+    write(*, FMT='(A)') "IMCOM ERROR: Check USERXY: must be 1 if supplying X & Y coordinate arrays"
+    write(*, FMT='(A)') "IMCOM ERROR: Check <gimscale> floating point"
     stop
   end if  
   read(UNIT=30, FMT=*, IOSTAT=iostat) scratch, outpos1, outpos2
   if (iostat.ne.0) then
     write(*, FMT='(A)') "IMCOM ERROR: Incorrect line format for "//trim(outconfig)
-    write(*, FMT='(A)') "IMCOM: Expecting: OUTPOS    <outpos_x> <outpos_y>"
-    write(*, FMT='(A,I7)') "IMCOM: IOSTAT = ", iostat
-    write(*, FMT='(A)') "IMCOM: Check EOF (if IOSTAT negative)"
-    write(*, FMT='(A)') "IMCOM: Check <outpos_x>, <outpos_y> floating point"
+    write(*, FMT='(A)') "IMCOM ERROR: Expecting: OUTPOS    <outpos_x> <outpos_y>"
+    write(*, FMT='(A,I7)') "IMCOM ERROR: IOSTAT = ", iostat
+    write(*, FMT='(A)') "IMCOM ERROR: Check EOF (if IOSTAT negative)"
+    write(*, FMT='(A)') "IMCOM ERROR: Check <outpos_x>, <outpos_y> floating point"
     stop
   end if
   read(UNIT=30, FMT=*, IOSTAT=iostat) scratch, n1out, n2out
@@ -973,7 +974,7 @@ END SUBROUTINE imcom_read_outconfig
 SUBROUTINE imcom_welcome
 implicit none
 ! Welcome banner
-write(*, FMT='(A)') "IMCOM: IMage COMbination v0.2.8 (B. Rowe & C. Hirata 2010-2012)"
+write(*, FMT='(A)') "IMCOM: IMage COMbination v0.2.8 (B. Rowe & C. Hirata 2010-2013)"
 END SUBROUTINE
 
 !---
@@ -982,31 +983,33 @@ SUBROUTINE imcom_usage_message
 implicit none
 call imcom_welcome
 write(*, '(A)') "IMCOM: [usage]"
-write(*, '(A)') " ./imcom <config_file> <U/S> <U/S_max> <U/S_tol> [...<forceT> <forceSys> <saturation>]"
-write(*, '(A)') " "
-write(*, '(A)') "  <config_file> [string]  : Global config file containing image locations etc."
-!write(*, '(A)') " "
-write(*, '(A)') "  <U/S> [string]          : U/u or S/s to specify minimization of U or S in output image"
-!write(*, '(A)') " "
+write(*, '(A)') &
+    " ./imcom <config_file> <U/S> <U/S_max> <U/S_tol> [...<forceT> [ <forceSys> [ <saturation> ]]]"
+write(*, '(A)') ""
+write(*, '(A)') &
+    "  <config_file> [string]  : Global config file containing image locations etc."
+write(*, '(A)') &
+    "  <U/S> [string]          : U/u or S/s to specify minimization of U or S in output image"
 write(*, '(A)') "  <U/S_max> [dbl]         : Required maximum U or S"
-!write(*, '(A)') " "
 write(*, '(A)') "  <U/S_tol> [dbl]         : Absolute tolerance on U or S for interval bisection"
-!write(*, '(A)') " "
-write(*, '(A)') "  [ ...<forceT> [int]     : 1 = force build T matrix , 0 = not (default)                 ]"
-write(*, '(A)') "  [ ...<forceSys> [int]   : 1 = force build system matrices A, B etc., 0 = not (default) ]"
-write(*, '(A)') "  [ ...<saturation> [dbl] : Image saturation/bad pixel value (default = Float overflow)  ]"
-write(*, '(A)') " "
+write(*, '(A)') "  [ ...<forceT> [int]     : 1 = force build T matrix , 0 = not (default)"
+write(*, '(A)') &
+    "  [ ...<forceSys> [int]   : 1 = force build system matrices A, B etc., 0 = not (default)"
+write(*, '(A)') &
+    "  [ ...<saturation> [dbl] : Image saturation/bad pixel value (default = Float overflow) ] ] ]"
+write(*, '(A)') ""
 END SUBROUTINE imcom_usage_message
 
 !---
 
 SUBROUTINE imcom_get_cmdline
+! Gets the command line arguments or prints the usage message
 implicit none
 integer :: nargs
 character(LEN=1) :: US_string
 character(LEN=256) :: buffer
 real(KIND=8), external :: DLAMCH
-! Gets the command line arguments or prints the usage message
+
 nargs = iargc()
 if (nargs.ge.4) then
   call getarg(1, config)
