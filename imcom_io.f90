@@ -274,7 +274,8 @@ if (n1(nexppsf + 1).ne.(n1(nexppsf)).or.n2(nexppsf + 1).ne.(n2(nexppsf))) then
   stop
 end if
 !
-! Zero-pad arrays to at least twice the size of the input image, or double current size, whichever is larger. Set n1pad = n2pad
+! Zero-pad arrays to at least twice the size of the input image, or double current size, whichever
+! is larger. Set n1pad = n2pad
 n1pad = 2 * nint((max(maxval(x_i), maxval(X_a)) - min(minval(x_i), minval(X_a))) / psfxscale)
 n2pad = 2 * nint((max(maxval(y_i), maxval(Y_a)) - min(minval(y_i), minval(Y_a))) / psfyscale)
 n1pad = max(n1pad, n2pad)

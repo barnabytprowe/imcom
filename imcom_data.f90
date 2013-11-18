@@ -38,7 +38,8 @@ character(LEN=256), dimension(:), allocatable :: gimxfile, gimyfile
 real(KIND=8), dimension(:), allocatable :: gimxscale, gimyscale
 real(KIND=8), dimension(:), allocatable :: rotangdeg
 
-! iii) dither position (coordinates of lower left corner pixel centre in each exposure) & coordinates of lower-left pixel in output image
+! iii) dither position (coordinates of lower left corner pixel centre in each exposure) &
+! coordinates of lower-left pixel in output image
 real(KIND=8), dimension(:), allocatable :: noise
 real(KIND=8), dimension(:, :), allocatable :: dither
 real(KIND=8) :: outpos1, outpos2
