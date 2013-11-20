@@ -39,6 +39,8 @@ CONTAINS
 !---
 
 SUBROUTINE imcom_get_A(npoly, npad, saveA, forcebuild)
+! Get the A matrix from a previously saved file if this exists, otherwise build the lookup table
+! and construct from scratch
 implicit none
 integer, intent(IN) :: npoly, npad, saveA, forcebuild
 logical :: Aexists
@@ -48,18 +50,20 @@ inquire(FILE=trim(Afile), EXIST=Aexists)
 if (Aexists.and.(forcebuild.eq.0)) then
   call imcom_sizefits(trim(Afile), n1_tmp, n2_tmp, bit_tmp)
   if ((n1_tmp.ne.n).or.(n2_tmp.ne.n)) then
-    write(*, FMT='(A)') "IMCOM ERROR: Dimensions of Matrix "//trim(Afile)//" do not match <config_file> image dimensions"
-    write(*, FMT='(A,I9)') "IMCOM ERROR: Should be square of side: ",n
+    write(*, FMT='(A)') &
+        "IMCOM ERROR: Dimensions of Matrix "//trim(Afile)// &
+        " do not match <config_file> image dimensions"
+    write(*, FMT='(A,I9)') "IMCOM ERROR: Should be square of side: ", n
     stop
   endif
   allocate(A_aij(n1_tmp, n2_tmp), STAT=alstat)
   if (alstat.ne.0) then
-    write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for A matrix -- too large? Sparse Matrix formalism not yet coded."
+    write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for A matrix -- too large?"
     stop
   endif
-!$omp parallel workshare
+  !$omp parallel workshare
   A_aij = 0.d0
-!$omp end parallel workshare
+  !$omp end parallel workshare
   write(*, FMT='(A)') "IMCOM: Reading A matrix from "//trim(Afile)
   call imcom_readfits(trim(Afile), n1_tmp, n2_tmp, A_aij)
 else
@@ -71,6 +75,8 @@ END SUBROUTINE imcom_get_A
 !---
 
 SUBROUTINE imcom_get_B(npoly, npad, saveB, forcebuild)
+! Get the B matrix from a previously saved file if this exists, otherwise build the lookup table
+! and construct from scratch
 implicit none
 integer, intent(IN) :: npoly, npad, saveB, forcebuild
 logical :: Bexists
@@ -80,16 +86,20 @@ inquire(FILE=trim(Bfile), EXIST=Bexists)
 if (Bexists.and.(forcebuild.eq.0)) then
   call imcom_sizefits(trim(Bfile), n1_tmp, n2_tmp, bit_tmp)
   if ((n1_tmp.ne.n).or.(n2_tmp.ne.m)) then
-    write(*, FMT='(A)') "IMCOM ERROR: Dimensions of Matrix "//trim(Bfile)//" do not match <config_file> image dimensions"
-    write(*, FMT='(A,2I9)') "IMCOM ERROR: Should be rectangle of sides: ",n,m
+    write(*, FMT='(A)') &
+        "IMCOM ERROR: Dimensions of Matrix "//trim(Bfile)// &
+        " do not match <config_file> image dimensions"
+    write(*, FMT='(A,2I9)') "IMCOM ERROR: Should be rectangle of sides: ", n, m
     stop
   endif
   allocate(B_ia(n1_tmp, n2_tmp), STAT=alstat)
   if (alstat.ne.0) then
-    write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for B matrix -- too large? Sparse Matrix formalism not yet coded."
+    write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for B matrix -- too large?"
     stop
   endif
+  !$omp parallel workshare
   B_ia = 0.d0
+  !$omp end parallel workshare
   write(*, FMT='(A)') "IMCOM: Reading B matrix from "//trim(Bfile)
   call imcom_readfits(trim(Bfile), n1_tmp, n2_tmp, B_ia)
 else
@@ -101,6 +111,8 @@ END SUBROUTINE imcom_get_B
 !---
 
 SUBROUTINE imcom_get_P(saveP, forcebuild)
+! Get the P matrix from a previously saved file if this exists, otherwise build the lookup table
+! and construct from scratch
 implicit none
 integer, intent(IN) :: saveP, forcebuild
 logical :: Pexists
@@ -120,9 +132,9 @@ if (Pexists.and.(forcebuild.eq.0)) then
     write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for P matrix -- too large? Sparse Matrix formalism not yet coded."
     stop
   endif
-!$omp parallel workshare
+  !$omp parallel workshare
   P_ia = 0.d0
-!$omp end parallel workshare
+  !$omp end parallel workshare
   write(*, FMT='(A)') "IMCOM: Reading P matrix from "//trim(Pfile)
   call imcom_readfits(trim(Pfile), n1_tmp, n2_tmp, P_ia)
   allocate(P2_ia(n1_tmp, n2_tmp), STAT=alstat)
@@ -130,11 +142,11 @@ if (Pexists.and.(forcebuild.eq.0)) then
     write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for P^2 matrix -- too large? Sparse Matrix formalism not yet coded."
     stop
   end if
-!$omp parallel workshare
+  !$omp parallel workshare
   P2_ia = P_ia * P_ia
-!$omp end parallel workshare
+  !$omp end parallel workshare
 else
- call imcom_build_P(saveP)
+  call imcom_build_P(saveP)
 end if
 END SUBROUTINE imcom_get_P
 
