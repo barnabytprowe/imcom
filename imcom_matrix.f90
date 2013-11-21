@@ -153,6 +153,8 @@ END SUBROUTINE imcom_get_P
 !---
 
 SUBROUTINE imcom_get_QL(saveQL, forcebuild)
+! Get the Q (eigenvector) and L (eigenvalue) matrix/vector from a previously saved file if this
+! exists, otherwise build the lookup table and construct from scratch
 implicit none
 integer, intent(IN) :: saveQL, forcebuild
 logical :: Qexists, Lexists
@@ -173,9 +175,9 @@ if (Qexists.and.Lexists.and.(forcebuild.eq.0)) then
     write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for Q matrix -- too large? Sparse Matrix formalism not yet coded."
     stop
   endif
-!$omp parallel workshare
+  !$omp parallel workshare
   Q_ij = 0.d0
-!$omp end parallel workshare
+  !$omp end parallel workshare
   write(*, FMT='(A)') "IMCOM: Reading Q matrix from "//trim(Qfile)
   call imcom_readfits(trim(Qfile), n1_tmp, n2_tmp, Q_ij)
   call imcom_sizefits(trim(Lfile), n1_tmp, n2_tmp, bit_tmp)
@@ -189,9 +191,9 @@ if (Qexists.and.Lexists.and.(forcebuild.eq.0)) then
     write(*, FMT='(A)') "IMCOM ERROR: Cannot allocate memory for L vector -- too large? Sparse Matrix formalism not yet coded."
     stop
   endif
-!$omp parallel workshare
+  !$omp parallel workshare
   L_i = 0.d0
-!$omp end parallel workshare
+  !$omp end parallel workshare
   write(*, FMT='(A)') "IMCOM: Reading L eigenvalues from "//trim(Lfile)
   call imcom_readfits(trim(Lfile), n1_tmp, n2_tmp, L_i)
 else
@@ -220,7 +222,7 @@ A_aij = 0.d0
 ! table accordingly
 if (psfconst.eq.1) then
   ial = 1
-!$omp parallel do schedule(dynamic, 64) private(Delx, Dely)
+  !$omp parallel do schedule(dynamic, 64) private(Delx, Dely)
   do i=1, n
 
     do j=i, n
@@ -237,9 +239,9 @@ if (psfconst.eq.1) then
     if (i.eq.int(0.8 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 80% complete"
 
   end do
-!$omp end parallel do
+  !$omp end parallel do
 else if (psfconst.eq.0) then
-!$omp parallel do schedule(dynamic, 64) private(Delx, Dely, ial)
+  !$omp parallel do schedule(dynamic, 64) private(Delx, Dely, ial)
   do i=1, n
 
     do j=i, n
@@ -257,7 +259,7 @@ else if (psfconst.eq.0) then
     if (i.eq.int(0.8 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 80% complete"
 
   end do
-!$omp end parallel do
+  !$omp end parallel do
 else
   write(*, FMT='(A)') "IMCOM ERROR: PSFCONST must be 1 or 0!"
   stop
@@ -301,7 +303,7 @@ n2bl = n2psf * npad
 ! Check whether PSF varies between exposures, and if not lookup from a smaller lookup 
 ! table accordingly
 if (psfconst.eq.1) then
-!$omp parallel do schedule(dynamic, 64) private(Delx, Dely)
+  !$omp parallel do schedule(dynamic, 64) private(Delx, Dely)
   do i=1, n
 
     do a=1, m
@@ -318,9 +320,9 @@ if (psfconst.eq.1) then
     if (i.eq.int(0.8 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 80% complete"
 
   end do
-!$omp end parallel do
+  !$omp end parallel do
 else if (psfconst.eq.0) then
-!$omp parallel do schedule(dynamic, 64) private(Delx, Dely)
+  !$omp parallel do schedule(dynamic, 64) private(Delx, Dely)
   do i=1, n
 
     do a=1, m
@@ -337,7 +339,7 @@ else if (psfconst.eq.0) then
     if (i.eq.int(0.8 * real(n, 4))) write(*, FMT='(A)') "IMCOM: 80% complete"
 
   end do
-!$omp end parallel do
+  !$omp end parallel do
 else
   write(*, FMT='(A)') "IMCOM ERROR: PSFCONST must be 1 or 0!"
   stop
