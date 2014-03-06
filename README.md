@@ -1,7 +1,5 @@
 IMCOM
 =====
-Copyright Barnaby Rowe & Christopher Hirata (2010-14)
------------------------------------------------------
 
 This is the public repository for the IMCOM (IMage COMbination) software
 described in Rowe, Hirata & Rhodes (2011), available at the following url:
@@ -24,4 +22,7 @@ Makefile.  This will all be improved in the near future, I promise.
 For theoretical details and discussion of the precise implementation that 
 we follow in IMCOM, please see the Rowe et al (2011) paper referenced above.
 
-General queries may be directed towards the Issues pages.
+General queries may be directed towards the issues pages on the GitHub
+repository: https://github.com/barnabytprowe/imcom/issues
+
+Copyright Barnaby Rowe & Christopher Hirata (2010-12).
