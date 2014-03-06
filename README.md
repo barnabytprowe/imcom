@@ -25,4 +25,4 @@ we follow in IMCOM, please see the Rowe et al (2011) paper referenced above.
 General queries may be directed towards the issues pages on the GitHub
 repository: https://github.com/barnabytprowe/imcom/issues
 
-Copyright Barnaby Rowe & Christopher Hirata (2010-12).
+Copyright Barnaby Rowe & Christopher Hirata (2010-14).
