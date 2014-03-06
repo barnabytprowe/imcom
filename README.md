@@ -1,5 +1,7 @@
-IMCOM --- Copyright Barnaby Rowe & Christopher Hirata (2010-14)
-===============================================================
+IMCOM
+=====
+Copyright Barnaby Rowe & Christopher Hirata (2010-14)
+-----------------------------------------------------
 
 This is the public repository for the IMCOM (IMage COMbination) software
 described in Rowe, Hirata & Rhodes (2011), available at the following url:
